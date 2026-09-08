@@ -1,0 +1,71 @@
+% figures/ex_type1.tex
+
+\begin{tikzpicture}[
+    % Style for the root node x (label now inside)
+    rootNode/.style={
+        circle, 
+        draw=black, 
+        fill=white, 
+        very thick, 
+        inner sep=0pt, 
+        minimum size=7mm,
+        font=\sffamily\bfseries\large
+    },
+    % Style for the small black child nodes
+    childNode/.style={
+        circle, 
+        fill=black, 
+        inner sep=0pt, 
+        minimum size=1.8mm
+    },
+    % Connector lines
+    edgeStyle/.style={
+        draw=black, 
+        line width=0.7pt
+    },
+    % Container shapes
+    shapeStyle/.style={
+        draw=black, 
+        line width=0.7pt
+    }
+]
+
+    % --- ROOT NODE ---
+    \node[rootNode] (Vx) at (0, 0) {x};
+
+    % --- CHILD NODES & SHAPES ---
+
+    % 1. Left Square Node
+    \node[childNode] (n1) at (-3.8, -1.5) {};
+    \draw[shapeStyle, rotate around={45:(n1)}] ($(n1)+(-0.6,-0.6)$) rectangle ($(n1)+(0.6,0.6)$);
+
+    % 2. Second Square Node
+    \node[childNode] (n2) at (-2.3, -2.8) {};
+    \draw[shapeStyle, rotate around={45:(n2)}] ($(n2)+(-0.6,-0.6)$) rectangle ($(n2)+(0.6,0.6)$);
+
+    % Ellipsis between Squares
+    \node[rotate=-45] at (-3.05, -2.15) {\(\dots\)};
+
+    % 3. Third Node (Triangle)
+    \node[childNode] (n3) at (0.2, -3.2) {};
+    \draw[shapeStyle] ($(n3)+(0, 0.7)$) -- ($(n3)+(-0.7, -0.6)$) -- ($(n3)+(0.7, -0.6)$) -- cycle;
+
+    % 4. Fourth Node (Triangle)
+    \node[childNode] (n4) at (2.2, -2.4) {};
+    \draw[shapeStyle] ($(n4)+(0, 0.7)$) -- ($(n4)+(-0.7, -0.6)$) -- ($(n4)+(0.7, -0.6)$) -- cycle;
+
+    % Ellipsis between Triangles
+    \node at (1.2, -2.8) {\(\dots\)};
+
+    % 5. Right Ellipse Node
+    \node[childNode] (n5) at (4, -1.3) {};
+    \draw[shapeStyle] (n5) ellipse (0.75cm and 1.2cm);
+
+    % --- EDGES ---
+    \draw[edgeStyle] (Vx) -- (n1);
+    \draw[edgeStyle] (Vx) -- (n2);
+    \draw[edgeStyle] (Vx) -- (n3);
+    \draw[edgeStyle] (Vx) -- (n4);
+    \draw[edgeStyle] (Vx) -- (n5);
+
+\end{tikzpicture}

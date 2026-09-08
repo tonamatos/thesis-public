@@ -1,0 +1,45 @@
+\documentclass{ut-thesis}
+\usepackage{common/tonas-thesis}
+
+\graphicspath{ {./images/} }
+
+% --- Metadata ---
+\author{Tonatiuh Matos Wiederhold}
+\title{On Complexity, Computation, and Graph Homomorphisms}
+\degree{Doctor of Philosophy}
+\department[Graduate Department of]{Mathematics}
+\gradyear{2026}
+
+\begin{document}
+
+%% --- Front Matter ---
+\frontmatter
+\maketitle
+
+\input{chapters/0-preamble/0-abstract.tex}
+%This page will contain the Acknowledgements in the final version.
+\input{chapters/0-preamble/1-acknowledgements.tex}
+\input{chapters/0-preamble/2-publications.tex}
+
+\tableofcontents
+\listoftables
+\listoffigures
+
+\mainmatter
+
+% Turn on line numbering for drafts.
+%\linenumbers
+
+\include{chapters/1-intro/introduction.tex}
+\include{chapters/2-descriptive-combinatorics/00-chapter-root.tex}
+\include{chapters/3-deep-computations/00-chapter-root.tex}
+\include{chapters/4-group-actions/00-chapter-root.tex}
+\include{chapters/5-closing/closing.tex}
+
+\backmatter
+
+\nocite{*}
+\bibliographystyle{alphaurl}
+\bibliography{bibliography/references}
+
+\end{document}

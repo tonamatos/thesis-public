@@ -1,0 +1,177 @@
+% /chapters/3-deep-computations/02-CCS.tex
+
+\section{Compositional Computation Structures}\label{sec:CCS}
+
+In this section, we connect function spaces with arbitrary-precision computations.
+We start by summarizing some basic concepts from~\cite{alva2024approximability}.
+
+\subsection{Computation States Structures}
+\label{sec:CSS}
+
+A \emph{computation states structure} is a pair $(L,\mathcal{P})$, where $L$ is a set whose elements we call \emph{states} and $\mathcal{P}$ is a collection of real-valued functions on $L$ that we call \emph{predicates}, also called \emph{features}.
+For each $P\in \mathcal{P}$, we call the value $P(v)$ the $P$-th \emph{(observable) feature} of~$v$.
+
+A \emph{transition} of a computation states structure $(L,\mathcal{P})$ is a map $f\colon L\to L$.
+
+The \emph{type} of a state $v\in L$ is the indexed family%
+\footnote{As in~§\ref{prop:Baire-identifications} above, we regard each predicate on $L$ as named by a specific formal label~$P$ (a \emph{predicate symbol}) which is given the semantic meaning of a \emph{bona fide} real function $P(\cdot)\colon v\mapsto P(v)$ (the predicate proper) in the computation states structure.
+Such a formal symbol~$P$ becomes \emph{de facto} the name of an observable feature having the real value $P(v)$ at any state $v\in L$.
+Whenever $\mathcal{P}$ is used as an index set (e.g., as in the topological product $\mathbb{R}^{\mathcal{P}}$ below), it is regarded as a set of formal symbols.
+This syntactic vs.\ semantic abuse of nomenclature is commonplace in mathematics, but the model-theoretic framework requires contextual awareness of the distinction.
+To disambiguate when necessary, we shall write $P(\cdot)$, implying the semantic meaning of a real function on~$L$, in contrast to~$P$, meant as a purely syntactic symbol.
+Nevertheless, by a standard abuse of nomenclature in appropriate contexts, we may also treat $P$ as a function on states (i.e., take $P$ to mean $P(\cdot)$ proper).}
+\[
+\operatorname{tp}(v)= (P(v))_{P\in \mathcal{P}}\in\mathbb{R}^\mathcal{P}
+\]
+of its features.
+
+Intuitively, $L$ is the set of states of a computation, and the predicates $P \in\mathcal{P}$ are primitives that are given and accepted as computable.
+(I.e., each symbol $P\in \mathcal{P}$ denotes a function $P(\cdot)$ taken as a computational primitive on~$L$.)
+
+We assume that each state $v\in L$ is uniquely characterized by its type $\operatorname{tp}(v)$, so we may identify $L$ with a topological subspace of~$\mathbb{R}^\mathcal{P}$ and topologized as such (i.e., $L$ is identified with its forward image~$\tp[L]\subseteq \mathbb{R}^{\mathcal{P}}$ under the type map).
+As a topological space, $L$ is thus endowed with the topology of pointwise convergence induced by the product topology of~$\mathbb{R}^\mathcal{P}$.
+In particular, for each $P\in \mathcal{P}$, the projection map $v\mapsto P(v)$ is continuous.
+
+Important state spaces include $L=\mathbb{R}^\mathbb{N}$ (resp., $L=\mathbb{R}^n$ for some positive integer~$n$), endowed with one predicate $P_i(v) = v_i$ (giving the $i$-th coordinate of~$v$) for each~$i\in \mathbb{N}$ (resp., for each $0\le i<n$).
+State subspaces $L\subseteq \mathbb{R}^{\mathbb{N}}$ and $L\subseteq \mathbb{R}^n$ are of primary interest in this paper.
+(Any states structure having a finite or countable family of predicates is effectively such a subspace.)
+
+\begin{definition}
+Given a computation states structure $(L,\mathcal{P})$, any type $\tp(v)\in \mathbb{R}^{\mathcal{P}}$ of a state $v\in L$ will be called a \emph{realized} (state) type.
+The topological closure of the set of realized types in~$\mathbb{R}^\mathcal{P}$ (endowed with the pointwise convergence topology) will be called the \emph{space of (state) types} of~$(L,\mathcal{P})$, denoted~$\mathcal{L}$;
+elements $\mathbf{v}\in \mathcal{L}$ are called \emph{state types}.
+Elements $\mathbf{v}\in\mathcal{L}\setminus L$ are \emph{unrealized} state types.
+\end{definition}
+
+Intuitively, state types capture a notion of ``limit state''.
+For each $P\in \mathcal{P}$, the $P$-th coordinate map (natural projection) $\mathbb{R}^{\mathcal{P}}\to \mathbb{R}: \mathbf{v} = (\mathbf{v}_Q)_{Q\in \mathcal{P}}\mapsto \mathbf{v}_P$, gives a continuous extension to~$\mathcal{L}$ of the predicate $P(\cdot)$ on~$L$;
+abusing notation, the extension will still be denoted~$P(\cdot)$ (or just~$P$).
+
+\begin{remark}\label{rem:poor-mans-ultraprod}
+    Just as $L$ is identified with a subset of~$\mathcal{L}$, but going in the opposite direction, one may regard unrealized state types as “hyper-states” (when such type is obtained as a sequential limit—or ultralimit—of realized state types, unrealized state types may be called “deep states”).
+    A comment for readers versed in model theory: at least for the purpose of realizing state types (with parameters in the original states space~$L$), the type space $(\mathcal{L}, \mathcal{P})$ serves as a “poor man's” ultraproduct of~$(L, \mathcal{P})$ wherein, by the very definition of~$\mathcal{L}$, each type $\mathbf{v}$ is realized.
+\end{remark}
+
+\subsubsection{Bounds on precision and magnitude. Shards}
+\label{sec:shards}
+
+In order for computation state structures to serve their purpose as models of real-world computing, we must keep in mind that computations involving real-valued quantities can only ever carried out approximately, to a preset degree of precision (i.e., to within acceptable error bounds).
+More subtly, yet equally important in practice, one must also bound the magnitude of real quantities involved in all computations:
+one cannot possibly store—let alone compute with—arbitrarily large numbers!
+Thus, although the collection~$\mathcal{P}$ of predicates may be infinite (possibly, uncountable even), “true” computations must imply choices, at the outset, of bounds for errors and for absolute magnitudes of quantities involved.
+Heuristically, different parts of a computation may require suitably matching (different) error bounds, as well as dealing with quantities of very different sizes.
+Focusing for now on the second of these issues, our results shall generally apply to sets of computations for which arbitrary but fixed bounds for each predicate are set in advance.
+This leads to the concept of \emph{shard} first introduced in~\cite{alva2024approximability}, as per the following definition.
+
+\begin{definition}
+    Fix a computation states structure $\underline{L} = (L, \mathcal{P})$, with $L\subseteq \mathbb{R}^{\mathcal{P}}$ implicitly identified with its type space.
+    A \emph{sizer} is a family $r_{\bullet}=(r_P)_{P\in\mathcal{P}}$ of positive real numbers, indexed by~$\mathcal{P}$.
+    Given a sizer $r_\bullet$, let $\mathbb{R}[\rb] \coloneqq \prod_{P\in\mathcal{P}}[-r_P,r_P]$ (a compact space), and let the $r_\bullet$-\emph{shard} of the states space~$L$ be $$L[r_\bullet] = L\cap \mathbb{R}[\rb].$$
+
+For a sizer $r_{\bullet}$, the \emph{$r_{\bullet}$-type shard} is defined as $\mathcal{L}[r_\bullet]=\overline{L[r_\bullet]}$
+(a closed, hence compact subset of $\mathbb{R}[\rb]$).
+
+Let also $\mathcal{L}_{\sh}$ (the space of \emph{shard-supported types}) be the union of all type-shards as the sizer $r_{\bullet}$ varies.
+\end{definition}
+
+Evidently, $\mathcal{L}_{\sh}\subseteq \mathcal{L}$, although the inclusion may be proper.
+However, the equality $\mathcal{L}_{\sh} = \mathcal{L}$ holds in the important special case when $\mathcal{P}$ is (at most) countable (see~\cite{alva2024approximability}).
+
+\subsection{Compositional Computation Structures} 
+
+\begin{definition}\label{def:CCS}
+    A \emph{Compositional Computation Structure} (CCS) is a triple $(L,\mathcal{P},\Gamma)$, where
+    \begin{itemize}
+        \item $(L,\mathcal{P})$ is a computation states structure, and
+        \item $\Gamma\subseteq L^L$ is a semigroup under composition.
+    \end{itemize}
+
+Elements of the semigroup $\Gamma$ are called the \emph{computations} of the structure $(L,\mathcal{P},\Gamma)$.
+The state space $L$ is implicitly identified with a subset of the type space~$\mathcal{L} \subseteq \mathbb{R}^{\mathcal{P}}$ of~$(L, \mathcal{P})$.
+We also assume that the identity map $\text{id}$ on~$L$ is an element of~$\Gamma$ (which is thus not merely a semigroup but a monoid of transformations of~$L$).
+
+We topologize $\Gamma$ as a subset of the topological product $L^L$, where (as usual) the ``exponent''~$L$ serves merely as an index set, but the ``base''~$L\subseteq \mathbb{R}^{\mathcal{P}}$ has the relative product topology (of pointwise convergence).
+In this manner, the semigroup $\Gamma$ is identified with a subset of the topological product~$\mathcal{L}^L \subseteq (\mathbb{R}^{\mathcal{P}})^L$, which leads to an inclusion $\overline{\Gamma}\subseteq \mathcal{L}^L$.
+Elements $\xi\in\overline{\Gamma}$ are called (real-valued) \emph{deep computations} or \emph{ultracomputations}.
+
+A collection $R$ of sizers is \emph{exhaustive} if $L = \bigcup_{\rb\in R}L[\rb]$ (shards $L[\rb]$ exhaust~$L$).
+A transformation $\gamma\in\Gamma$ is \emph{$R$-confined} if $\gamma$ restricts to a map $\gamma|_{L[r_\bullet]}\colon L[r_\bullet]\to L[r_\bullet]$ (into $L[r_{\bullet}]$ itself) for every $r_\bullet\in R$.
+A subset $\Delta\subseteq\Gamma$ is \emph{$R$-confined} if each $\gamma\in \Delta$ is.
+\end{definition}
+
+Unlike its subspace $L^L$ (a topological semigroup), the space $\mathcal{L}^L$ does not have a natural semigroup structure, so ultracomputations are not generally composable.
+Intuitively, ultracomputations are “final” or “ultimate”.
+
+\begin{proposition}\label{prop:confined-compact}
+    If $\Delta\subseteq\Gamma$ is confined by an exhaustive sizer collection, then $\overline{\Delta}$ is a compact subset of~$\Lshard^L$.
+\end{proposition}
+
+\begin{proof}
+    Assume that $R$ confines~$\Delta$.
+    For each $v\in L$, let $\rb^{(v)}\in R$ be a sizer such that $v\in L[\rb^{(v)}]$.
+    An arbitrary $\gamma\in\Delta$ restricts to a map $\gamma\restriction L[\rb^{(v)}]\colon L[\rb^{(v)}]\to L[\rb^{(v)}]$, so $\Gamma \subseteq K \coloneqq \prod_{v\in L}\mathcal{L}[\rb^{(v)}]$.
+    The space~$K$ is a product of compact spaces, hence compact, so $\overline{\Gamma}$ is a closed, hence compact subset thereof, and a subset of~$\Lshard^L\supseteq K$ \emph{a fortiori}.
+\end{proof}
+
+For a CCS $(L,\mathcal{P},\Gamma)$, we regard the elements of $\Gamma$ as ``standard'' finitary computations, and the elements of $\overline{\Gamma}$, i.e., deep computations, as possibly infinitary limits of standard computations.
+The main goal of this paper is to study the computability, definability and computational complexity of deep computations.
+Since deep computations are defined through a combination of topological concepts (namely, topological closure) and structural and model-theoretic concepts (namely, models and types), we will import technology from both topology and model theory.
+
+\begin{remark}(For readers versed in model theory.)%
+    \footnote{Refer to~\cite{Keisler:2023} where a general framework for real-valued structures is introduced; see also~\cite[section 6]{Duenez-Iovino:2017} for a basic tutorial.}
+    \begin{enumerate}
+    \item compositional computation structures as defined above are not real-valued structures in a literal sense, because there is no intrinsic structural manner to ensure that $\Gamma$ is realized as a literal subset of the product space $L^L$.
+    However, in a semantically transparent manner, any CSS as above may alternatively be seen (per its original definition in~\cite{alva2024approximability}) as a real-valued structure $(L,\mathcal{P},\Gamma,\circ,\operatorname{ev})$, where
+    
+    \begin{itemize}
+        \item $(L,\mathcal{P})$ is a computation states structure,
+        \item $(\Gamma,\circ)$ is a semigroup,
+        \item $\operatorname{ev}\colon \Gamma\times L\to L: (\gamma,v)\mapsto \operatorname{ev}(\gamma,v)$ is a semigroup action of $\Gamma$ on~$L$ (i.e., $\operatorname{ev}(\gamma\circ\delta,v) = \operatorname{ev}(\gamma,\operatorname{ev}(\delta,v))$ for $\gamma,\delta\in\Gamma$ and $v\in L$).
+    \end{itemize}
+    Both definitions are reconciled upon identifying $\gamma\in \Gamma$ with the map $(\gamma,v)\mapsto \operatorname{ev}(\gamma,v)$.
+
+    \item In the preceding sense of real-valued structures, the class of compositional computation structures (for a fixed predicate symbol collection~$\mathcal{P}$) is first-order elementary.
+    The limited notion of state type we have introduced (essentially, quantifier-free state types with parameters of sort $L$ only) may be enriched to state types involving more formulas (e.g., with parameters in~$\Gamma$, or including quantified formulas), and extended to “transform-types” (i.e., types of sort~$\Gamma$).
+    In particular, given a structure $\underline{C}=(L,\mathcal{P}, \Gamma, \circ, \operatorname{ev})$, all types are realized in some ultrapower~$\underline{C}^{(\mathcal{U})}$ of~$\underline{C}$ (constructed in the usual manner detailed in the references above).
+    \footnote{By contrast (cf., Remark~\ref{rem:poor-mans-ultraprod}), the ultrapower construction is not necessary to realize state types in a computation states structures.}
+    This approach to spaces of types was introduced in Banach space theory by Krivine~\cite{Krivine:1974, Krivine-Maurey:1981,Krivine:1972}.
+\end{enumerate}
+\end{remark}
+
+\subsection{Computability of deep computations and the Extensibility Axiom}
+Let $(L, \mathcal{P})$ be a computation structure with \emph{countable} predicate collection~$\mathcal{P}$.
+
+\begin{enumerate}
+\item A \emph{computable predicate} is any real function $\varphi\colon L\to \mathbb{R}$ whose restriction to an arbitrary shard is uniformly approximable by polynomials (with real coefficients) in the features~$P(\cdot)$.
+\item A transform $f\colon L\to \mathcal{L}$ is \emph{computable} if, for each $Q\in\mathcal{P}$, the output feature $Q{\circ}f\colon L\to\mathbb{R}$ is a computable predicate.
+\end{enumerate}
+
+It is shown in \cite{alva2024approximability} that computable transforms $f\colon L\to\mathcal{L}$ are precisely those that extend to continuous maps $\tilde{f}\colon \mathcal{L} \to \mathcal{L}$.
+
+To summarize, for a function $f\colon L\to \mathcal{L}$, the following conditions are equivalent:
+
+\begin{itemize}
+    \item $f$ is computable
+    \item $f$ has uniformly polynomially approximable features on shards
+    \item $f$ extends to a continuous map~$\mathcal{L}\to \mathcal{L}$.
+\end{itemize}
+
+These equivalences motivate the following definition:
+
+A computation $\gamma\in \Gamma$ is \emph{extensible} if it has some extension $\tilde\gamma\colon\mathcal{L}_{\sh}\to\mathcal{L}_{\sh}$ such that, for every sizer $r_{\bullet}$, there is a sizer $s_\bullet$ such that $\tilde\gamma|_{\mathcal{L}[r_\bullet]}\colon\mathcal{L}[r_\bullet]\to\mathcal{L}[s_\bullet]$ is continuous.
+
+Because $\tilde{\gamma}$ extends $\gamma$ continuously on each compact type-shard, we call it the \emph{$K$-extension} of~$\gamma$; such extension is evidently unique (if it exists).
+
+Abusing notation, for any $\Delta\subseteq\Gamma$ consisting of extensible computations, the set $\{\tilde\gamma\colon\gamma\in\Delta\}$ will be denoted $\tilde{\Delta}$.
+
+Extensibility is not automatic: a transform can be continuous, even have continuous features, without those features being \emph{uniformly} approximable by polynomials on every shard, which is exactly what the computability equivalence above requires.
+Without it, a continuous but non-extensible computation would still be ``uncomputable'' in this precise sense, and the equivalence between computability and continuity established above would fail to hold in general.
+For this reason, extensibility is imposed as a standing hypothesis in what follows.
+
+\begin{AxExt}\label{ax:extensibility-axiom}
+    Every computation $\gamma\in\Gamma$ is extensible.
+\end{AxExt}
+
+For a more detailed discussion of the Extensibility Axiom, we refer the reader to~\cite{alva2024approximability}.
+
+\emph{For the rest of the paper, the Extensibility Axiom is imposed on all CCSs.}

@@ -1,0 +1,196 @@
+% /chapters/2-descriptive-combinatorics/05-cantor-game.tex
+
+\section{Uncountable sets and an infinite linear order game}\label{sec:cantor_game}
+
+This section addresses a question by Will Brian and Steven Clontz regarding an infinite game of perfect information with two players, called \emph{Baker's game}.
+
+Games have many useful applications in fields like topology and set theory.
+Leaving many details out of this famous example, the Banach--Mazur game (see \cite{oxtoby1957}) is played by two players who alternate turns picking subsets of $\omega^\omega$, forming a descending chain $W_0\supseteq W_1\supseteq\cdots$.
+A previously agreed upon set $S\subseteq\omega^\omega$ constitutes the winning condition:
+Player I wins if there is an element $x\in S$ such that $x\in W_n$ for all $n$; otherwise, Player II wins.
+A well-known result is that Player II has a winning strategy if and only if $S$ is of the first category.
+In particular, Player II wins whenever $S$ is countable.
+
+The game studied in this section, Baker's game, is similar: two players take turns selecting real numbers; Player I tries to ensure that some element in the fixed set $S$ remains in between all of these real numbers.
+In \cite{brian-clontz}, the authors show that Player II has a winning strategy if and only if the set $S$ is countable.
+It makes sense to play this game in more general linear orders, and so they ask if it is possible for Player II to have a winning strategy on an uncountable set $S$ instead, or if this property somehow only holds in the reals, thus providing a characterization of the reals in these terms.
+
+In collaboration with the other author of \cite{MatosWiederholdSalvetti2025}, we showed the existence of a dense linear order of arbitrary infinite cardinality on which Player II has a winning strategy on \textbf{every} set $S$, including uncountable ones.
+This construction demonstrates that the outcome of Baker's game is highly sensitive to the order type of the underlying space and not merely a matter of cardinality.
+Concretely, the Brian--Clontz characterization does not extend to arbitrary dense linear orders.
+
+\subsection{The Cantor Game}
+
+In \cite{baker}, Matthew Baker introduced the following game on the real numbers.
+Fix a subset $S\subseteq\mathbb{R}$.
+Player I starts by picking a real number $a_0$.
+Then, Player II picks a real number $b_0$ such that $a_0<b_0$.
+In the $n$-th turn, Player I picks a real number $a_n$ such that $a_{n-1}<a_n<b_{n-1}$ and then Player II picks a real number $b_n$ such that $a_n<b_n<b_{n-1}$.
+After $\omega$-many turns they form two sequences of real numbers $\{a_n\}$ and $\{b_n\}$ such that $a_0<a_1<\cdots<a_n<\cdots<b_n<\cdots<b_1<b_0$.
+Player I wins if and only if there exists $x\in S$ such that $a_n<x<b_n$ for all $n<\omega$.
+Otherwise, Player II wins.
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/cantor-game.tex}
+    \caption{The nested construction of intervals in the Cantor Game.}
+    \label{fig:cantor_game}
+\end{figure}
+
+It should be noted that the $[a_n,b_n]$ form a nested set of intervals, and thus there always exists real number $x$ with the property that for all $n<\omega$, $a_n<x<b_n$.
+Proposition~\ref{prop:arrow} generalizes the following observation when playing the game in an arbitrary dense linear order.
+  
+\begin{proposition}[\cite{baker}]\label{prop:countable win}
+    If $S$ is countable, then Player II has a winning strategy in the Cantor Game.
+\end{proposition}
+
+The so-called \emph{Cantor Game} was introduced as a game-theoretic way of proving that $\mathbb{R}$ is uncountable, which follows by the previous observation.
+Baker also proved that if $S$ contains a perfect set, then Player I has a winning strategy.
+Later in \cite{cantor}, M.D.\ Ladue (a student of Baker) proved that Player I has a winning strategy if and only if the set $S$ contains a perfect set.
+The question of whether the converse of Proposition~\ref{prop:countable win} is true remained open until 2022.
+In \cite{brian-clontz}, Brian and Clontz used elementary submodels to prove the converse statement of proposition \ref{prop:countable win} above.
+
+\begin{question}[\cite{brian-clontz}]\label{question:brian-clontz}
+    Is there a linear order $(X,<)$ and an uncountable $S\subseteq X$ on which Player II has a winning strategy?
+\end{question}
+
+\subsection{Scattered and well-ordered sets}\label{sec:prelim}
+
+Given an ordinal $\alpha$, denote by $\alpha^*$ the converse of $\alpha$, i.e., the conversely well-ordered set $(\alpha,>)$.
+Recall that a linearly ordered set is \emph{scattered} if it does not contain a copy of the rationals.
+A linearly ordered set is said to be \emph{$\sigma$-scattered} if it is a countable union of scattered sets.
+Given an order type $\gamma$, say that a linearly ordered set is \emph{$\gamma$-free} if it does not contain a copy of $\gamma$.
+The following result can be found in \cite{partition}.
+We include the proof for the reader's convenience.
+
+\begin{theorem}[\cite{todorcevic_6}]\label{thm:todorcevic}
+    Let $X$ be a linearly ordered set.
+    The following are equivalent.
+    \begin{enumerate}[label=(\roman*)]
+        \item $X$ is a countable union of well-ordered sets.
+        \item $X$ is $\sigma$-scattered and $\omega_1^*$-free.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    $(i)\Rightarrow(ii)$ is clear, so we focus on $(ii)\Rightarrow(i)$.
+    It suffices to assume that $X$ is scattered (and $\omega_1^*$-free).
+    Define the following relation on $X$: $x\sim y$ if and only if the closed interval $[x,y]$ is a countable union of well-ordered sets.
+    Routine arguments show that $\sim$ is an equivalence relation.
+    Also, every equivalence class $\mathcal{C}$ is convex, i.e., if $x,y\in\mathcal{C}$ and $x<z<y$, then $z\in\mathcal{C}$.
+    Let $[x]$ be the equivalence class of $x$.
+    Since every equivalence class is convex, the order $[x]<[y]$ if and only if $x<y$ is well-defined.
+    Hence, the quotient order $X/\!\sim$ is isomorphic to a subspace of $X$.
+    It follows that $X/\!\sim$ is scattered by assumption.
+    \begin{claim}
+        $[x]_{\geq}:=\{y\in[x]:y\geq x\}$ is a countable union of well-ordered sets for all $x$.
+    \end{claim}
+    \begin{claimproof}
+        Let $\{y_\alpha:\alpha<\kappa\}$ be a cofinal subset of $[x]_{\geq}$ with $y_0=x$.
+        So, $$[x]_{\geq}=\bigcup_{\alpha<\kappa}[y_\alpha, y_{\alpha+1}].$$
+        Since $[y_\alpha, y_{\alpha+1}]$ is a countable union of well-ordered sets, then write $[y_\alpha, y_{\alpha+1}]=\bigcup_{n<\omega}A_n^\alpha$, where $A_n^\alpha$ is $\omega^*$-free.
+        Let $A_n:=\bigcup_{\alpha<\kappa}A_n^\alpha$ and notice that $A_n$ is $\omega^*$-free since $\kappa$ is $\omega^*$-free.
+        Then, $[x]_\geq=\bigcup_{n<\omega}A_n$, so $[x]_\geq$ is a countable union of well-ordered sets.
+    \end{claimproof}
+    \begin{claim}
+        $[x]_{\leq}:=\{y\in[x]:y\leq x\}$ is a countable union of well-ordered sets for all $x$.
+    \end{claim}
+    \begin{claimproof}
+        Let $\{y_\alpha:\alpha<\kappa\}$ be a coinitial subset of $[x]_\leq$ with $y_0=x$.
+        Since $X$ is $\omega_1^*$-free, then $\kappa$ is countable, so
+        $$[x]_\leq=\bigcup_{n<\omega}[y_{n+1},y_n].$$
+        Since $[y_{n+1},y_n]$ is a countable union of well-ordered sets for all $n<\omega$, then $[x]_{\leq}$ is a countable union of well-ordered sets.
+    \end{claimproof}
+    The previous two claims imply that $[x]$ is a countable union of well-ordered sets for all $x\in X$.
+    Now we show that actually $X=[x]$ for some $x$.
+    \begin{claim}
+        $(X/\!\sim,<)$ is dense, i.e., if $[x]<[y]$ then there is $z\in Z$ such that $[x]<[z]<[y]$.
+    \end{claim}
+    \begin{claimproof}
+        Let $[x]<[y]$ and suppose there is no $z$ such that $[x]<[z]<[y]$.
+        Then, $[x,y]\subseteq [x]_\geq\cup[y]_\leq$ which implies that $[x,y]$ is a countable union of well-ordered sets by the previous two claims.
+        Therefore, $[x]=[y]$.
+    \end{claimproof}
+    This last claim shows that $X$ must have a single equivalence class, since a nontrivial scattered dense order contains a copy of $\mathbb{Q}$.
+\end{proof}
+
+If $S$ is a countable union of well-ordered subsets of an $\omega_1$-free set $X$, then $S$ must be countable.
+Also, it is clear that a subset $S$ of $\mathbb{R}$ is countable if and only if $S$ is a countable union of well-ordered sets.
+This idea, in combination with the preceding theorem, is generalized by the following.
+
+\begin{corollary}\label{cor:sigma-countable}
+    If $X$ is an $\omega_1$-free and $\omega_1^*$-free linearly ordered set, then the following are equivalent for any $S\subseteq X$.
+    \begin{enumerate}
+        \item $S$ is countable.
+        \item $S$ is a countable union of well-ordered sets.
+        \item $S$ is $\sigma$-scattered.
+    \end{enumerate}
+\end{corollary}
+
+\subsection{Baker's game on linear orders}\label{sec:linear}
+We define a variation of Baker's game in an arbitrary dense linear order $(X,<)$.
+Given $S\subseteq X$, denote by $BG(X,S)$ the game where two players take turns selecting elements $a_n,b_n$ of $X$ as in the Cantor Game for the reals.
+Player I wins if after $\omega$-many turns there is an $x\in S$ such that for all $n<\omega$, $a_n<x<b_n$, and Player II wins otherwise.
+The density condition ensures the game never reaches a stalemate.
+Thus, for the rest of the section, $X$ is a dense linearly ordered set with a fixed subset $S$ (the winning conditions).
+Observe that every countable set $S$ satisfies the subsequent proposition.
+
+\begin{proposition}\label{prop:arrow}
+    If $S$ is a countable union of well-ordered sets, then Player II has a winning strategy for $BG(X,S)$.
+\end{proposition}
+
+\begin{proof}
+    Let $S=\bigcup_{n<\omega}S_n$ where each $S_n$ is $\omega^*$-free (that is, well-founded).
+    In the $n$-th turn, Player II plays $b_n=\min(S_n\cap(a_n,b_{n-1}))$ if $S_n\cap(a_n,b_{n-1})\neq\emptyset$ and any legal move otherwise (by density, there must always be one).
+    Now, suppose that for all $n<\omega$, $a_n<x<b_n$.
+    This implies that $x\notin S_n$ for all $n<\omega$, and hence, $x\notin S$.
+    In other words, this is a winning strategy for Player II.
+\end{proof}
+
+In general, $S$ being a countable union of well-ordered sets does not imply that $S$ is countable (unless it contains no copies of $\omega_1$).
+The previous proposition implies that if $S$ is an (uncountable) well-ordered set, then Player II has a winning strategy for $BG(X,S)$.
+We now show that if $S$ is conversely well-ordered, then Player II has a winning strategy for $BG(X,S)$.
+Notice that an uncountable conversely well-ordered set $S$ has the property that $S$ cannot be written as a countable union of well-ordered sets, so this result shows that, in general, the converse of Proposition ~\ref{prop:arrow} is false.
+
+\begin{theorem}\label{thm:blocks}
+    Suppose that $\gamma$ is an ordinal and $\{S_\alpha:\alpha<\gamma\}$ is a collection of subsets of $X$ on which Player II has a winning strategy.
+    Furthermore, assume that $S_\beta<S_\alpha$ for all $\alpha<\beta<\gamma$ (i.e.\, $x<y$ for all $x\in S_\beta$ and $y\in S_\alpha$).
+    Then, Player II has a winning strategy for $BG\left(X,\bigcup_{\alpha<\gamma}S_\alpha\right)$.
+\end{theorem}
+
+\begin{proof}
+    Player I starts by playing $a_0\in X$.
+    If there is $b_0>a_0$ such that $b_0\leq y$ for all $y\in\bigcup_{\alpha<\gamma}S_\alpha$, then Player II wins by picking $b_0$.
+    Otherwise, Player II picks any legal move in the first turn.
+    In this case, $a_1>a_0$, so let $\alpha_1<\gamma$ be the smallest such that $y_1<a_1$ for some $y_1\in S_{\alpha_1}$.
+    If there is a legal move $b_1>a_1$ such that $b_1\leq y$ for all $y\in\bigcup_{\alpha<\alpha_1}S_\alpha$, then Player II picks such $b_1$ and then uses the winning strategy for $S_{\alpha_1}$.
+    Otherwise, Player II plays any legal move $b_1$ and then, since $a_2>a_1$, one can pick the smallest $\alpha_2<\alpha_1$ such that $y_{2}<a_2$ for some $y_2\in S_{\alpha_2}$.
+    
+    By repeating this process, since $\gamma$ is well-ordered, one cannot have a decreasing sequence $\dots<\alpha_2<\alpha_1<\gamma$.
+    Hence, at some turn $N$, there is a legal move $b_N>a_N$ for Player II such that $b_N\leq y$ for all $y\in\bigcup_{\alpha<\alpha_N}S_\alpha$.
+    After that, Player II continues playing with the winning strategy for $BG(X,S_{\alpha_N})$.
+    
+    This describes a winning strategy for Player II.
+    Indeed, given any $x\in X$ such that $a_n<x<b_n$ for all $n<\omega$, the following holds:
+    Given that $y_N<a_N<x$ and the hypothesis that $S_\beta<S_\alpha$ whenever $\alpha<\beta$, $x\notin S_{\alpha}$ for all $\alpha>\alpha_N$; also $x\notin S_{\alpha}$ for all $\alpha<\alpha_N$ by the way $b_N$ was played.
+    Finally, $x\notin S_{\alpha_N}$, since Player II used a winning strategy for $BG(X,S_{\alpha_N})$.
+\end{proof}
+
+\begin{corollary}
+    If $S$ is conversely well-ordered, then Player II has a winning strategy on $BG(X,S)$.
+\end{corollary}
+
+\begin{corollary}\label{cor:any_kappa}
+    For any infinite cardinal $\kappa$, there is a dense linear order $(X,<)$ of size $\kappa$ on which Player II has a winning strategy on every subset of $X$.
+\end{corollary}
+
+\begin{proof}
+    Take $X=\kappa^*\times\mathbb Q$ ordered lexicographically.
+    Concretely, given $x=(\alpha,p)$ and $y=(\beta, q)$ elements of $X$, $x\leq y$ if either $\beta<\alpha$ or $\alpha=\beta$ and $p<_\mathbb Qq$.
+    Since the rationals are countable and $\kappa$ is infinite, $X$ has the desired size.
+    The fact that $X$ is dense follows from the fact that $\mathbb Q$ is dense and unbounded.
+
+    Now let $S\subseteq X$ and define, for each $\alpha<\kappa$, $S_\alpha=\{\alpha\}\times\mathbb Q$.
+    As each $S_\alpha$ is countable, Player II has a winning strategy for $BG(X,S_\alpha)$, by virtue of Proposition~\ref{prop:arrow}.
+    Since $S=\bigcup_{\alpha<\kappa}S_\alpha$ and the $S_\alpha$ are ordered the way that Theorem~\ref{thm:blocks} requires, the result follows.
+\end{proof}

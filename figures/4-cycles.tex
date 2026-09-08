@@ -1,0 +1,35 @@
+% figures/4-cycles.tex
+
+% Left Subfigure: "U-shape" path
+\begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=2]
+        % Define coordinates for a square
+        \node[vertex, label={[vlabel]above left:$v_1$}] (TL) at (0,1) {};
+        \node[vertex, label={[vlabel]above right:$v_2$}] (TR) at (1,1) {};
+        \node[vertex, label={[vlabel]below left:$v_0$}] (BL) at (0,0) {};
+        \node[vertex, label={[vlabel]below right:$v_3$}] (BR) at (1,0) {};
+
+        % Draw the path: Left, Top, Right
+        \draw[thick] (BL) -- (TL) -- (TR) -- (BR) -- (BL);
+    \end{tikzpicture}
+\end{subfigure}
+\hfill
+% Right Subfigure: "Z-shape" / Diagonals
+\begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=2]
+        % Define coordinates for a square
+        \node[vertex, label={[vlabel]above left:$v_1$}] (TL) at (0,1) {};
+        \node[vertex, label={[vlabel]above right:$v_2$}] (TR) at (1,1) {};
+        \node[vertex, label={[vlabel]below left:$v_0$}] (BL) at (0,0) {};
+        \node[vertex, label={[vlabel]below right:$v_3$}] (BR) at (1,0) {};
+
+        % Draw the path: Bottom-Left to Top-Left, Top-Left to Bottom-Right, Bottom-Right to Top-Right
+        % Based on your description: "top edge and the two diagonals"
+        \draw[thick] (BL) -- (TR); % Diagonal 1
+        \draw[thick] (TR) -- (TL); % Top edge
+        \draw[thick] (TL) -- (BR); % Diagonal 2
+        \draw[thick] (BL) -- (BR);
+    \end{tikzpicture}
+\end{subfigure}

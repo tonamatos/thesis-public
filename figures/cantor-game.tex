@@ -1,0 +1,65 @@
+% figures/cantor-game.tex
+
+\begin{tikzpicture}[scale=1.2]
+
+    % Main horizontal real line
+    \draw[black!40, -] (-5.5,0) -- (5.5,0);
+
+    % Define distances - n=0 to n=3
+    \def\dist{4.5} 
+    \def\scale{0.5}
+
+    % --- Nodes and Labels ---
+    
+    % n=0
+    \node[vertex] (a0) at (-\dist,0) {};
+    \node[vlabel, below=4pt of a0] {$a_0$};
+    \node[vertex] (b0) at (\dist,0) {};
+    \node[vlabel, below=4pt of b0] {$b_0$};
+
+    % n=1
+    \node[vertex] (a1) at (-\dist*\scale,0) {};
+    \node[vlabel, below=4pt of a1] {$a_1$};
+    \node[vertex] (b1) at (\dist*\scale,0) {};
+    \node[vlabel, below=4pt of b1] {$b_1$};
+
+    % n=2
+    \node[vertex] (a2) at (-\dist*\scale*\scale,0) {};
+    \node[vlabel, below=4pt of a2] {$a_2$};
+    \node[vertex] (b2) at (\dist*\scale*\scale,0) {};
+    \node[vlabel, below=4pt of b2] {$b_2$};
+
+    % n=3
+    \node[vertex] (a3) at (-\dist*\scale*\scale*\scale,0) {};
+    \node[vlabel, below=4pt of a3] {$a_3$};
+    \node[vertex] (b3) at (\dist*\scale*\scale*\scale,0) {};
+    \node[vlabel, below=4pt of b3] {$b_3$};
+
+    % Central Ellipses (the limit)
+    \fill[black] (-0.15,0) circle (0.8pt);
+    \fill[black] (0,0)    circle (0.8pt);
+    \fill[black] (0.15,0)  circle (0.8pt);
+
+    % --- Mirror Image Arched Arrows ---
+    % out=angle determines the exit trajectory, in=angle determines the entry.
+    \tikzset{
+        arxA/.style={-{Latex[scale=0.8]}, black!70, thin, out=45, in=135, shorten >= 1.5pt},
+        arxB/.style={-{Latex[scale=0.8]}, black!70, thin, out=-135, in=-45, shorten >= 1.5pt}
+    }
+
+    % Player I moves (Top side, curving Right)
+    \draw[arxA] (a0.north) to (a1.north);
+    \draw[arxA] (a1.north) to (a2.north);
+    \draw[arxA] (a2.north) to (a3.north);
+    % Final fading arrow for Player I
+    \draw[arxA, dashed] (a3.north) to (-0.2, 0.1);
+
+    % Player II moves (Bottom side, curving Left)
+    % Note: we draw from b_n to b_{n+1} so the arrow points toward the center
+    \draw[arxB] (b0.south) to (b1.south);
+    \draw[arxB] (b1.south) to (b2.south);
+    \draw[arxB] (b2.south) to (b3.south);
+    % Final fading arrow for Player II
+    \draw[arxB, dashed] (b3.south) to (0.2, -0.1);
+
+    \end{tikzpicture}

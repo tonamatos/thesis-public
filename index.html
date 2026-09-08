@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tonatiuh Matos Wiederhold — PhD Thesis</title>
+<style>
+  :root {
+    --ink: #1c1c1c;
+    --muted: #6b6b6b;
+    --rule: #e2e2e2;
+    --card: rgba(255, 255, 255, 0.9);
+  }
+
+  body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 40px 16px;
+    color: var(--ink);
+    background-image: url('https://images.pexels.com/photos/7598077/pexels-photo-7598077.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  #container {
+    max-width: 720px;
+    margin: auto;
+    padding: 44px 48px;
+    background: var(--card);
+    border-radius: 12px;
+  }
+
+  h1 {
+    margin: 0 0 4px 0;
+    font-size: 1.75rem;
+    line-height: 1.25;
+  }
+
+  .byline {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0 0 28px 0;
+  }
+
+  h2 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 600;
+    margin: 32px 0 12px 0;
+  }
+
+  p { line-height: 1.6; }
+
+  .abstract { font-size: 0.95rem; }
+
+  .downloads {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0 8px 0;
+  }
+
+  .btn {
+    flex: 1 1 220px;
+    display: block;
+    padding: 14px 20px;
+    background: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+
+  .btn:hover { background: #555; }
+  .btn .title { font-weight: bold; display: block; }
+  .btn .sub {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.75;
+    font-weight: normal;
+    margin-top: 2px;
+  }
+
+  .btn.secondary { background: #5a5a5a; }
+  .btn.secondary:hover { background: #6f6f6f; }
+
+  ol.chapters {
+    padding-left: 1.2em;
+    line-height: 1.7;
+    font-size: 0.95rem;
+  }
+
+  ol.chapters li { margin-bottom: 2px; }
+
+  a.plain { color: #333; }
+
+  .copyright {
+    text-align: center;
+    color: #aaa;
+    font-size: 0.8rem;
+    border-top: 1px solid var(--rule);
+    padding-top: 18px;
+    margin: 40px 0 0 0;
+  }
+</style>
+</head>
+
+<body>
+<div id="container">
+
+<h1>On Complexity, Computation, and Graph Homomorphisms</h1>
+<p class="byline">Doctor of Philosophy &middot; Tonatiuh Matos Wiederhold &middot; Graduate Department of Mathematics, University of Toronto, 2026</p>
+
+<div class="downloads">
+  <a class="btn" href="thesis.pdf">
+    <span class="title">Read the thesis 📄</span>
+    <span class="sub">PDF, ~127 pages</span>
+  </a>
+  <a class="btn secondary" href="slides.pdf">
+    <span class="title">Defence slides 🎤</span>
+    <span class="sub">PDF, presentation</span>
+  </a>
+</div>
+
+<h2>Abstract</h2>
+<p class="abstract">
+A wide range of problems in computer science, including constraint satisfaction, can be
+framed in the language of graph homomorphisms. There are problems for which the existence
+of a solution may be proved by means of the Axiom of Choice or a non-principal ultrafilter.
+Although such solutions exist abstractly, in practice we want solutions that are definable,
+and so it is natural to impose restrictions. Interestingly, this often makes the problems
+harder to solve, but the solutions have a concrete description. This thesis studies the cost
+of insisting on definable solutions. The parallel between computer-science and set-theoretic
+complexity is a recurring theme in the thesis.
+</p>
+<p class="abstract">
+Descriptive set theory provides the language for all three substantive chapters: Borel
+definability for Chapter&nbsp;2, the Baire-class hierarchy for Chapter&nbsp;3, and Polish
+group actions for Chapter&nbsp;4.
+</p>
+
+<h2>Contents</h2>
+<ol class="chapters">
+  <li>Introduction</li>
+  <li>Descriptive Combinatorics</li>
+  <li>Deep Computations</li>
+  <li>Group Actions on Graphs</li>
+  <li>Closing Remarks and Open Problems</li>
+</ol>
+
+<h2>Source</h2>
+<p style="font-size: 0.95rem;">
+The complete LaTeX sources are available on
+<a class="plain" href="https://github.com/tonamatos/thesis-public">GitHub</a>.
+The thesis uses the
+<a class="plain" href="https://ctan.org/tex-archive/macros/latex/contrib/ut-thesis/">ut-thesis</a>
+document class together with my own
+<a class="plain" href="https://github.com/tonamatos/tonas-latex">style files</a>.
+</p>
+
+<p class="copyright">2026 &copy; Tonatiuh Matos Wiederhold</p>
+
+</div>
+</body>
+</html>

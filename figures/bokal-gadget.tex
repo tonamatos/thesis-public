@@ -1,0 +1,49 @@
+% figures/bokal-gadget.tex
+
+\begin{tikzpicture}[
+    >=Stealth, 
+    node distance=2.5cm,
+    dot/.style={circle, draw, fill=white, inner sep=1.5pt},
+    every node/.style={font=\large\itshape}
+]
+
+    % --- Coordinates ---
+    % Left Column
+    \node[dot] (a) at (0, 4) {};
+    \node[dot] (b) at (0, 2) {};
+    \node[dot] (c) at (0, 0) {};
+    
+    % Right Column
+    \node[dot] (cp) at (4, 4) {};
+    \node[dot] (bp) at (4, 2) {};
+    \node[dot] (ap) at (4, 0) {};
+
+    % --- Labels ---
+    \node[above left=2pt of a]  {a};
+    \node[left=4pt of b]        {b};
+    \node[below left=2pt of c]  {c};
+    
+    \node[above right=2pt of cp] {c'};
+    \node[right=4pt of bp]       {b'};
+    \node[below right=2pt of ap] {a'};
+
+    % --- Edges ---
+    % Vertical connections
+    \draw[->, thick] (a) -- (b);
+    \draw[->, thick] (b) -- (c);
+    \draw[->, thick] (ap) -- (bp);
+    \draw[->, thick] (bp) -- (cp);
+
+    % Horizontal/Diagonal connections
+    \draw[->, thick] (cp) -- (a);
+    \draw[->, thick] (c) -- (ap);
+    \draw[->, thick] (bp) -- (a);
+    \draw[->, thick] (b) -- (cp);
+    \draw[->, thick] (ap) -- (b);
+    \draw[->, thick] (c) -- (bp);
+
+    % Curved outer edges
+    \draw[->, thick] (a) to[bend right=45] (c);
+    \draw[->, thick] (cp) to[bend left=45] (ap);
+
+\end{tikzpicture}

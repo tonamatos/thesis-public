@@ -1,0 +1,275 @@
+% /chapters/2-descriptive-combinatorics/04-inexistence.tex
+
+\section{No countable basis for Borel directed graphs of dichromatic number at least three}\label{sec:dichromatic}
+
+This section proves that the Borel directed graphs whose vertex set admits a partition into two Borel acyclic sets form a $\mathbf\Sigma^1_2$-complete set; equivalently, that deciding whether a Borel directed graph has Borel dichromatic number at least~$3$ is a $\mathbf\Pi^1_2$-complete problem.
+It follows that no countable family of Borel directed graphs can serve as a basis for this class under Borel homomorphism and, more generally, that any basis must be at least as complex as~$\mathbf\Pi^1_2$.
+
+The proof lifts the classical NP-completeness reduction of Bokal, Fijav{\v{z}}, Juvan, Kayll, and Mohar to the Borel setting, using the coding framework of Thornton.
+Combined with a straightforward reduction from undirected to directed colouring problems, this completes the picture for finite Borel chromatic and dichromatic thresholds: for every finite $k$, the set of Borel (directed) graphs admitting a Borel $k$-(di)colouring is $\mathbf\Sigma^1_2$-complete, and the complement therefore admits no countable basis.
+This contrasts with the uncountable threshold, where a single-element basis exists for Borel chromatic number (Kechris--Solecki--Todor{\v{c}}evi{\'c}) and a continuum-size basis exists for Borel dichromatic number (Raghavan--Xiao).
+
+We work throughout with \emph{nice codes} in the sense of Thornton~\cite{thornton2022algebraic, thornton-thesis}; see Subsection~\ref{sec:framework} for a brief review.
+
+\begin{proposition}\label{prop:main}
+	The set of nice codes for Borel directed graphs admitting a Borel $2$-dicolouring is $\mathbf\Sigma^1_2$-complete.
+	Equivalently, the set of nice codes for Borel directed graphs with Borel dichromatic number at least~$3$ is $\mathbf\Pi^1_2$-complete.
+\end{proposition}
+
+\begin{corollary}\label{cor:no-basis}
+	There is no countable family~$\mathbf{B}$ of Borel directed graphs that forms a basis for Borel directed graphs of Borel dichromatic number at least~$3$ under Borel homomorphism.
+\end{corollary}
+
+The proof of Proposition~\ref{prop:main} proceeds by adapting the classical NP-completeness reduction from 2-colouring of 3-uniform hypergraphs to 2-dicolouring of directed graphs~\cite{Bokal_2004_CircularChrom} to the Borel setting.
+The key step is verifying that this reduction is $\Delta^1_1$ in the codes, following the template established by Thornton in~\cite[Appendix~A]{thornton-thesis} for a similar result about edge 3-colouring.
+I remark that 2-dicolouring of directed graphs is \emph{not} a CSP in the sense of Thornton's algebraic framework~\cite{thornton2022algebraic}, since acyclicity is not a constraint expressible as a homomorphism to a fixed finite template; thus Proposition~\ref{prop:main} does not follow directly from Thornton's general results.
+
+The picture reveals a notable difference between the undirected and directed settings at the uncountable threshold: a single graph suffices as a basis in the undirected case, while a continuum-size family is needed for directed graphs.
+With finitely many colours, both settings exhibit the same completeness obstruction to a countable basis, though at different thresholds: the phenomenon begins at $k=3$ for undirected graphs and already at $k=2$ for directed graphs, mirroring the classical NP-completeness landscape.
+The case $k=2$ for directed graphs, established in this paper, is the last remaining piece of this picture (see Remark~\ref{rmk:dichrom-recovers-chrom}).
+
+Several questions are posed in Section~\ref{sec:dichrom-questions}.
+
+\subsection{Coding framework}\label{sec:framework}
+
+Briefly recall the coding apparatus from~\cite[Appendix~A]{thornton-thesis}; see also \cite[Section~4]{thornton2022algebraic}.
+The reader already familiar with this framework may skip to Subsection~\ref{sec:classical}.
+
+Fix a good $\omega$-parametrization $U\subseteq\omega\times\NN$ of $\Pi^1_1$ \cite[Theorem~A.5]{thornton2022algebraic}.
+
+\begin{definition}[{\cite[Definition~A.6]{thornton2022algebraic}}]\label{def:simple-nice-codes}
+	A \emph{simple code} for a $\Delta^1_1$ set~$B\subseteq\NN$ is a pair $(e,i)\in\omega^2$ with $U_e = \NN\setminus U_i = B$.
+
+	A \emph{nice coding} is a triple $(\CC,\DD^\Pi,\DD^\Sigma)$ where:
+	\begin{enumerate}[label=(\roman*)]
+		\item $\CC\subseteq\omega$ is $\Pi^1_1$ (the set of \emph{codes});
+		\item $\DD^\Pi\subseteq\omega\times\NN$ is $\Pi^1_1$ and $\DD^\Sigma\subseteq\omega\times\NN$ is $\Sigma^1_1$;
+		\item for every $e\in\CC$, $\DD^\Pi_e = \DD^\Sigma_e$;
+		\item every $\Delta^1_1$ set $B\subseteq\NN$ has a code $e\in\CC$ with $B = \DD^\Pi_e$;
+		\item there are recursive functions translating between simple and nice codes in both directions.
+	\end{enumerate}
+\end{definition}
+
+Fix nice codings for $\Delta^1_1(\NN^k)$ for all~$k$, writing $\DD_e$ for $\DD^\Pi_e$.
+
+\begin{lemma}[{\cite[Lemma~A.7]{thornton2022algebraic}}]\label{lemma:toolkit}
+	Fix a $\Delta^1_1$ linear order~$\preceq$ on~$\NN$.
+	The following operations are $\Delta^1_1$ in the codes:
+	\begin{enumerate}[label=(\arabic*)]
+		\item $(A,B)\mapsto A\cup B$;
+		\item $(A,B)\mapsto A\cap B$;
+		\item $(A,B)\mapsto A\times B$;
+		\item $A\mapsto\dom(A)$, for relations with countable sections;
+		\item $(A,f)\mapsto f(A)$, for countable-to-one~$f$;
+		\item $A\mapsto$ the enumeration function of the finite sections of~$A$ along~$\preceq$.
+	\end{enumerate}
+\end{lemma}
+
+This lemma can typically be used as a black box: to verify that a construction is $\Delta^1_1$ in the codes, it suffices to express it as a composition of the preceding operations.
+
+\subsection{The classical reduction}\label{sec:classical}
+
+Now, I recall the reduction from 2-colouring of 3-uniform hypergraphs to 2-dicolouring of directed graphs.
+The NP-completeness of 2-dicolouring follows by combining this reduction with the well-known NP-completeness of 2-colouring 3-uniform hypergraphs.
+The reduction is due to Bokal et al.~\cite{Bokal_2004_CircularChrom}; I present it in a form convenient for the Borel lifting.
+
+\begin{fact}\label{fact:hyp-np}
+	The problem of deciding whether a 3-uniform hypergraph admits a 2-colouring is NP-complete.
+\end{fact}
+ 
+\begin{definition}[Template gadget]\label{def:gadget}
+	Let $$T_{\mathrm{shared}}:=\{a,b,c\}\quad T_{\mathrm{aux}}:=\{a',b',c'\}\quad T:=T_{\mathrm{shared}}\cup T_{\mathrm{aux}}.$$
+	The \emph{template gadget}~$F$ is the directed graph on vertex set~$T$ with arc set~$E_T$ as depicted in Figure~\ref{fig:gadget}.
+\end{definition}
+
+\begin{figure}[ht]
+    \centering
+    \input{figures/bokal-gadget.tex}
+    \caption{The template gadget~$F$. Shared vertices $\{a,b,c\}$ correspond to hypergraph vertices; auxiliary vertices $\{a',b',c'\}$ are local to each gadget copy.}
+    \label{fig:gadget}
+\end{figure}
+
+\begin{lemma}[Gadget property]\label{lemma:gadget-property}
+A map $\sigma\colon\{a,b,c\}\to 2$ extends to a 2-dicolouring of~$F$ if and only if~$\sigma$ is not constant (i.e., not all three shared vertices receive the same colour).
+\end{lemma}
+
+\begin{proof}
+	This is a finite verification on the structure of~$F$; see~\cite[Theorem~3.1]{Bokal_2004_CircularChrom}.
+\end{proof}
+
+\begin{lemma}[Classical reduction]\label{lem:classical}
+For every 3-uniform hypergraph $H$, there is a directed graph $D(H)$ such that $H$ is 2-colourable if and only if $D(H)$ is 2-dicolourable.
+\end{lemma}
+
+\begin{proof}
+	Let $V = V(H)$ and fix a linear order on~$V$.
+	Define $$E_{\mathrm{sort}} = \bigl\{(v_1,v_2,v_3)\in E(H) : v_1 < v_2 < v_3\bigr\},$$
+	a canonical listing of hyperedges as ordered triples.
+	For each $$e=(v_1,v_2,v_3)\in E_{\mathrm{sort}},$$ place a copy~$F_e$ of the template gadget, identifying the shared labels $a,b,c$ with the hypergraph vertices $v_1,v_2,v_3$ and introducing fresh auxiliary vertices $(e,a'),(e,b'),(e,c')$.
+	The directed graph~$D(H)$ has vertex set $$V_D = V \cup \bigl\{(e,t) : e\in E_{\mathrm{sort}},\; t\in T_{\mathrm{aux}}\bigr\}$$
+	and arcs given by the union of the arcs of all copies~$F_e$, with each shared label mapped to the corresponding vertex of~$V$.
+
+	First, suppose that $c\colon V\to 2$ is a proper 2-colouring of the hypergraph~$H$.
+	For each~$e\in E_{\mathrm{sort}}$, the induced colouring on the shared vertices of~$F_e$ is non-constant, so by Lemma~\ref{lemma:gadget-property} it extends to a 2-dicolouring~$\sigma_e$ of~$F_e$.
+	Combining these extensions with~$c$ on shared vertices yields a globally well-defined map $\psi\colon V_D\to 2$.
+	We now claim that $\psi$ is a 2-dicolouring of~$D(H)$.
+	Suppose not, and let $C$ be a monochromatic directed cycle of minimal length.
+	Since every arc between vertices of~$V$ is directed according to the linear order~$\prec$ on~$V$, the cycle~$C$ cannot be contained entirely in~$V$; hence $C$ contains an auxiliary vertex.
+	Let $F_e$ be a gadget containing an auxiliary vertex of~$C$.
+	Since $\sigma_e$ is a 2-dicolouring of~$F_e$, the cycle~$C$ cannot be contained entirely in~$F_e$, so $C$ contains a directed segment $$x\to\cdots\to y\to\cdots\to z$$ lying inside~$F_e$, with $y$ an auxiliary vertex of~$F_e$, $x,z\in\{a,b,c\}$ shared, and all interior vertices auxiliary in~$F_e$.
+	By minimality of~$C$, this segment cannot be shortcut by an arc $x\to z$, so $(x,z)\notin E(F_e)$, leaving $(x,z)\in\{(b,a),(c,a),(c,b)\}$.
+	Since the only arcs of~$F$ between shared vertices are $a\to b$, $a\to c$, $b\to c$, this forces $(z,x)\in E(F_e)$.
+	The arc $z\to x$ together with the segment $x\to\cdots\to z$ forms a directed cycle in~$F_e$, monochromatic in the colour class of~$C$, contradicting that $\sigma_e$ is a 2-dicolouring of~$F_e$.
+
+	Conversely, let $\psi\colon V_D\to 2$ be a 2-dicolouring of~$D(H)$ and set $\varphi = \psi\restriction_V$.
+	For any $e = (v_1,v_2,v_3)\in E_{\mathrm{sort}}$, the restriction $\psi\restriction_{V(F_e)}$ is a 2-dicolouring of~$F_e$, so by the contrapositive of Lemma~\ref{lemma:gadget-property}, $\varphi(v_1),\varphi(v_2),\varphi(v_3)$ are not all equal.
+	Hence $\varphi$ is a 2-colouring of~$H$.
+\end{proof}
+
+\begin{remark}\label{rmk:reverse-simple}
+	The converse direction requires no selection or choice: $\varphi$ is simply the restriction of~$\psi$ to the original vertex set~$V$, which is a subset of~$V_D$ by construction.
+	This will be important in Subsection~\ref{sec:borel}, where it means that no uniformization argument is needed for the reverse direction of the Borel reduction.
+\end{remark}
+
+\subsection{The Borel reduction}\label{sec:borel}
+
+I now verify that the construction of Subsection~\ref{sec:classical} lifts to the Borel setting.
+The argument follows the template of~\cite[Theorem~A.9]{thornton2022algebraic}, where a similar verification for edge 3-colouring is carried out.
+
+\begin{fact}[{\cite[Corollary~4.6]{thornton2022algebraic}}]\label{fact:hyp-borel}
+	The set of nice codes for locally finite\footnote{A hypergraph is \emph{locally finite} if every vertex has finitely many incident hyperedges.} Borel 3-uniform hypergraphs admitting a Borel 2-colouring is $\mathbf\Sigma^1_2$-complete.
+\end{fact}
+
+It therefore suffices to produce a $\Delta^1_1$ reduction from the set of codes for Borel 2-colourable 3-uniform hypergraphs to the set of codes for Borel 2-dicolourable directed graphs.
+
+Now I verify that the construction is $\Delta^1_1$ in the codes.
+Let $H$ be a locally finite Borel 3-uniform hypergraph with vertex set $V\subseteq\NN$ and hyperedge set $E\subseteq V^3$.
+We treat $E$ as a symmetric ternary relation, i.e.\ closed under permutations of its three coordinates, so that the sorted set~$E_{\mathrm{sort}}$ defined below extracts a unique sorted triple per hyperedge.
+We fix a $\Delta^1_1$ linear order~$\preceq$ on~$\NN$ and encode the template gadget~$F$, its label set~$T$, and its arc set~$E_T$ by canonical finite sequences in~$\NN$.
+
+Begin by sorting the hyperedges.
+$$E_{\mathrm{sort}} = \{(v_1,v_2,v_3)\in E : v_1\preceq v_2\preceq v_3\}.$$
+This is the intersection of~$E$ with the ternary relation $\{(v_1,v_2,v_3)\in\NN^3 : v_1\preceq v_2\preceq v_3\}$, which is itself $\Delta^1_1$ as the conjunction of two pullbacks of the graph of~$\preceq$.
+Hence $E_{\mathrm{sort}}$ is $\Delta^1_1$ on codes by Lemma~\ref{lemma:toolkit}(2).
+
+Then, build the vertex set.
+Define $V_D = V \cup \bigl(E_{\mathrm{sort}}\times T_{\mathrm{aux}}\bigr)$, which is a union of~$V$ with a product, hence $\Delta^1_1$ on codes by Lemma~\ref{lemma:toolkit}(1),(3).
+
+Finally, build the arc set.
+For each $e = (v_1,v_2,v_3)\in E_{\mathrm{sort}}$ and each template arc $(u,v)\in E_T$, define the \emph{substitution map} $\varphi_H\colon E_{\mathrm{sort}}\times E_T\to V_D^2$ that sends a pair $(e,(u,v))$ to the corresponding arc of~$D(H)$, by replacing each label $\ell\in T$ with its realization in~$D(H)$:
+\begin{itemize}[nosep]
+	\item if $\ell\in T_{\mathrm{shared}}$ is the shared label in position~$i$ (i.e., $\ell\in\{a,b,c\}$ in position $i$), it maps to the vertex $v_i\in V$ occurring in $e=(v_1,v_2,v_3)$;
+	\item if $\ell\in T_{\mathrm{aux}}$, it maps to $(e,\ell)\in E_{\mathrm{sort}}\times T_{\mathrm{aux}}$.
+\end{itemize}
+Since the gadget is finite and fixed, the substitution map is recursive relative to the code for $E_{\mathrm{sort}}$, obtained by finitely many coordinate projections and pairings.
+Adding these constructions over the finitely many template arcs $(u,v)\in E_T$ via Lemma~\ref{lemma:toolkit}(1) shows that the substitution map~$\varphi_H$ is $\Delta^1_1$ in the code of~$H$ (with $E_T$ treated as fixed throughout).
+
+The arc set is $A_D = \varphi_H(E_{\mathrm{sort}}\times E_T)$.
+To apply Lemma~\ref{lemma:toolkit}(5), we need $\varphi_H$ to be countable-to-one.
+This holds: for any arc $\alpha\in A_D$, the preimage $\varphi_H^{-1}(\alpha)$ is finite, since $E_T$ is finite and, by local finiteness of~$H$, each vertex of~$V$ appears in only finitely many hyperedges in~$E_{\mathrm{sort}}$.
+By Lemma~\ref{lemma:toolkit}(1),(3),(5), the arc set~$A_D$ is $\Delta^1_1$ on codes.
+
+Applying the simple-to-nice code translation from the coding framework (Definition~\ref{def:simple-nice-codes}(v)), we obtain:
+
+\begin{lemma}\label{lem:code-reduction}
+	The function that maps the code of $H$ to the code of $D(H)$ is $\Delta^1_1$.
+\end{lemma}
+
+Now I show that Borel colourability is preserved.
+
+\begin{claim}\label{claim:forward}
+	If $H$ is Borel 2-colourable, then $D(H)$ is Borel 2-dicolourable.
+\end{claim}
+
+\begin{proof}
+	Let $c\colon V\to 2$ be a Borel 2-colouring of~$H$.
+	For each $e\in E_{\mathrm{sort}}$, the restriction of~$c$ to the shared vertices of~$F_e$ is non-constant, so by the gadget property (Lemma~\ref{lemma:gadget-property}) there exists at least one extension to a 2-dicolouring of~$F_e$.
+	Denote by $\CF$ the finite set of maps $T\to 2$ and define $S$ as the set of all $(e,\sigma)\in E_{\mathrm{sort}}\times\CF$ such that $\sigma$ is a 2-dicolouring of $F_e$ extending the shared-vertex colours.
+	The set~$S$ is Borel since the defining condition involves only finitely many acyclicity checks and colour-matching conditions, all determined by the Borel colouring~$c$ and the fixed finite template.
+	Furthermore, $S$ has finite nonempty sections~$S_e$.
+	By the Luzin--Novikov uniformization theorem, there is a Borel selector $e\mapsto\sigma(e)\in S_e$.
+
+	The map $\psi\colon V_D\to 2$ defined by
+	$$\psi(v) =\begin{cases}c(v),&v\in V;\\
+		\sigma(e)(t),&(e,t)\in E_{\mathrm{sort}}\times T_{\mathrm{aux}}\end{cases}$$
+	is well-defined (auxiliary vertices of distinct gadgets are disjoint). Since $c$ and $e\mapsto\sigma(e)$ are Borel, and the decomposition of $V_D$ into $V$ and $E_{\mathrm{sort}}\times T_{\mathrm{aux}}$ is Borel, the map $\psi$ is Borel.
+
+	We claim each colour class of~$\psi$ is acyclic.
+	Suppose not, and let $C$ be a monochromatic directed cycle of minimal length.
+	Since every arc between vertices of~$V$ is directed according to the linear order~$\prec$ on~$V$, the cycle~$C$ cannot be contained entirely in~$V$; hence $C$ contains an auxiliary vertex.
+	Let $F_e$ be a gadget containing an auxiliary vertex of~$C$.
+	Since $\sigma(e)$ is a 2-dicolouring of~$F_e$, the cycle~$C$ cannot be contained entirely in~$F_e$, so $C$ contains a directed segment $$x\to\cdots\to y\to\cdots\to z$$ lying inside~$F_e$, with $y$ an auxiliary vertex of~$F_e$, $x,z\in\{a,b,c\}$ shared, and all interior vertices auxiliary in~$F_e$.
+	Once again, the minimality of~$C$ implies that this segment cannot be shortcut by an arc $x\to z$, so $(x,z)\notin E(F_e)$, leaving $(x,z)\in\{(b,a),(c,a),(c,b)\}$.
+	Since the only arcs of~$F$ between shared vertices are $a\to b$, $a\to c$, $b\to c$, we have that $(z,x)\in E(F_e)$.
+	The arc $z\to x$ together with the segment $x\to\cdots\to z$ forms a directed cycle in~$F_e$, monochromatic in the colour class of~$C$, contradicting that $\sigma(e)$ is a 2-dicolouring of~$F_e$.
+\end{proof}
+
+\begin{claim}\label{claim:reverse}
+	If $D(H)$ is Borel 2-dicolourable, then $H$ is Borel 2-colourable.
+\end{claim}
+
+\begin{proof}
+	Let $\psi\colon V_D\to 2$ be a Borel 2-dicolouring of~$D(H)$ and define $\varphi = \psi\restriction_V$.
+	Since $V\subseteq V_D$ is Borel, $\varphi$~is Borel.
+	For any hyperedge $e=(v_1,v_2,v_3)\in E_{\mathrm{sort}}$, the gadget~$F_e$ is a directed subgraph of~$D(H)$, so $\psi\restriction_{V(F_e)}$ is a 2-dicolouring of~$F_e$, and the gadget property implies that $\varphi(v_1),\varphi(v_2),\varphi(v_3)$ are not all equal.
+	Hence~$\varphi$ is a Borel 2-colouring of~$H$.
+\end{proof}
+
+\begin{remark}\label{rmk:no-lf-reverse}
+	Note that the reverse direction (Claim~\ref{claim:reverse}) uses neither the local finiteness of~$H$ nor any uniformization.
+	Local finiteness of~$H$ is invoked at three points in the forward direction: it is a hypothesis of Fact~\ref{fact:hyp-borel}; it makes the substitution map~$\varphi_H$ countable-to-one (in fact finite-to-one), enabling the application of Lemma~\ref{lemma:toolkit}(5) in the $\Delta^1_1$ reduction; the sections~$S_e$ are finite (indeed uniformly bounded independently of $H$), enabling the application of Luzin--Novikov.
+\end{remark}
+
+I can finally prove the main result of the section.
+
+\begin{proof}[Proof of Proposition~\ref{prop:main}]
+	By Fact~\ref{fact:hyp-borel}, the set of nice codes for locally finite Borel 3-uniform hypergraphs with Borel 2-colourings is $\mathbf\Sigma^1_2$-complete.
+	By Lemma~\ref{lem:code-reduction}, the map $\mathrm{code}(H)\mapsto\mathrm{code}(D(H))$ is~$\Delta^1_1$.
+	By Claims~\ref{claim:forward} and~\ref{claim:reverse}, $H$~is Borel 2-colourable if and only if $D(H)$~is Borel 2-dicolourable.
+	Thus the set of nice codes for Borel 2-dicolourable directed graphs is $\mathbf\Sigma^1_2$-hard.
+
+	For the upper bound, note that a directed graph~$D$ (given by a nice code) admits a Borel 2-dicolouring if and only if there exists a nice code~$e_c$ such that $\DD_{e_c}$ defines a valid 2-dicolouring of~$D$.
+	The condition ``$\DD_{e_c}$ is a 2-dicolouring of~$D$'' is $\mathbf\Pi^1_1$ in the codes $e_c$ and $e_D$.
+	Totality, that $\DD_{e_c}$ defines a function $V(D)\to 2$, is a universal condition over $V(D)$.
+	Acyclicity of each colour class is Borel (indeed, arithmetic), since a directed graph is acyclic if and only if it contains no finite directed cycle.
+	This is a universal quantification (over finite sequences, coded in~$\NN$) of a $\Delta^1_1$ matrix.
+	The existential quantification over~$e_c$ gives a $\mathbf\Sigma^1_2$ condition.
+	Hence the set of codes for Borel 2-dicolourable directed graphs is $\mathbf\Sigma^1_2$-complete; its complement, the set of codes for directed graphs with $\vec\chi_B(D)\geq 3$, is $\mathbf\Pi^1_2$-complete.
+\end{proof}
+
+\begin{remark}\label{rmk:sigma-pi-convention}
+	The convention used in~\cite{Todorcevic_2021_ComplexProbBorel} and~\cite{thornton2022algebraic} is to state the $\mathbf\Sigma^1_2$-completeness of the class of graphs \emph{admitting} a colouring.
+	We follow this convention.
+\end{remark}
+
+\begin{proof}[Proof of Corollary~\ref{cor:no-basis}]
+Suppose a countable basis $\mathbf{B} = \{H_1,H_2,\dots\}$ exists, so that
+$$
+	\vec\chi_B(D) \geq 3
+	\quad\Longleftrightarrow\quad
+	\exists\, H_n\in\mathbf{B},\ \exists\text{ Borel homomorphism } H_n\to D.
+$$
+For each fixed~$H_n$, the condition ``there exists a Borel homomorphism $H_n\to D$'' is $\mathbf\Sigma^1_2$ in the code for~$D$: one existential quantifier over a nice code~$e_f$ for a Borel function $f\colon V(H_n)\to V(D)$, and the requirement that~$f$ preserves arcs is $\mathbf\Pi^1_1$ in the codes.
+
+The countable union $\bigcup_n \{D : H_n\to_B D\}$ is therefore~$\mathbf\Sigma^1_2$.
+And Proposition~\ref{prop:main} asserts that the $\{D : \vec\chi_B(D)\geq 3\}$ is $\mathbf\Pi^1_2$-complete.
+A set that is simultaneously $\mathbf\Sigma^1_2$ and $\mathbf\Pi^1_2$-hard would give $\mathbf\Pi^1_2 \subseteq \mathbf\Sigma^1_2$, contradicting the fact that the projective hierarchy is strictly ordered.
+\end{proof}
+
+\begin{remark}\label{rmk:complexity-lower-bound}
+	The argument proves more than the non-existence of a countable basis.
+	If $\mathbf{B}$ is any basis for the class of Borel directed graphs with $\vec\chi_B(D)\geq 3$, then the right-hand side of
+	$$
+		\vec\chi_B(D)\geq 3 \quad\Longleftrightarrow\quad \exists\, H\in\mathbf{B},\ \exists\text{ Borel homomorphism }H\to D
+	$$
+	must define a $\mathbf\Pi^1_2$-complete set, since the left-hand side is $\mathbf\Pi^1_2$-complete by Proposition~\ref{prop:main}.
+	If $\mathbf{B}\in\mathbf\Sigma^1_2$ (viewed as a subset of the code space), then ``$H\in\mathbf{B}$'' is a $\mathbf\Sigma^1_2$ condition on the code of~$H$, and ``there exists a Borel homomorphism $H\to D$'' is $\mathbf\Sigma^1_2$ in the codes of~$H$ and~$D$ (as in the proof of Corollary~\ref{cor:no-basis}).
+	The conjunction of two $\mathbf\Sigma^1_2$ conditions is $\mathbf\Sigma^1_2$, and existential quantification preserves $\mathbf\Sigma^1_2$, so the right-hand side would be $\mathbf\Sigma^1_2$ in the code of~$D$.
+	But this contradicts $\mathbf\Pi^1_2$-completeness of the left-hand side, since $\mathbf\Sigma^1_2\neq\mathbf\Pi^1_2$.
+	Hence $\mathbf{B}\notin\mathbf\Sigma^1_2$: any basis must be at least $\mathbf\Pi^1_2$-hard as a subset of the code space, and is therefore at least as complex to describe as the set of all directed graphs without a Borel acyclic 2-colouring.
+	The separation $\mathbf\Sigma^1_2\neq\mathbf\Pi^1_2$ used here is a theorem of $\mathsf{ZFC}$ (the classical Hierarchy Theorem for the projective pointclasses, via a universal set and a diagonal argument; see e.g.~\cite{Kechris_1995_DescriptiveSetTheory}); no determinacy hypothesis is needed anywhere in this thesis.
+\end{remark}
+
+\paragraph{Acknowledgments}
+I thank Dilip Raghavan for suggesting that the NP-completeness proof for dichromatic number could be relevant to the Borel setting, my doctoral advisor Spencer Unger for pointing me towards Thornton's coding framework, and Riley Thornton for confirming that 2-dicolouring is not a CSP\footnote{Constraint satisfaction problem.} in the sense of~\cite{thornton-thesis}, advising that the approach of~\cite[Appendix~A]{thornton2022algebraic} should be followed instead, and suggesting several of the questions in Section~\ref{sec:dichrom-questions}.
+I also thank Alekos Kechris for extending an invitation to present this result at the Caltech Logic Seminar, and pointing out a minor mistake during the presentation.

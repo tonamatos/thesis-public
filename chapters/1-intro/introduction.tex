@@ -1,0 +1,139 @@
+% /chapters/1-intro/introduction.tex
+
+\chapter{Introduction}\label{ch:introduction}
+
+Consider the following version of the perfect set theorem.
+\begin{theorem}[Cantor]\label{thm:cantor-perfect}
+    Let $C$ be a closed subset of the Cantor space $2^\omega$.
+    Then $C$ is uncountable if and only if there is a continuous injection from $2^\omega$ into $C$.
+\end{theorem}
+The statement says that the question of whether a closed subset of $2^\omega$ is uncountable has a structurally simple answer: one either embeds the Cantor space itself, or the set must be countable.
+The Cantor space is the only obstruction to countability.
+
+In the study of function spaces, a phenomenon of similar spirit manifests when comparing the sequential and topological closures of a set of functions.
+
+On the Cantor space $X = 2^\omega$, the $n$-th coordinate map $p_n\colon 2^\omega\to2$ is continuous for each $n<\omega$; however, $(p_n)_{n\in\mathbb{N}}$ has \emph{no} convergent subsequences in $\mathbb{R}^X$ (\cite[Chapter~1.1]{Todorcevic_1997_TopicsTop}).
+In a sense, this example exhibits the worst failure of sequential convergence possible: the closure of $\{p_n\}$ in $\{0, 1\}^X$ (or in $\mathbb{R}^X$ for that matter) is homeomorphic to the Stone-Čech compactification $\beta\mathbb{N}$ of the (discrete) space of natural numbers, which has cardinality $2^{2^{\omega}}$.
+
+The following theorem, proved by Haskell Rosenthal in 1974, is fundamental in functional analysis and captures a sharp division in the behavior of sequences in a Banach space.
+We denote by $\Cp(X)$ the space of continuous real-valued functions on $X$ with the topology of pointwise convergence.
+Recall also that $\beta\mathbb{N}$ is the Stone-\v{C}ech compactification of the discrete space of natural numbers.
+
+\begin{restatable}[Rosenthal's Dichotomy, \cite{Rosenthal:1974}]{theorem}{rosenthaldichotomy}\label{thm:Rosenthal}
+    If $X$ is Polish and $(f_n)_{n\in\mathbb{N}}\subseteq \Cp(X)$ is pointwise bounded, then $(f_n)$ has a convergent subsequence, or a subsequence whose closure in $\mathbb{R}^X$ is homeomorphic to~$\beta\mathbb{N}$.
+\end{restatable}
+
+This result is a precursor to the classification theorems about Rosenthal compacta that we use in Chapter~\ref{ch:deep_computations} to establish new definability classes for various spaces of computations.
+
+Let $G$ be a graph with vertex set $V(G)$ and edge set $E(G)$.
+A $k$-colouring is a mapping from $V(G)$ to a set of $k$ colours such that adjacent vertices are given different colours.
+We say $G$ is $k$-colourable if it admits a $k$-colouring.
+The least number $k$ of colours for which a $k$-colouring of $G$ exists is denoted by $\chi(G)$.
+Throughout this thesis, we will often endow the sets of vertices and edges with a topology and impose additional restrictions on the colouring, such as it being a Borel mapping.
+In that case, the least number of colours $k$ for which there is a Borel $k$-colouring is denoted by $\chi_B(G)$.
+
+Graph colourings are special instances of \emph{graph homomorphisms} between two graphs $f\colon G\to H$, that is, a mapping between the vertex sets that preserves the adjacencies: whenever $x,y$ form an edge in $G$, $f(x),f(y)$ form an edge in $H$.
+Indeed, a graph $G$ is $k$-colourable if and only if there exists a homomorphism from $G$ into the complete graph on $k$ vertices, $K_k$.
+
+Given a finite graph, there is an algorithm that decides whether it is 2-colourable or not in polynomial time in the size of the graph.
+Informally, traversing the graph through its adjacencies while alternating colours produces either a valid 2-colouring, or a contradiction (the method reaches a vertex adjacent to an already-coloured vertex and is forced to use the same colour as its neighbour); by the limited number of colours, this contradiction implies that no 2-colouring exists.
+For finite graphs, deciding $3$-colourability is NP-complete.
+
+An elementary exercise for finite graphs proves that a graph is $2$-colourable if and only if it has no odd cycles.
+There is a compactness argument that extends this result to infinite graphs, which is essentially the De Bruijn--Erd\H{o}s theorem~\cite[14.1.27]{bondy2008graph}.
+This can be used to show that the \emph{infinite Hamming graph} $\mathcal H$, defined in the subsequent paragraph, is $2$-colourable.
+
+Consider the Cantor space $2^\omega$ and impose a graph structure on it by declaring two infinite binary sequences $x$ and $y$ adjacent if they differ at exactly one coordinate.
+The resulting graph, which we denote by $\mathcal H$, is $2$-colourable as it lacks any odd cycles.
+Suppose that $A\subseteq 2^\omega$ is an independent set\footnote{An \emph{independent} set of vertices is a set disjoint from the edge relation, i.e.\ a set of pairwise non-adjacent vertices.}.
+Suppose also that $A$ has the Baire property (for example, every Borel set has the Baire property).
+If $A$ were not meagre, then it would be comeagre in some basic clopen set $[t]:=\{x\in2^\omega:t\subseteq x\}$.
+Let $f\colon2^\omega\to2^\omega$ be the homeomorphism that flips the $(|t|+1)$-st\footnote{$|t|$ denotes the length of the finite sequence $t$, i.e.\ its domain.} coordinate, so that the image of $[t]$ under $f$ is $[t]$ itself, and every $x$ is adjacent to $f(x)$ in $\mathcal H$.
+Then $f[A]$ is also comeagre in $[t]$, but $A\cap f[A]=\emptyset$ by independence, which contradicts the Baire category theorem applied to the Polish subspace $[t]$.
+Therefore, every independent set with the Baire property is meagre, and thus $2^\omega$ cannot be covered by countably many such classes.
+
+The preceding argument illustrates the cost of imposing descriptive (computable or measurable) requirements on the solution, in this case of the colouring problem: namely, that the number of colours must be increased.
+These dichotomies share a common shape, formalized in descriptive set theory as the basis paradigm.
+
+Kechris, Solecki, and Todor{\v{c}}evi{\'c}~\cite{kechris1999borel} introduced this notion of the \emph{Borel chromatic number} precisely to study this phenomenon.
+Remarkably, they proved the following result, known as the $\mathbb{G}_0$ dichotomy: there exists a single Borel graph~$\mathbb{G}_0$ such that
+\begin{align*}
+    \chi_B(G) > \aleph_0\quad
+    \Longleftrightarrow\quad
+    \mathbb{G}_0 \to_B G.
+\end{align*}
+
+The symbol $\mathbb{G}_0 \to_B G$ abbreviates the phrase ``there is a Borel homomorphism from $\mathbb{G}_0$ to $G$.''
+The graph~$\mathbb{G}_0$ forms a one-element \emph{basis} for the class of Borel graphs with uncountable Borel chromatic number.
+One can interpret the existence of a small (i.e.\ singleton, or finite, or countable) basis as a sort of measure of complexity of the associated decision problem.
+For instance, the existence of $\mathbb{G}_0$ says that deciding whether a Borel graph has uncountable Borel chromatic number is simple: one only has to verify one possible ill-behaved property, namely containing a homomorphic copy of $\mathbb{G}_0$, to give a positive answer; and in some sense, finding this homomorphic copy is the \emph{only} way of proving that a Borel graph has uncountable Borel chromatic number.
+In contrast, deciding whether a Borel graph has infinite Borel chromatic number is a much more complex task, as no easily describable method exists for deciding this in terms of graph homomorphisms, and so different graphs probably require wildly different proof techniques, if any.
+
+Similarly to the case for finite graphs in the opening paragraphs of the chapter, Carroy, Miller, Schrittesser, and Vidny{\'{a}}nszky~\cite{L0paper} proved the existence of a one-element basis for analytic graphs of Borel chromatic number at least three, that is, there exists a Borel graph $\mathbb{L}_0$ with the following property.
+The result is stated as a corollary in Section~\ref{sec:concise_L0}.
+
+\begin{restatable}[$\mathbb{L}_0$ dichotomy]{corollary}{Lzero}\label{cor:L0-dichotomy}
+    For any analytic graph $G$ on a Polish space, $\chi_B(G)\geq 3$ if and only if there is a continuous mapping $\mathbb{L}_0\to_cG$.
+\end{restatable}
+
+\begin{remark}\label{rmk:finite-Borel}
+    Finite graphs are considered trivial examples of analytic graphs.
+    Concretely, for a finite space $X$ and a graph $G$ defined on it, $\chi_B(G)=\chi(G)$ and every set of vertices and every set of edges is both Borel and analytic.
+    Note that if $G$ is finite, then $\chi(G)\geq3$ is equivalent to $G$ having an odd cycle;
+    and it is not too difficult to show that this condition is equivalent to there being a continuous mapping $\mathbb{L}_0\to_cG$.
+    In summary, the preceding result holds for finite graphs as well.
+\end{remark}
+
+A new proof of Corollary~\ref{cor:L0-dichotomy} is given in Section~\ref{sec:concise_L0}, and a new antibasis result for \emph{dicolourings}, a directed analogue of colourings, is established in Section~\ref{sec:dichromatic}.
+
+It is worth seeing explicitly that the $\mathbb{G}_0$ dichotomy refines Theorem~\ref{thm:cantor-perfect}.
+Let $C \subseteq 2^\omega$ be closed and consider the complete graph $K_C = (C \times C) \setminus \Delta_C$, which is closed and in particular analytic.
+Apply the $\mathbb{G}_0$ dichotomy:
+\begin{itemize}
+    \item If $\chi_B(K_C) \leq \aleph_0$, then $C$ partitions into countably many $K_C$-independent Borel sets.
+    But independent sets in a complete graph contain at most one point, so $C$ is countable.
+    \item Otherwise, there is a continuous homomorphism $\phi\colon (2^\omega, \mathbb{G}_0) \to (C, K_C)$, that is, a continuous map $\phi\colon 2^\omega \to C$ sending $\mathbb{G}_0$-edges to pairs of distinct points.
+    The closed equivalence relation $E_\phi = \{(x,y) : \phi(x) = \phi(y)\}$ is then disjoint from $\mathbb{G}_0$ off the diagonal, so each $E_\phi$-class is $\mathbb{G}_0$-independent, hence meagre; a standard Mycielski-style argument therefore yields a continuous injection $\iota\colon 2^\omega \to 2^\omega$ on which $E_\phi$ restricts to equality, and $\phi \circ \iota\colon 2^\omega \to C$ is the desired continuous injection.
+\end{itemize}
+Cantor's theorem thus appears as the instance of the $\mathbb{G}_0$ dichotomy for complete graphs on closed sets.
+
+A recent paper by Todor{\v{c}}evi{\'c} and Vidny{\'{a}}nszky \cite{Todorcevic_2021_ComplexProbBorel} rules out the existence of countable bases for any other finite colour threshold.
+In Section~\ref{sec:dichromatic}, a new result completes the picture for the \emph{dichromatic} number, an analogue of the chromatic number for directed graphs.
+
+This is an illustrative introduction to the dichotomies that occupy the present thesis: the perfect set theorem which foreshadows the $\mathbb{G}_0$ dichotomy, and the Rosenthal-style dichotomies underlying the Deep Computations exposition of Chapter~\ref{ch:deep_computations}, as well as other complexity-theoretic themes that recur throughout this work.
+
+The same dichotomy phenomenon, sequential vs.\ topological closure, Baire-1 vs.\ wild, drives Chapter~\ref{ch:deep_computations}, where we identify new definability classes for spaces of computations.
+
+It is worth pausing to note that the basis paradigm where small obstructions characterize a structural property predates descriptive combinatorics by decades.
+Two of the most celebrated results in graph theory take this form.
+The following two theorems (see \cite[Section~10.5]{bondy2008graph}) are well-known characterizations of \emph{planarity} in graphs in these terms.
+While the two bases consist of the same graphs, notice that the underlying ordering on graphs differs.
+
+\begin{theorem}[Wagner, 1937]\label{thm:wagner-basis}
+    The set $\{K_5, K_{3,3}\}$ is a basis for non-planarity under the minor ordering: a finite graph $G$ is non-planar if and only if there exists $B \in \{K_5, K_{3,3}\}$ such that $B \leq_{\mathrm{minor}} G$.
+\end{theorem}
+
+\begin{theorem}[Kuratowski, 1930]\label{thm:kuratowski-basis}
+    The set $\{K_5, K_{3,3}\}$ is a basis for non-planarity under the topological minor ordering: a finite graph $G$ is non-planar if and only if there exists $B \in \{K_5, K_{3,3}\}$ such that $G$ contains a subdivision of~$B$.
+\end{theorem}
+
+Planar graphs are a particular example of a broader class of graphs for which a much more general finite basis result exists.
+
+\begin{theorem}[Robertson--Seymour]\label{thm:robertson-seymour}
+    Finite graphs are well-quasi-ordered under the minor relation.
+    In particular, for every minor-closed class $\mathcal{C}$ of finite graphs, there exists a finite set $\mathcal{B}$ such that $G \notin \mathcal{C}$ if and only if $B \leq_{\mathrm{minor}} G$ for some $B \in \mathcal{B}$.
+\end{theorem}
+
+Nevertheless, there are classes of graphs with interesting results that follow a very similar theme for which the preceding theorem does not apply.
+One such instance, discussed in Section~\ref{sec:minimal-rigid}, concerns asymmetric graphs, which are not subject to the Robertson--Seymour theorem by virtue of asymmetry failing to be minor-closed.
+
+\begin{restatable}[Schweitzer--Schweitzer {\cite{SCHWEITZER2017215}}]{theorem}{schweitzerminimal}\label {thm:schweitzer-minimal}
+	There exists a set $\mathcal{B}$ of exactly $18$ finite graphs, the minimal asymmetric graphs, such that every finite asymmetric graph $G$ contains some $B \in \mathcal{B}$ as an induced subgraph; that is, there is an injective homomorphism $\varphi\colon B \hookrightarrow G$ that preserves non-adjacency.
+	Moreover, the elements of $\mathcal{B}$ are pairwise incomparable under the induced subgraph ordering.
+\end{restatable}
+
+A precursor to the study of the group action presented in Chapter~\ref{ch:group_actions} involves the following dichotomy, which is the main result of our article~\cite{Caroetal2023}.
+
+\begin{theorem}[Part of Theorem~\ref{thm:constant_bal}]
+    A graph $G$ with an even number of edges $k>0$ has constant balancing number\footnote{\emph{Constant balancing number} is defined in Subsection~\ref{subsec:amoebas_bal}.} if and only if there are injective homomorphisms $\frac{k}2K_2\to G$ and $K_{1,k/2}\to G$.
+\end{theorem}

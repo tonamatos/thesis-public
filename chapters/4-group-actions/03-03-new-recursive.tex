@@ -1,0 +1,128 @@
+% /chapters/4-group-actions/03-03-new-recursive.tex
+
+\subsection{Local amoeba trees with large maximum degree}\label{subsec:new_recursive}
+
+Intuitively, if one is trying to transform one graph into another by means of feasible edge replacements, it may come in handy to have isolated vertices that allow new positions for the graph.
+We previously mentioned that complete graphs are rigid graphs, meaning they have no non-trivial feasible edge replacements.
+Adding isolated vertices to a complete graph destroys its rigidity, since now new movements are possible.
+
+\begin{definition}\label{def:global_amoeba}
+    A finite graph $G$ is called a \emph{global amoeba} if there is a $t\geq1$ such that $G\cup tK_1$ (that is, the graph obtained as the disjoint union of $G$ and $t$ many isolated vertices) is a local amoeba.
+\end{definition}
+
+Perhaps surprisingly, there is no general logical implication between a graph $G$ being a local amoeba and being a global amoeba.\footnote{With this in mind, one might try to suggest more descriptive names for these graphs that do not hint at this nonexisting causal link, but the author chose to respect the terminology from the well-established literature.}
+One case where such an implication does exist is for trees (see Corollary~\ref{cor:local_trees_are_global}).
+
+The main result of \cite{Caroetal2023} is the following classification of global amoebas.
+Notably, if a value of $t$ exists such that Definition~\ref{def:global_amoeba} holds, then $t=1$ is always the least such value, as the following theorem states.
+
+\begin{theorem}[{\cite[Theorem~4.1]{Caroetal2023}}]\label{thm:classification_global}
+    For any non-empty graph $G$ with vertex set $V(G)=\{v_0,v_1,\dots,v_{n-1}\}$, the following are equivalent.
+    
+    \begin{enumerate}
+        \item $G$ is a global amoeba.
+        
+        \item $G\cup K_1$ is a local amoeba.
+        
+        \item Every orbit of $\Fer(G)$ contains some label $i<n$ such that $v_i$ has degree 1 in $G$.
+    \end{enumerate}
+\end{theorem}
+
+A well-known fact about a finite tree $T$ with at least one edge is that it must have at least two vertices of degree 1.
+Recalling that if $T$ is a local amoeba, then $\Fer(T)$ consists of a single orbit (it is in fact, the whole symmetric group), it is clear that condition (3) of Theorem~\ref{thm:classification_global} is satisfied for any tree $T$ that happens to be a local amoeba.
+
+\begin{corollary}\label{cor:local_trees_are_global}
+    If $T$ is a finite tree for which $\Fer(T)$ acts transitively on (the vertex labels of) $T$ (for example if $T$ is a local amoeba), then $T$ is a global amoeba.
+\end{corollary}
+
+The acyclicity of $T$ is indispensable: a complete graph with at least three vertices is a local amoeba but not a global amoeba.
+
+Figure~\ref{fig:global_non_local} depicts the smallest tree $T$ that is a global amoeba but not a local amoeba.
+Interestingly, the \tFer group acts transitively on it (that is, it consists of a single orbit).
+There are also global amoeba trees whose \tFer group is not transitive, and the smallest such example has two orbits, depicted in Figure~\ref{fig:multi_orbit_tree} with vertices coloured by the orbit of their labels under the action of the \tFer group.\footnote{Recall from elementary group theory that the set of orbits of a group action forms a partition of the set.
+Thus, in this example, two vertices have the same colour if and only if some element of $\Fer(T)$ sends the label of one to the label of the other.}
+The main conjecture of Section~\ref{sec:amoeba_trees} is that the \tFer groups of all global amoeba trees have at most two orbits.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{global_non_local_tree.pdf}
+        \caption{The smallest non-local global amoeba tree.}
+        \label{fig:global_non_local}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{multi_orbit_tree.pdf}
+        \caption{The smallest global amoeba tree on which \tFer does not act transitively.}
+        \label{fig:multi_orbit_tree}
+    \end{subfigure}
+    \caption{The smallest global amoeba trees with these properties.}
+    \label{fig:fer_group_trees}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{fibonacci_trees.png}
+    \caption{Fibonacci-type trees $T_k$, for $1\leq k\leq5$.}
+    \label{fig:Tk}
+\end{figure}
+
+The construction we describe now (see Figure~\ref{fig:Tk}), loosely inspired by the Fibonacci sequence, illustrates the main results of \cite{Eslavaetal2025}.
+Start by defining $T_1$ and $T_2$ to each be the tree consisting of a single edge, in other words, $T_1\simeq T_2\simeq K_2$.
+Now, suppose that $T_{k-1}$ and $T_{k-2}$ have already been constructed.
+In each of these trees, select a vertex of maximum degree.
+The tree $T_k$ is the result of joining $T_{k-1}$ and $T_{k-2}$ by the edge connecting these two vertices.
+The choice of the vertex of maximum degree is irrelevant, as one can easily verify: either such vertex is unique, or there are exactly two such vertices that are similar (that is, they can be interchanged via an automorphism), and thus the resulting sequence of graphs is unique up to isomorphisms.
+
+The sequence of graphs $\{T_k:k\in\mathbb{N}\}$ is a particular case of a more general scheme of recursive constructions studied in \cite[Section~3]{Eslavaetal2025}.
+
+\begin{theorem}[{\cite[Theorem~9]{Eslavaetal2025}}]\label{thm:fibonacci_is_local}
+    For every $k\in\mathbb{N}$, $T_k$ is a local amoeba.
+\end{theorem}
+
+The proof that a finite graph $G$ of order $n$ is a local amoeba often involves a counting argument: one shows that $\Fer(G)$ has $n!$ elements and then, since $\Fer(G)\leq S_n$, concludes that $\Fer(G)=S_n$.
+There are two disadvantages of this method.
+
+\begin{itemize}
+    \item Given an arbitrary permutation $\sigma\in S_n$ (that is, an arbitrary copy of $G$ on the same vertex set), the proof generally offers no method of finding the sequence of feasible edge replacements.
+    In other words, this proof technique shows the existence of a solution to the puzzle, without giving an algorithm to find it.
+    The algorithm published in \cite[Section~5]{Eslavaetal2025} resolves this for an infinite family of trees.
+    
+    \item Counting methods do not generalize to infinite graphs.
+    This is addressed in Section~\ref{sec:infinitary_amoeba_graphs}.
+\end{itemize}
+
+The following notion will also be useful in Section~\ref{sec:infinitary_amoeba_graphs}.
+
+\begin{definition}\label{def:stem-symmetric}
+    Let $G$ be a finite graph whose vertices are indexed by a label set $X$, so that $V(G)=\{v_j:j\in X\}$, and let $i\in X$.
+    The subgroup of $\Fer(G)$ generated by the canonical generators that fix $i$ is denoted by
+    $$
+        \Fer^i(G)\;:=\;\langle\,\mathcal E_G\cap\Stab_{S_X}(i)\,\rangle.
+    $$
+
+    We say a graph $G$ is \emph{stem-symmetric with respect to the label $i$} (equivalently, \emph{stem-symmetric with respect to the vertex $v_i$}) if $\Fer^i(G)=\Stab_{S_X}(i)$, that is, if $\Fer^i(G)$ realizes every label permutation of $X$ that fixes $i$.
+\end{definition}
+
+In other words, a finite graph $G$ is stem-symmetric with respect to a label $i$ if every permutation fixing $i$ is a product of canonical generators that each fix $i$.
+
+\begin{lemma}\label{lemma:path-stem-symmetric}
+    For every $n\in\mathbb N$, the path whose vertices, in order, are $v_0,v_1,\dots,v_n$ is stem-symmetric with respect to the endpoint label $n$.
+\end{lemma}
+
+\begin{proof}
+    Denote this path by $P_{n+1}$.
+    The result is immediate for $n\leq1$, so assume that $n\geq2$.
+    Let $1\leq\ell<n$ and notice that the graph $P_{n+1}-v_\ell v_{\ell+1}+v_0v_{\ell+1}$ is a path on $n+1$ vertices and thus isomorphic to $P_{n+1}$.
+    The label permutation
+    $$
+        \sigma_\ell:=\prod_{j=0}^{\lfloor(\ell-1)/2\rfloor}(j\ \ell-j)
+    $$
+    belongs to $\Fer_{P_{n+1}}(v_\ell v_{\ell+1}\to v_0v_{\ell+1})$ and fixes the label $n$.
+
+    Set $\sigma_0:=\id_{n+1}$ and $c_\ell:=\sigma_\ell\sigma_{\ell-1}$ for $1\leq\ell<n$.
+    Then $c_\ell=(0\ 1\ \cdots\ \ell)$, so $(0\ 1)=c_1$ and $(\ell-1\ \ell)=c_{\ell-1}^{-1}c_\ell$ for $2\leq\ell<n$.
+    Thus $\Fer^n(P_{n+1})$ contains every adjacent transposition of $\{0,1,\dots,n-1\}$ and is therefore equal to $\Stab_{S_{n+1}}(n)$.
+\end{proof}

@@ -1,0 +1,405 @@
+% /chapters/3-deep-computations/01-intro.tex
+
+\section{Introduction}\label{sec:deep_comp_intro}
+
+In this chapter we study the asymptotic behavior of computations as parameters of the computation tend towards a limit, e.g., the depth of a neural network tending to infinity, or the time interval between layers of a time-series network tending toward zero.
+Recently, particular cases of this concept have attracted considerable attention in deep learning research (e.g., Neural Ordinary Differential Equations~\cite{Chen:2018}, Physics-Informed Neural Networks~\cite{Raissi-Perdikaris-Karniadakis:2019}, and Deep Equilibrium Models~\cite{Bai:2019}).
+The formal framework introduced here provides a unified setting to study these limit phenomena from a foundational viewpoint.
+
+The main result of the chapter is the identification of a hierarchy of four distinct complexity classes for limit computations.
+This is obtained by invoking a major result about the topology of spaces of functions, namely,
+Todorčević's trichotomy for Rosenthal compacta~\cite{Todorcevic_1999_CompactSubsetsBaire} and transferring it into the realm of computation.
+The medium that we use to translate between topology and computation is model theory, specifically, Shelah's classification theory~\cite{Shelah:1990}.
+
+The translation between topology and computation proceeds as follows.
+To every computation in a given computation model, we associate a continuous real-valued function, called the \emph{type} of the computation, that describes the logical properties of this computation with respect to the rest of the model.
+This association allows us to view computations in any given computational model as elements of a space of real-valued functions, which is called the \emph{space of types} of the model.
+The idea of embedding models of theories into their type spaces is borrowed from model theory, where type spaces play a central role.
+The embedding of computations into spaces of types then allows us to utilize the vast theory of topology of function spaces, known as \emph{$\Cp$-theory}, to obtain results about complexity of topological limits of computations.
+As we shall indicate next, recent classification results for spaces of functions provide an elegant and powerful machinery to classify computations according to their levels of ``tameness'' or ``wildness'', with the former corresponding roughly to polynomial approximability and the latter to exponential approximability.
+The model-theoretic viewpoint of spaces of types thus allows us to interconnect various classification programs: 
+in topology, the classification of Rosenthal compacta pioneered by Todorčević~\cite{Todorcevic_1999_CompactSubsetsBaire}; 
+in logic, the classification of theories developed by Shelah~\cite{Shelah:1990}; and in statistical learning, the notions of PAC learning and VC dimension pioneered by Vapnik and Chervonenkis~\cite{Vapnik-Chervonenkis:1974, Vapnik-Chervonenkis:1971}.
+
+In~\cite{alva2024approximability}, the authors introduced the concept of limits of computations, which they called \emph{ultracomputations} (given that they arise as ultrafilter limits of standard computations) and \emph{deep computations} (following usage in machine learning~\cite{Bai:2019}).
+There is a technical difference between both designations, but in this chapter, to simplify the nomenclature, we will ignore the difference and use primarily the term ``deep computation''.
+
+In \cite{alva2024approximability}, a new ``tame vs.\ wild'' (i.e., polynomially approximable vs.\ nonpolynomially approximable) dichotomy for the complexity of deep computations was proved by invoking a classical result of Grothendieck from the 1950s~\cite{Grothendieck:1952}.
+Under our model-theoretic framework, the property of polynomial approximability of computations is identified with continuous extensibility in the sense of topology, and with the notions of \emph{stability} and \emph{type definability} in the sense of model theory.
+
+In this chapter, we refine the dichotomy of \cite{alva2024approximability}, and obtain new complexity classes for deep computation.
+The ``wild'' part of the dichotomy from~\cite{alva2024approximability} is further subdivided between ``tame'' and ``wild'' classes; three new levels of tameness are identified within this new subdivision, and seven distinct minimal prototypes of tameness are identified.
+
+The finer classification results of this chapter are obtained through more contemporary topological and model-theoretic tools than in~\cite{alva2024approximability}. 
+From the topological side, instead of Grothendieck's classical criterion, we use the modern theory of \emph{Rosenthal compacta}, and from the model theory side, instead of stability, we use \emph{neostability}.
+The main tool imported from neostability is Shelah's \emph{Independence Property}, or rather, its negation, which is commonly referred to as ``NIP''.
+More on this below.
+
+Deep computations arise as topological limits of standard (continuous) computations.
+In topology, the \emph{first Baire class}, or \emph{Baire class~1} consists of functions (also called simply \emph{Baire-1}) arising as pointwise limits of sequences of continuous functions.
+Intuitively, the first Baire class consists of functions with ``controlled'' discontinuities, and lies just one level of topological complexity above the Baire class 0, which (by definition) consists of continuous functions.
+
+We apply a result of Bourgain, Fremlin and Talagrand from the late 1970s on compact subsets of the first Baire class to obtain a new ``tame vs.\ wild'' dichotomy for deep computations~\cite{BFT_1978_PCompactBaire}; then, we apply a trichotomy of Todorčević, from the late 90s, for \emph{Rosenthal compacta} to identify new tame classes~\cite{Todorcevic_1999_CompactSubsetsBaire}.
+
+A Rosenthal compactum is a compact topological space that is homeomorphic to a subspace of the space of Baire class~1 functions on some Polish (i.e., separable, completely metrizable) space equipped with the topology of pointwise convergence.
+Rosenthal compacta exhibit ``topological tameness,'' meaning that they behave in relatively controlled ways.
+Since the late 1970s, they have played a crucial role in understanding the complexity of structures of functional analysis, especially Banach spaces.
+Todorčević's trichotomy for Rosenthal compacta has been utilized to settle longstanding problems in topological dynamics and topological entropy~\cite{glasner2022tame}.
+It is noteworthy that Todorčević's proof relies on sophisticated set-theoretic forcing and infinite Ramsey theory.
+At the time of writing this chapter, decades after his original argument, there are no elementary proofs of the trichotomy; in fact, Todorčević's methods have been analyzed and exploited further~\cite{Todorcevic:2023,horowitz2019compactsetsbaireclass}.
+(Theorem~\ref{thm:Rosenthal} of Chapter~\ref{ch:introduction} is the prototype: a pointwise-bounded sequence in $\overline{\Cp(X)}$ either has a convergent subsequence or has $\beta\mathbb{N}$ as its pointwise closure: the simplest tame/wild split.)
+
+Through our framework, Rosenthal compacta in topology correspond to the important concept of \emph{Non-Independence Property} (known as ``NIP'') in model theory, identified by Shelah~\cite{Shelah:1971,Shelah:1990}, and to the concepts \emph{VC-dimension} and \emph{Probably Approximately Correct} learning (known as ``PAC learnability'') in statistical learning theory~\cite{Vapnik-Chervonenkis:1971, Vapnik-Chervonenkis:1974, Valiant:1984}.
+
+Beyond Todorčević's trichotomy, we invoke a more recent heptachotomy for separable Rosenthal compacta obtained by Argyros, Dodos and Kanellopoulos~\cite{argyros2008rosenthal}.
+These authors identify seven fundamental ``prototypes" of separable Rosenthal compacta, and show that any non-metrizable separable Rosenthal compactum must contain a ``canonical'' embedding of one of these prototypes.
+
+From the point of view of approximation theory, it is noteworthy that in the context of Gro\-then\-dieck~\cite{Grothendieck:1952} and Bourgain--Fremlin--Talagrand~\cite{BFT_1978_PCompactBaire}, compactness and sequential compactness coincide; thus, the results of these papers allow us to ensure that deep computations, which in principle are abstract ultrafilter limits (over a possibly uncountable set), can always be approximated by concrete \emph{sequences} of standard computations.
+
+We believe that the results presented in this chapter show practitioners of computation, or topology, or descriptive set theory, or model theory, how classification invariants used in their field translate into classification invariants of other fields.
+In the interest of accessibility, we do not assume that the reader has previous familiarity with advanced topology, model theory, or computing.
+The necessary topological background beyond undergraduate topology is covered later in this section.
+
+In this section, we also present basic topological and combinatorial preliminaries. In section~\ref{sec:CCS}, we introduce the structural/model-theoretic viewpoint (no previous exposure to model theory is needed).
+Section~\ref{sec:classification} is devoted to the classification of deep computations.
+
+Throughout the chapter, our results pertain to classical models of computation (particularly computations involving real-valued quantities that are known and manipulated to a finite degree of precision).
+The final section, Section~\ref{sec:measure-theoretic-NIP}, introduces a probabilistic viewpoint, which we intend to develop in future work.
+
+In this section we recall notions and results from general topology and function space theory.
+For simplicity, we assume that all spaces are Hausdorff unless explicitly stated otherwise.
+
+A subset of a topological space is $F_\sigma$ if it is a countable union of closed sets, and $G_\delta$ if it is a countable intersection of open sets.
+In a metric space, every open set is~$F_\sigma$; equivalently, every closed set is~$G_\delta$.
+
+A \emph{Polish space} is a separable and completely metrizable topological space, i.e., one admitting a complete metric that induces its topology.
+The class of Polish spaces is closed under countable topological products.
+Classical examples of Polish spaces (besides the real line) include the Cantor space~$2^\mathbb{N}$ (the set of all infinite binary sequences, endowed with the product topology), the Baire space $\mathbb{N}^\mathbb{N}$ (the set of all infinite sequences of naturals, also with the product topology), and the space $\mathbb{R}^\mathbb{N}$ of sequences of real numbers.
+
+\begin{fact}\cite[4.3.24]{Engelking:1989}
+A subset of a Polish space is itself Polish in the subspace topology if and only if it is a $G_{\delta }$ set.
+In particular, closed subsets and open subsets of Polish spaces are also Polish spaces.
+\end{fact}
+
+If $X$ is a topological space and $A$ is a subset of $X$, then $A$ is said to be
+\emph{nowhere dense} if its closure has an empty interior,
+and of the \emph{first category} if $A$ is a countable union of closed nowhere dense sets;
+otherwise, $A$ is said to be of the \emph{second category}.
+Sets $A\subseteq X$ of the first category are also called \emph{meagre}, and their
+complements $X\setminus A$ are called \emph{comeagre}.
+Thus, the set of meagre subsets of $X$ is the $\sigma$-ideal generated by the nowhere dense subsets of $X$.
+A topological space $X$ is \emph{Baire} if every comeagre subset of $X$ is dense.
+Equivalently, $X$ is Baire if any countable intersection of open dense sets remains dense.
+The Baire Category Theorem states that compact Hausdorff spaces and all completely metrizable spaces (hence, all Polish spaces) are Baire.%
+\footnote{More generally, any Čech-complete space is Baire~\cite[Theorem 3.9.3]{Engelking:1989}.}
+
+Given two topological spaces $X$ and $Y$ we denote by $\Cp(X,Y)$ the set of all continuous functions $f\colon X\rightarrow Y$ endowed with the topology of pointwise convergence, i.e., with the relative (subspace) product topology~$\Cp(X,Y)\subseteq Y^X$, where the product topology on $Y^X$ uses only $Y$'s topology; the topology on $X$ enters through the requirement that elements of $\Cp(X,Y)$ be continuous.
+The space $\Cp(X, \mathbb{R})$ of continuous real-valued functions on~$X$ is denoted simply~$\Cp(X)$.
+
+A function $f\in Y^X$ between topological spaces $X$, $Y$ is said to be of \emph{Baire class~1}, or a \emph{Baire-1} function, if there is a sequence $(f_n)_{n\in \mathbb{N}}\subseteq \Cp(X, Y)$ such that $f = \lim_{n\to\infty}f_n$ (i.e., $f(x)=\lim_{n\to\infty}f_n(x)$ for all $x\in X$).
+An elementary argument shows that Baire-1 functions are continuous everywhere except on a set of the first category.
+If $X$ and $Y$ are topological spaces, the space of Baire-1 functions $f\colon X\rightarrow Y$ endowed with the topology of pointwise convergence is denoted $\mathrm{B}_1(X,Y)$;
+thus, $\Cp(X,Y)\subseteq \mathrm{B}_1(X,Y)\subseteq Y^X$ are topological inclusions.
+We abbreviate $\mathrm{B}_1(X, \mathbb{R})$ as $\mathrm{B}_1(X)$.
+Relatively compact subsets of $\Cp(X)$ and of $\mathrm{B}_1(X)$ (particularly for $X$ Polish) are of interest in analysis and topological dynamics.
+
+A topological space $X$ is \emph{perfectly normal} if it is normal and every closed subset of $X$ is a $G_\delta$ set (equivalently, every open subset of $X$ is an $F_\sigma$ set).
+Every metrizable space (hence, every Polish space) is perfectly normal.
+
+The following fact was proved by Baire in his groundbreaking thesis.
+For a proof, see~\cite[Section 10]{Todorcevic_1997_TopicsTop}.
+
+\begin{fact}[Baire]\label{baire}
+    If $X$ is perfectly normal, then the following conditions are equivalent for a function $f\colon X\to \mathbb{R}$:
+    \begin{itemize}
+        \item[(1)] $f$ is a Baire class~1 function, that is, $f$ is a pointwise limit of continuous functions.
+        \item[(2)] $f^{-1}[U]$ is an $F_\sigma$ subset of $X$ whenever $U\subseteq\mathbb{R}$ is open.
+    \end{itemize}
+    If $X$ is Baire, then (1) and (2) are equivalent to:
+    \begin{itemize}
+        \item[(3)] For every closed $F\subseteq X$, the restriction $f|_F$ has a point of continuity.
+    \end{itemize}
+    Moreover, if $X$ is Polish and $f\notin \mathrm{B}_1(X)$, then there exist countable $D_0,D_1\subseteq X$ and reals $a<b$ such that
+    \[
+    D_0\subseteq f^{-1}(-\infty,a],
+    \quad
+    D_1\subseteq f^{-1}[b,\infty),
+    \quad
+    \overline{D_0}=\overline{D_1}.
+    \]
+\end{fact}
+
+\subsection{From Rosenthal's dichotomy to the Bourgain--Fremlin--Talagrand dichotomy to Shelah's NIP}
+
+Recall the following result from the Introduction chapter.
+
+\rosenthaldichotomy*
+
+The genesis of the dichotomy was \emph{Rosenthal's $\ell_1$-Theorem}, which states that a Banach space includes an isomorphic copy of $\ell_1$ (the space of absolutely summable sequences), or else every bounded sequence therein is weakly Cauchy.
+The $\ell_1$-Theorem connects diverse areas:
+Banach space geometry, Ramsey theory, set theory, and topology of function spaces.
+
+As we move from $\Cp(X)$ to the larger space $\mathrm{B}_1(X)$, a dichotomy paralleling the $\ell_1$-Theorem holds.
+This result is usually not phrased as a dichotomy in the above manner, but rather as an equivalence (see Theorem~\ref{thm:BFT} below).
+
+First, we introduce some useful notation.
+For any $f\in \mathbb{R}^X$ and any real $a$, define
+\begin{align*}
+    X^f_{\le a} &\coloneqq f^{-1}(-\infty,a], &
+    X^f_{\ge a} &\coloneqq f^{-1}[a, +\infty).
+\end{align*}
+For any set $A\subseteq \mathbb{R}^X$ and any real $a$, define (by a slight abuse of notation)
+\begin{align*}
+    X^A_{\le a} &\coloneqq \bigcap_{f\in A}X^f_{\le a} = \{x\in X: \text{$f(x)\le a$ for all $f\in A$}\},\\
+    X^A_{\ge a} &\coloneqq \bigcap_{f\in A}X^f_{\ge a} = \{x\in X: \text{$f(x)\ge a$ for all $f\in A$}\}.
+\end{align*}
+(In case $A=\emptyset$, we define $X^\emptyset_{\ge a} = X = X^\emptyset_{\le a}$.)
+For any sequence $\{f_n\}\subseteq \mathbb{R}^X$ and $I\subseteq \mathbb{N}$, define $I^{\complement} \coloneqq \mathbb{N}\setminus I$ and $f_I \coloneqq \{f_i: i\in I\}$.
+
+\begin{theorem}[``The BFT Dichotomy''. Bourgain--Fremlin--Talagrand {\cite{BFT_1978_PCompactBaire}}]
+\label{thm:BFT}
+    Let $X$ be a Polish space and $A\subseteq \Cp(X)$ be pointwise bounded.
+    The following are equivalent:
+    \begin{enumerate}[(i)]
+        \item $A$ is relatively compact in $\mathrm{B}_1(X)$.
+        \item For every $(f_n)_{n\in\mathbb{N}}\subseteq A$ and every $a<b$ there is $I\subseteq\mathbb{N}$ such that
+        \begin{equation*}
+            X_{\le a}^{f_I} \cap X_{\ge b}^{f_{I^{\complement}}} = \emptyset.
+        \end{equation*}
+    \end{enumerate}
+\end{theorem}
+(As stated above, the BFT Dichotomy is a particular case of the equivalence (ii)$\Leftrightarrow$(v) in {\cite[Corollary 4G]{BFT_1978_PCompactBaire}}.)
+
+The sets $X_{\le a}^{f_I}$ and $X_{\ge b}^{f_{I^{\complement}}}$ appearing in condition Theorem~\ref{thm:BFT}\emph{(ii)} are defined, respectively, in terms of $|I|$-many inequalities of the form $f_i(x)\le a$, and $|I^{\complement}|$-many of the form $f_j(x)\ge b$.
+Thus, at least one of $X_{\le a}^{f_I}$ and $X_{\ge b}^{f_{I^{\complement}}}$ is defined by the satisfaction of infinitely (countably) many inequalities.
+For our purposes, it is more natural to consider only finitely many inequalities at a time, which motivates the definitions below.
+
+\begin{definition}\label{def:NIP-fns}
+    We say that a collection of functions \emph{$A\subseteq \mathbb{R}^X$ has the finitary Non-Independence Property (NIP)} if, for all sequences $(f_n)_{n\in\mathbb{N}}\subseteq A$ and reals $a<b$, there exist finite disjoint sets $E,F\subseteq\mathbb{N}$ such that $X_{\le a}^{f_E} \cap X_{\ge b}^{f_F} = \emptyset$.
+    We say that such $E, F$ \emph{witness finitary NIP for $(f_n)$ and $a, b$}.
+
+    A set $A\subseteq \mathbb{R}^X$ \emph{has the finitary Independence Property (IP)} if it does not have finitary NIP, i.e., if there exists a sequence $(f_n)_{n\in\mathbb{N}}\subseteq A$ and reals $a<b$ such that for every pair of finite disjoint sets $E,F\subseteq\mathbb{N}$, we have $X_{\le a}^{f_E} \cap X_{\ge b}^{f_F} \ne \emptyset$.
+\end{definition}
+
+If the word ``finite'' is omitted in the above definitions, we obtain the definitions of \emph{countable} NIP (weaker than finitary NIP) and \emph{countable} IP (stronger than finitary IP), respectively.
+
+If we insist on witnesses $E,F\subseteq \mathbb{N}$ such that $F = E^{\complement}$, we call the respective properties ``BFT-NIP'' and ``BFT-IP''.
+Thus, Theorem~\ref{thm:BFT} becomes (for pointwise bounded function collections $A\subseteq \Cp(X)$) that $A$ is relatively compact in $\mathrm{B}_1(X)$ if and only if $A$ has BFT-NIP.
+
+Unless otherwise unspecified, IP/NIP shall mean \emph{finitary} IP/NIP henceforth.
+
+\begin{proposition}\label{prop:BFT-finitary-cpct}
+    If $X$ is compact and $A\subseteq \Cp(X)$, then $A$ has BFT-NIP if and only if it has finitary NIP.
+\end{proposition}
+(No pointwise boundedness is assumed of~$A$.)
+\begin{proof}
+    Trivially (as per the preceding discussion), finitary NIP implies BFT-NIP.
+    Reciprocally, assume that $X$ is compact and $A\subseteq \Cp(X)$ has finitary IP.
+    Fix a sequence $(f_n)\subseteq A$ and reals $a<b$ such that $X^{f_E}_{\le a}\cap X^{f_F}_{\ge b}\neq\emptyset$ for every finite disjoint $E,F\subseteq\mathbb{N}$.
+    Fix $I\subseteq\mathbb{N}$.
+    Since $(f_n)\subseteq A\subseteq \Cp(X)$ is a sequence of continuous functions, the collection $\mathcal{F}_I=\{X^{f_n}_{\le a}:n\in I\}\cup\{X^{f_m}_{\ge a}:m\in I^{\complement}\}$ consists of closed (non-empty) sets.
+    Since all finite $E\subseteq I$ and $F\subseteq I^{\complement}$ witness finitary IP for $(f_n)$ and $a, b$, we see that the collection $\mathcal{F}_I$ has the finite intersection property.
+    By compactness, $X^{f_I}_{\le a}\cap X^{f_{I^{\complement}}}_{\ge b} = \bigcap\mathcal{F}_I\neq\emptyset$.
+\end{proof}
+
+\begin{theorem}\label{thm:BFT2}
+    Let $X$ be a compact metrizable (hence Polish) space.
+    For every pointwise bounded $A\subseteq \Cp(X)$, the following properties are all equivalent:
+    \begin{enumerate}[(i)]
+        \item $A$ is relatively compact in~$\mathrm{B}_1(X)$;
+        \item $A$ has BFT-NIP;
+        \item $A$ has countable NIP;
+        \item $A$ has finitary NIP.
+    \end{enumerate}
+\end{theorem}
+
+(The equivalence \emph{(ii)}$\Leftrightarrow$\emph{(iv)} holds for arbitrary compact~$X$.
+The equivalence \emph{(ii)}$\Leftrightarrow$\emph{(iii)}, for arbitrary~$X$.)
+
+\begin{proof}
+    Corollary of Theorem~\ref{thm:BFT} and Proposition~\ref{prop:BFT-finitary-cpct}.
+\end{proof}
+
+Theorem~\ref{thm:BFT2} may be stated as the following dichotomy (under the assumptions) for any compact metrizable~$X$:
+either $A$ is relatively compact in~$\mathrm{B}_1(X)$, or $A$ has IP (in either sense).
+
+The Independence Property was first isolated by Saharon Shelah in model theory as a dividing line between theories whose models are ``tame'' (corresponding to NIP) and theories whose models are ``wild" (corresponding to IP).
+See~\cite[Definition 4.1]{Shelah:1971}, \cite{Shelah:1990}.
+We will discuss this dividing line in more detail in the next section.
+
+\subsection{NIP as a universal dividing line between polynomial and exponential complexity}
+
+The particular case of the BFT dichotomy (Theorem~\ref{thm:BFT}) when $A$ consists of $\{0,1\}$-valued (i.e., $\{\text{Yes},\text{No}\}$-valued) strings was discovered independently, around 1971-1972 in many foundational contexts related to polynomial (``tame") vs.\ exponential (``wild'') complexity: In model theory, by Saharon Shelah~\cite{Shelah:1971}, \cite{Shelah:1990}, in combinatorics, by Norbert Sauer~\cite{Sauer:1972}, and Shelah~\cite{Shelah:1972}, \cite{Shelah:1990}, and in statistical learning, by Vladimir Vapnik and Alexey Chervonenkis~\cite{Vapnik-Chervonenkis:1971}, \cite{Vapnik-Chervonenkis:1974}.
+
+
+\begin{description}
+
+\item[In model theory]
+Shelah's classification theory is a foundational program in mathematical logic devised to categorize first-order theories based on the complexity and structure of their models.
+A theory $T$ is considered classifiable in Shelah's sense if the number of non-isomorphic models of $T$ of a given cardinality can be described by a bounded number of numerical invariants.
+In contrast, a theory $T$ is unclassifiable if the number of models of $T$ of a given cardinality is the maximum possible number.
+A key fact is that the number of models of $T$ is directly impacted by the number of \emph{types} over sets of parameters in models of $T$; a controlled number of types is a characteristic of a classifiable theory.
+
+
+In Shelah's classification program~\cite{Shelah:1990}, theories \emph{without} the independence property (called NIP theories, or \emph{dependent} theories) have a well-behaved, ``tame" structure;
+the number of types over a set of parameters of size $\kappa$ of such a theory is of polynomially or similar “slow" growth on~$\kappa$.
+
+In contrast, theories with the Independence Property (called IP theories) are considered “intractable" or “wild”.
+A theory with the Independence Property produces the maximum possible number of types over a set of parameters; for a set of parameters of cardinality $\kappa$, the theory will have $2^{2^{\kappa}}$-many distinct types.
+
+\item[In combinatorics]
+Sauer~\cite{Sauer:1972} and Shelah~\cite{Shelah:1972} proved the following independently:
+Let $\mathscr{F}$ be a collection of subsets of some set $S$.
+Either:
+for every $n\in\mathbb{N}$ there is a set $A\subseteq S$ with $|A|=n$ such that $|\{S_i\cap A: i\in\mathbb{N}\}|=2^n$ ($\mathscr{F}$ is a collection having ``exponential complexity'');
+or: there exists $N\in\mathbb{N}$ such that for every $A\subseteq S$ with $|A|\ge N$, one has
+\[
+|\{S_i\cap A: i\in\mathbb{N}\}| \le \sum_{i=0}^{N-1} \binom{|A|}{i}.
+\]
+($\mathscr{F}$ is a collection having ``polynomial complexity'').
+Clearly, any collection $\mathscr{F}$ of subsets of a \emph{finite} set $S$ has polynomial complexity.
+The ``polynomial'' name is justified:
+indeed, for fixed $N>0$, as a function of the size $|A| = m > 0$, we have
+\begin{equation*}
+    \sum_{i=0}^{N-1} \binom{m}{i}
+    \le \sum_{i=0}^{N-1}\frac{m^{i}}{i!}
+    \le \left( \sum_{i=0}^{N-1}\frac{1}{i!} \right)\cdot m^{N-1}
+    < e\cdot m^{N-1} = O \left( m^N \right).
+\end{equation*}
+(More precisely, the order of magnitude is $O(m^{N-1})$:
+polynomial in $m$ for $N$ fixed.)
+
+\item[In machine learning]
+Readers familiar with statistical learning may recognize the Sauer-Shelah lemma as the dichotomy discovered and proved slightly earlier (1971) by Vapnik and Chervonenkis~\cite{Vapnik-Chervonenkis:1971, Vapnik-Chervonenkis:1974} to address uniform convergence in statistics.
+The least integer $N$ given by the preceding paragraph, when it exists, is called the \emph{VC-dimension} of $\mathscr{F}$;
+it is a core concept in machine learning.
+If such an integer $N$ does not exist, we say that the VC-dimension of $\mathscr{F}$ is infinite.
+The lemma provides upper bounds on the number of data points (sample size) needed to learn a concept class of known VC dimension~$d$ up to a given admissible error in the statistical sense.
+The Fundamental Theorem of Statistical Learning states that a hypothesis class is PAC-learnable (PAC stands for ``Probably Approximately Correct'') if and only if its VC dimension is finite.
+ 
+\end{description}
+ 
+\subsection{Rosenthal compacta}
+ 
+The universal classification implied by Theorem~\ref{thm:BFT}, as attested by the examples outlined in the preceding section, led to the following definition (by Gilles Godefroy~\cite{Godefroy:1980}):
+
+\begin{definition}
+\label{def:Rosenthal-compacta}
+A Rosenthal compactum is any topological space realized as a compact subset of the space $\mathrm{B}_1(X) = \mathrm{B}_1(X, \mathbb{R})$ (equipped with the topology of pointwise convergence) of all real functions of the first Baire class on some Polish space~\(X\).
+\end{definition}
+A Rosenthal compactum~$K$ is necessarily Hausdorff since it is a topological subspace of the Hausdorff product space $\mathbb{R}^X$.
+
+Rosenthal compacta possess significant topological and dynamical tameness properties, and play an important role in functional analysis, measure theory, dynamical systems, descriptive set theory, and model theory.
+In this chapter, we use them to study deep computations.
+% For this, we shall first focus on countable languages, which is the theme of the next subsection.
+
+\subsection{The special case~\texorpdfstring{$\mathrm{B}_1(X,\mathbb{R}^\mathcal{P})$}{B\_1(X, R\textasciicircum P)} with~\texorpdfstring{$\mathcal{P}$}{P} countable}
+
+Fix an arbitrary (at most) countable set~$\mathcal{P}$ whose elements $P\in \mathcal{P}$ will be called \emph{predicate symbols} or \emph{formal predicates}.
+Our present goal is to characterize relatively compact subsets of $\mathrm{B}_1(X,\mathbb{R}^\mathcal{P})$, where $X$ is always assumed to be a perfectly normal space (typically a Polish space).
+
+The set $\mathcal{P}$ shall be considered discrete whenever regarded as a topological space.
+Since $$\Cp(X, \mathbb{R}^{\mathcal{P}})\subseteq \mathrm{B}_1(X, \mathbb{R}^{\mathcal{P}})\subseteq (\mathbb{R}^{\mathcal{P}})^X,$$ the ``ambient'' space $(\mathbb{R}^{\mathcal{P}})^X$ is quite relevant.
+The product $X\times \mathcal{P}$ will be regarded as either a point set, or as a topological product depending on context.
+We have natural homeomorphic identifications
+\begin{equation*}
+    (\mathbb{R}^{\mathcal{P}})^X \cong \mathbb{R}^{X\times \mathcal{P}} \cong (\mathbb{R}^X)^{\mathcal{P}},
+\end{equation*}
+given by
+\begin{align*}
+    \mathbb{R}^{X\times \mathcal{P}} \to (\mathbb{R}^{\mathcal{P}})^X: \varphi &\mapsto {\hat{}}\varphi \\
+    \mathbb{R}^{X\times \mathcal{P}} \to (\mathbb{R}^X)^{\mathcal{P}}: \varphi &\mapsto \varphi{\,\hat{}},
+\end{align*}
+where 
+\begin{align*}
+    \hat{}\varphi(x)\coloneqq \varphi(x, \cdot)\in \mathbb{R}^{\mathcal{P}}, &&
+    \varphi\,\hat{}(P)\coloneqq \varphi(\cdot, P) \in \mathbb{R}^X.
+\end{align*}
+Such identifications view $X$ and $\mathcal{P}$ as mere point sets (the topology of~$X$ in particular plays no role).
+
+For $x\in X$, define the ``left projection'' map
+\begin{equation*}
+    \lambda_x\colon \mathbb{R}^{X\times\mathcal{P}}\to \mathbb{R}^{\mathcal{P}}: \varphi\mapsto \lambda_x(\varphi)\coloneqq \hat{}\varphi(x);
+\end{equation*}
+
+for $P\in \mathcal{P}$, the ``right projection'' map
+\begin{equation*}
+    \rho_P\colon \mathbb{R}^{X\times\mathcal{P}}\to \mathbb{R}^X: \varphi\mapsto \rho_P(\varphi)\coloneqq \varphi\,\hat{}(P).
+\end{equation*}
+For fixed $x\in X$ and $P\in \mathcal{P}$, we also have canonical projection maps
+\begin{align*}
+    \lambda_x\colon \mathbb{R}^X\to \mathbb{R}: f\mapsto f(x), &&
+    \rho_P\colon \mathbb{R}^{\mathcal{P}}\to \mathbb{R}: f\mapsto f(P).
+\end{align*}
+When clear from context, rather than using the specific symbols (``$\lambda$'' for left,``$\rho$'' for right) to denote projections, we may use the generic symbol~``$\pi$'';
+thus, $\pi_x$ may mean $\lambda_x$, and $\pi_P$ may mean $\rho_P$.
+
+The Proposition below reduces the study of $\mathbb{R}^{\mathcal{P}}$-valued continuous or Baire-1 functions on~$X$ to the special case of real-valued ones.
+
+\begin{proposition}\label{prop:Baire-identifications}
+    The identification $(\mathbb{R}^{\mathcal{P}})^X \cong \mathbb{R}^{X\times \mathcal{P}} \cong (\mathbb{R}^X)^{\mathcal{P}}$ induces identifications
+    \begin{align*}
+        \Cp(X, \mathbb{R}^{\mathcal{P}}) \cong \Cp(X\times \mathcal{P}) \cong \Cp(X)^{\mathcal{P}}, &&
+        \mathrm{B}_1(X, \mathbb{R}^{\mathcal{P}}) \cong \mathrm{B}_1(X\times \mathcal{P}) \cong \mathrm{B}_1(X)^{\mathcal{P}}.
+    \end{align*}
+\end{proposition}
+
+(The cardinality of $\mathcal{P}$ plays no role.)
+
+\begin{proof}
+    The identification of $\Cp$-spaces follows trivially from the definition of topological product and the fact that $\mathcal{P}$ is discrete: a continuous map $X\to \mathbb{R}^{\mathcal{P}}$ is precisely a $\mathcal{P}$-indexed family of continuous functions $X\to \mathbb{R}$, and these correspond to continuous functions $X\times \mathcal{P}\to \mathbb{R}$.
+    The identification of Baire-1 spaces follows immediately, since it is defined in terms of the purely topological notion of limit (in the ambient space) of sequences of continuous functions.
+\end{proof}
+
+Given $A\subseteq Y^X$ and $K\subseteq X$ we write $A|_K:=\{f|_K:f\in A\}$, i.e., the set of all restrictions of functions in $A$ to $K$.
+The following Theorem is a slightly more general version of Theorem \ref{thm:BFT}.
+
+\begin{theorem}\label{thm:Generalized-BFT}
+    Assume that $\mathcal{P}$ is countable, $X$ is a Polish space, and $A\subseteq \Cp(X,\mathbb{R}^\mathcal{P})$ is pointwise bounded in the sense that $\pi_P\circ A$ ($\subseteq \Cp(X)$) is pointwise bounded for every $P\in\mathcal{P}$.
+    The following are equivalent for every compact $K\subseteq X$:
+
+    \begin{enumerate}[(i)]
+        \item $A|_K$ is relatively compact in $\mathrm{B}_1(K,\mathbb{R}^\mathcal{P})$;
+        \item $\pi_P\circ A|_K$ has NIP for every $P\in\mathcal{P}$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    Compact subsets $K\subseteq X$ are closed, hence also Polish.
+    Therefore, the asserted equivalence follows from Theorems~\ref{thm:BFT} and~\ref{prop:BFT-finitary-cpct}.
+\end{proof}
+
+We conclude this section with an elementary but important observation.
+
+\begin{lemma}\label{lem:NIP-and-closure}
+    Assume that $X$ is Hausdorff and that $A\subseteq \Cp(X)$.
+    The following are equivalent for every $L\subseteq X$:
+    \begin{enumerate}[(i)]
+        \item
+        $A_L$ satisfies the NIP;
+        \item
+        $A|_{\overline{L}}$ satisfies the NIP.
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+    The implication (i)$\Rightarrow$(i) is trivial.  To see the opposite implication, suppose that (ii) does not hold, and choose $\{f_n\}_{n\in\mathbb{N}}\subseteq A$ and $a<b$ such that for all finite disjoint $E,F\subseteq\mathbb{N}$,
+    \[
+	\overline{L}\cap\bigcap_{n\in E}f_n^{-1}(-\infty,a]\cap\bigcap_{n\in F}f_n^{-1}[b,\infty)\neq\emptyset.
+    \]
+    But then, for any $a',b'$ with $a<a'<b'<b$ and any finite disjoint $E,F\subseteq\mathbb{N}$, we can choose
+    \[
+	x\in\overline{L}\cap\bigcap_{n\in E}f_n^{-1}(-\infty,a')\cap\bigcap_{n\in F}f_n^{-1}(b',\infty),
+    \]
+    which, by the definition of closure, gives
+    \[
+	L\cap\bigcap_{n\in E}f_n^{-1}(-\infty,a']\cap\bigcap_{n\in F}f_n^{-1}[b',\infty)\neq\emptyset,
+    \]
+    contradicting (i).
+\end{proof}
+
+\subsection*{Historical remarks}
+The Baire hierarchy of functions was introduced by René-Louis Baire in his 1899 doctoral thesis, \emph{Sur les fonctions de variables réelles}.
+The field of $\Cp$-theory was pioneered by A.~V.~Arhangel'skiĭ and his students in the 1970s and 1980s~\cite{Arkhangelskii:1992}, and
+it has found many applications in model theory and functional analysis.
+For a recent survey, see~\cite{tkachuk2011cp}.

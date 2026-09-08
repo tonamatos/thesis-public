@@ -1,0 +1,141 @@
+% /chapters/4-group-actions/03-01-amoebas-bal.tex
+
+\subsection{Balanceable graphs}\label{subsec:amoebas_bal}
+
+Ramsey's classical theorem for finite graphs states that, for a fixed graph $G$, there is a large enough complete graph $K_n$ such that no matter how the edges of $K_n$ are coloured (in say two colours), one can find a monochromatic copy of $G$ inside of $K_n$.
+Suppose one wishes to find a copy of $G$ inside the coloured graph $K_n$, but instead of monochromatic, with half of the edges (rounded down or up when $G$ has an odd number of edges) in one colour, and the other half in the remaining colour.
+Clearly, one needs to impose additional conditions on the colourings of $K_n$, namely, that each colour class is ``well represented'' (since otherwise one could colour $K_n$ in a single colour, making it impossible to find a non-trivial graph with the desired property) and one needs additional conditions on the structure of $G$.
+We do not go into the details of what those properties are, beyond what is needed to state and expand the results from my own research, as well as tie these concepts to the other ideas in this section.
+The interested reader will find a thorough discussion and complete characterization of these graphs in \cite[Section~2]{unavoidable_chromatic}.
+
+\begin{definition}\label{def:balancing_num}
+    Suppose that a finite graph $G$ has an edge-colouring $c\colon E(G)\to2$ in two colours.
+    This coloured graph is called \emph{balanced} if the number of edges of each colour differs by at most one; that is, if $G$ has an even number of edges, there are exactly as many edges of each colour.
+
+    A finite graph $G$ is called \emph{balanceable} if in any $2$-colouring of the complete graph $K_n$, with sufficiently many edges of each colour and $n$ sufficiently large, one can find a balanced copy of $G$.
+
+    The \emph{balancing number} $\bal(n,G)$ of a balanceable graph $G$ is the maximum number $k$ for which there is a $2$-colouring of $c\colon E(K_n)\to2$ with $\min\{|c^{-1}\{0\}|,|c^{-1}\{1\}|\}=k$ and no balanced copy of $G$.
+\end{definition}
+
+In other words, any $2$-colouring of $K_n$ with more than $\bal(n,G)$ edges in each colour contains a balanced copy of $G$.
+
+\begin{theorem}[{\cite[Corollary~2.5]{unavoidable_chromatic}}]\label{thm:bal_char}
+    Let $G$ be a finite graph with $k$ edges.
+    Then $G$ is balanceable if and only if:
+    \begin{enumerate}
+        \item there are disjoint $X,Y\subseteq V(G)$ such that $V(G)=X\cup Y$ and there are either $\left\lfloor\frac12k\right\rfloor$ or $\left\lceil\frac12k\right\rceil$ edges between the vertices of $X$ and $Y$; and
+        
+        \item there is $W\subseteq V(G)$ such that there are either $\left\lfloor\frac12k\right\rfloor$ or $\left\lceil\frac12k\right\rceil$ edges with both endpoints in $W$.
+    \end{enumerate}
+\end{theorem}
+
+We can study more specific aspects of graphs than whether they are balanceable or not.
+Interestingly, the balancing number may or may not depend on $n$, as the following examples demonstrate.
+We include a detailed proof of the first example for the convenience of the reader, as it often used without proof in the literature.
+
+\begin{proposition}\label{prop:balC_4_is_one}
+    The $4$-cycle, $C_4$, has balancing number $1$.
+    More specifically, $\bal(n,C_4)=1$ whenever $n\geq4$.
+\end{proposition}
+
+\begin{proof}    
+    Indeed, it is obvious that the balancing number cannot be less than 1, as $C_4$ has four edges, and hence a balanced copy needs two edges of each colour.
+
+    As for the upper bound, let $n\geq 4$ and fix an arbitrary edge colouring $c\colon E(K_n)\to\{\text{red},\text{blue}\}$ with at least two edges of each colour.
+    First, suppose there is a vertex $x\in V(K_n)$ all of whose incident edges are same colour (say red).
+    Then, if there are two blue edges in $K_n$ that intersect, they form a blue path of vertices $p_0,p_1,p_2$, none of which can be $x$ by assumption.
+    The edges $xp_0,\; p_0p_1,\; p_1p_2,\; p_2x$ are red, blue, blue, red, respectively, and thus form a balanced copy of $C_4$.
+    If no two blue edges intersect, then the edges joining the endpoints of two particular blue edges (of which there must be at least two) must be all red, which we use to form a balanced copy of $C_4$.
+    
+    Now, consider the case when every vertex has red and blue incident edges.
+    Continue by fixing a red edge $xy$ and partitioning the vertices $w\in V(K_n)\setminus\{x,y\}$ into four classses depending on the value of the pair $(c(wx),c(wy))$.
+    There are two colours, hence four possible values for this pair; let us abbreviate the classes as $RR$ for those vertices $w$ with pair $(\text{red},\text{red})$ and similarly, $RB,BR$ and $BB$.
+    By assumption, $x$ and $y$ have blue incident edges and thus $V(K_n)\setminus\{x,y\}\notin\{RR,RB,BR\}$.
+    If $V(K_n)\setminus\{x,y\}=BB$, then any red edge different from $xy$ must be disjoint from $xy$ and forms a balanced copy of $C_4$ by connecting said edge to $xy$ (via blue edges).
+    We can therefore assume that at least two of the four classes are nonempty, giving six sub-cases to analyze:
+
+    If there are $w\in RR$ and $z\in BB$, or if there are $w\in RB$ and $z\in BR$, then $(x,w,y,z)$ is a balanced $4$-cycle; if $w\in RB$ and $z\in BB$, then either $(x,w,z,y)$ (whenever $wz$ is blue) or $(x,y,w,z)$ (whenever $wz$ is red) is a balanced $4$-cycle; the case $w\in BR$ and $z\in BB$ is symmetric; if $w\in RR$, $z\in RB\cup BR$ and $wz$ is blue, then either $(x,y,z,w)$ (whenever $z\in RB$) or $(x,y,w,z)$ (whenever $z\in BR$) is a balanced $4$-cycle.
+    
+    The only case that is not yet covered so far is when $w\in RR$, $z\in RB$ (or, respectively, when $z\in BR$) and $wz$ is a red edge.
+    Invoking our assumption one last time, there must be a blue edge incident in $w$, say $ww'$.
+    Crucially, we may assume that $w'\in RR$ since any other possibility is covered by the preceding discussions.
+    Finally, the cycle $(w,w',y,z)$ (or, respectively $(w,w',x,z)$, when $z\in BR$) is balanced.
+\end{proof}
+
+\begin{example}\label{ex:balancing_numbers}~ 
+\begin{enumerate}
+    \item The path on three edges, $P_4$, has balancing number $0$.
+    
+    Suppose that the edges of $K_n$ are coloured in red and blue with at least one edge of each colour.
+    In particular, a red edge and a blue edge must intersect, forming a path of two edges of different colour.
+    Taking any third edge that completes the copy of $P_4$, successfully builds a balanced copy regardless of the colour of the third edge.
+    
+    \item For $n\geq 10$, $\bal(n,4K_2)=n-1$.%
+    \footnote{Here $4K_2$ is the graph consisting of four disjoint edges.}
+    This is \cite[Theorem~2.3]{Caro_small_balanceable}.
+
+    \item When $n\geq5$, $\bal(n,K_{1,4})=n-1$.
+    This is an immediate consequence of \cite[Theorem~3.2]{unavoidable_chromatic}.
+
+    \item The complete graph $K_5$ is not balanceable.
+    
+    Consider a colouring of $K_{2n}$ where we split the vertex set into two disjoint sets $A$ and $B$ of size $n$.
+    We colour every edge connecting vertices in $A$ red, and edges connecting vertices in $B$ blue; edges connecting $A$ with $B$ are also red.
+    Suppose a balanced copy $C$ of $K_5$ sits in $K_{2n}$ with vertex set $V(C)\subseteq V(K_{2n})$; then five of its ten edges must be blue.
+    The vertex set $V(C)\cap B$ induces a complete graph (a clique in $K_{2n}$) such that an edge $xy\in E(C)$ is blue if and only if $\{x,y\}\subseteq B$.
+    Since $\binom{k}{2}=5$ has no integer solution, this is a contradiction.
+    
+    This example illustrates the characterization provided by Theorem~\ref{thm:bal_char}.
+    The preceding argument shows that $K_5$ fails the second condition of the theorem; it is straightforward (albeit unnecessary) to show that it also fails the first.
+\end{enumerate}
+\end{example}
+
+Let us elucidate the case when the value of $\bal(n,G)$ is independent of the parameter $n$.
+So, suppose that $G$ is a graph on $k$ edges (for simplicity, let us say $k$ is always even), such that $\bal(n,G)\leq C(G)$.
+In such a case, we say that $G$ has \emph{constant balancing number}, such as in Example~\ref{ex:balancing_numbers}(1).
+The graph $\frac k2K_2$ is a set of $k/2$ disjoint edges (a \emph{matching}), and $K_{1,k/2}$ is a \emph{star graph}, that is, $k/2$ edges incident on a single vertex.
+
+In \cite{Caroetal2023}, we gave a concrete structural characterization of graphs of constant balancing number independently of, and concurrently with, the characterization in \cite[Section~3.2]{caro2022evolution}, where the found values of $C(G)$ involve Ramsey numbers, which grow exponentially.
+In our paper, the characterization offers a deeper understanding of the structure of the graphs with constant balancing number, and furthermore shows that $\bal(n,G)$ is quadratic in $k$ (and not just bounded by a function exponential in $k$).
+Moreover, we extend the characterization to graphs with an odd number of edges.
+
+\begin{theorem}\label{thm:constant_bal}
+    Let $k>0$ be an even integer and $G$ a graph with $k$ edges and no isolated vertices.
+    Then, the following are equivalent.
+    \begin{enumerate}
+        \item $G$ has constant balancing number.
+
+        \item There are injective graph homomorphisms $\frac k2K_2\to G$ and $K_{1,k/2}\to G$.
+        
+        \item $$\bal(n,G)\leq\frac{(|V(G)|-3)(|V(G)|+k)}2.$$ 
+    \end{enumerate}
+
+    Moreover, if $G$ has either $k$ or $k+1$ edges, then $$\frac1{18}k^2-\frac{11}{18}k+\frac{14}9\leq\bal(n,G)\leq\frac{15}8k^2-\frac74k-1.$$
+\end{theorem}
+
+\begin{proof}[Proof sketch of (1)$\implies$(2)]
+    Fix the complete graph $K_n$.
+    One can always pick an arbitrary vertex $v_0$ and colour all edges incident in $v_0$ red and every other edge of $K_n$ blue, as done in the proof of Proposition~\ref{prop:balC_4_is_one}.
+    Provided one makes $n$ large enough, one can guarantee that $K_n$ has more than $C(G)$ red edges.
+    By definition, there is a balanced copy of $G$ inside $K_n$.
+    In particular, all of its red edges (which account for exactly $k/2$ edges of $G$) intersect at some vertex.
+    This vertex in $G$ can be then chosen as the image of the centre of the star graph $K_{1,k/2}$ under an injective graph homomorphism $K_{1,k/2}\to G$.
+
+    Consider a different colouring of $K_n$.
+    This time, pick a maximal matching in $K_n$ and colour those edges red, and everything else blue.
+    The size of the matching increases with $n$, and so once again, for large enough $n$, we can guarantee that $G$ satisfies Definition~\ref{def:balancing_num}.
+    Consequently, (at least) half of the edges of $G$ must be pairwise disjoint.
+    In other words, one can construct an injective homomorphism $\frac k2K_2\to G$.
+\end{proof}
+
+The implication (2)$\implies$(1) appears as \cite[Theorem~3.6]{caro2022evolution}, where it is proved using Ramsey numbers, and also as \cite[Theorem~1.1]{Caroetal2023}, where we prove it by a structural induction.
+The implication (2)$\implies$(3) is \cite[Theorem~3.7]{Caroetal2023} and is the only part that requires that $G$ has no isolated vertices.
+The moreover part is \cite[Theorem~5.1]{Caroetal2023}.
+The implication (3)$\implies$(1) is immediate, as the bound in (3) does not depend on $n$.
+
+If one wishes to study an analogous notion for infinite graphs, one has to define what it means for a large complete graph to have ``sufficiently many edges of each colour.''
+In \cite[Section~4]{bowen2020unavoidable}, the authors study a somewhat similar notion of balanceability and suggest an approach to generalizing these ideas to the infinite case.
+Drawing inspiration from this approach, we adapt some of the ideas to this theory.
+Namely, that ``sufficiently many edges of each colour'' corresponds to non-meagre colour classes in a Polish space.
+
+Section~\ref{sec:infinitary_amoeba_graphs} includes an analogue of Theorem~\ref{thm:constant_bal} that says that if the colours are well represented in a complete graph on a perfect Polish space, then one can find a star graph (in this context: a fixed centre connected to a Cantor set through edges) in one colour, joined with perfectly-many pairwise disjoint edges in the other colour.

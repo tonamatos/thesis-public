@@ -1,0 +1,46 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write  # Required to push the PDFs to the gh-pages branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive  # To include style files
+          fetch-depth: 0
+
+      - name: Compile thesis
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: thesis.tex
+
+      # The defence slides are not rebuilt here: slides.tex embeds pages from an
+      # external PDF that is not part of this repository, so the committed
+      # presentation/slides.pdf is published as-is.
+
+      - name: Prepare deployment folder
+        run: |
+          mkdir public
+          cp index.html public/
+          cp favicon.ico public/
+          mv thesis.pdf public/
+          cp presentation/slides.pdf public/
+          touch public/.nojekyll  # Prevents Jekyll processing on GitHub Pages
+
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          force_orphan: true  # Keeps the deployment branch clean and small
+          cname: thesis.wiederhold.dev

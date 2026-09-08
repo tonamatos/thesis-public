@@ -1,0 +1,377 @@
+% /chapters/3-deep-computations/03-examples-CCS.tex
+
+\section{Examples of Compositional Computation Structures}\label{sec:examples_CSS}
+
+We begin by formalizing the Newton--Raphson root-finding method as a CCS~\cite{Galantai200025}, \cite[Section~2.3]{Burden2016numerical}.
+Let $\hatC = \mathbb{C}\cup\{\infty\}$ be the extended complex plane (the Alexandroff —one-point— compactification of~$\mathbb{C}$).
+We regard the unit sphere $S^2\subseteq \mathbb{R}^3$ as the Riemann sphere and endowed with the stereographic projection map $S^2\to\hatC$ —a topological homeomorphism whose \emph{inverse} $\hatC\rightarrow S^2$ is given by $z \mapsto (P_1(z), P_2(z), P_3(z))$, where $(P_1(\infty), P_2(\infty), P_3(\infty)) = (0,0,1)$ and, for $z\ne\infty$,
+    \begin{align*}
+        P_1(z) &= \frac{2\,\Re{z}}{|z|^2+1},&
+        P_2(z) &= \frac{2\,\Im{z}}{|z|^2+1},&
+        P_3(z) &= \frac{|z|^2-1}{|z|^2+1}.
+    \end{align*}
+The extended complex plane $\hatC$ is thus endowed with the real predicates $P_1, P_2, P_3$ with values in~$[-1,1]$; its topology is metrized by the pullback of the usual Euclidean metric on~$S^2$.
+
+\subsubsection*{Newton CCSs: steps and fractals}\label{sec:Newton-map}
+Let $p = p(z)$ be a non-constant rational function with complex coefficients —i.e., an analytic (meromorphic) map $\hatC\to\hatC$.
+The \emph{Newton method step} (or \emph{Newton map}) for $p$ is the rational map
+\begin{equation}\label{eq:Np}
+    N_p\colon z \mapsto z-\frac{p(z)}{p'(z)}.
+\end{equation}
+
+Successive iterations of the Newton-Raphson method (i.e., compositional powers~$N_p^{(n)}$) may be regarded as computations of a CCS whose states space is $L = \hatC$.
+The natural choice of predicates is $\mathcal{P} = (P_1, P_2, P_3)$,
+the inverse stereographic projection coordinates.
+(The real- and imaginary part maps $z\mapsto\Re{z}$, $z\mapsto\Im{z}$ are not defined at~$z = \infty$.)
+
+\paragraph{Newton CCSs}
+\label{sec:Newton-CCS}
+Let $\Gamma_p:=\{N_p^{(n)}:n\in\mathbb{N}\}$ be the semigroup of iterates of the Newton map~\eqref{eq:Np}.
+The CCS $(\hatC, (P_1,P_2,P_3), \Gamma_p)$ is \emph{Newton's method for~$p(z)$} (or the \emph{Newton CCS for~$p(z)$}).
+Note that the states space $\hatC$ is compact and the Newton map $N_p$ is continuous thereon, so the Extensibility Axiom is satified by Newton CCSs.
+
+Given an initial estimate $z_0$, one hopes for the sequence of Newton steps applied to~$z_0$ (namely, $N_p^{(\bullet)}(z_0) \coloneqq (z_n)_{n\in \mathbb{N}}$, where $z_n \coloneqq N_p^{(n)}(z_0)$)
+to converge to a root~$r$ of~$p$.
+
+\paragraph{Fatou and Julia sets}
+Recall that the \emph{Fatou set $\mathcal{F}_p$} consists of all points that have a compact neighbourhood on which some subsequence of the sequence $p^{(\bullet)}$ of iterates of~$p$ converges uniformly;
+the \emph{Julia set} $\mathcal{J}_p\coloneqq\hatC\setminus \mathcal{F}_p$ is its complement:
+it is (necessarily closed and) typically a fractal.
+The Julia set of the Newton map~$N_p$ is called the \emph{Newton fractal} of~$p$.
+
+\subsection{Example: Newton's CCS for the cubic \texorpdfstring{${\rho}(z) = z^3-2z+2$}{rho(z) = z3-2z+2}}\label{sec:Newton-cubic}
+The polynomial ${\rho}(z) = z^3-2z+2$ has Newton map
+\begin{equation*}
+  N_{\rho}: z \mapsto z - \frac{z^3-2z+2}{3z^2-2} = \frac{2z^3-2}{3z^2-2}.
+\end{equation*}
+Denote the real root of $\rho$ by $r_0$; the roots in the upper- and the lower half plane, by $r_{+}$ and $r_{-}$, respectively.
+
+Successive Newton steps obtained from the initial guess $z_0=0$ yield the divergent sequence $N_{\rho}^{(\bullet)}(0) = (0, 1, 0, 1, \dots)$ having sequential limits $0, 1$ —neither a root of~${\rho}$.
+
+\subsubsection{Visualizing Newton iterates}
+Assign to each complex point $z\in \mathbb{C}$ an “RGB colour” $(R,G,B)\in[0,1]^3$ whose entries give the corresponding (Red/Green/Blue) colour intensity;
+thus, $(1,0,0)$ is red, $(0,1,0)$ is green, and $(0,0,1)$ is blue—while, for example, $(0.5, 0, 0.5)$ is a light purple.
+Each of the three distinct roots of~${\rho}$ will be given one of these colours
+(the real root $r_0$, red; the roots $r_{+1}$ on the upper- and $r_{-1}$ on the lower half plane, respectively green and blue).
+The RGB colour of all other~$z\in \mathbb{C}$ is a convex combination whose relative weights are $1/d_i$ where $d_i = |z-r_i|$ for $i=0, \pm1$;
+this will be called the “standard” colour of~$z$:
+the closer $z$ is to root $r_i$, the closer the colours of these points are.%
+\footnote{While $\infty$ is a fixed point of~$N_{\rho}$, it is a repeller: if $|z|$ is large, then $N_{\rho}(z) = \frac{2}{3}z + O(1)$ has roughly two-thirds its magnitude.
+Therefore, $\infty$ is not the limit of any subsequence of $N_{\rho}^{(\bullet)}(z_0)$ with $z_0$ in the Fatou set of~$N_{\rho}$; in particular, $\infty$ is a point of the Newton fractal of~${\rho}(z)$.}
+
+For any $n\in \mathbb{N}$, define a colouring of~$\mathbb{C}$ in the natural way:
+colour each $z_0\in \mathbb{C}$ using the standard colour of~$z_n\coloneqq N_{\rho}^{(n)}(z_0)$.
+At any stage, particularly early ones, the colouring looks “fuzzy” (out of focus) because the colouring function is continuous;
+however, as $n$ increases, the colouring becomes “sharper”
+(the colouring function has large regions of near-constancy, in the transition areas between which colour varies rapidly —i.e., is “nearly discontinuous”).
+For one thing, for many $z_0$ in the Fatou set, the (entire) sequence $(z_n)$ converges to one of the three roots:
+the RGB colours of~$(z_n)$ tend towards (a single one of) red, green or blue correspondingly.
+The Fatou set also has an open region consisting of points~$z_0$ for which $(z_n)_{n\in \mathbb{N}}$ has a subsequence converging to $0$ or~$1$ (uniformly on some compact neighbourhood of~$z_0$).
+The four open regions are immediately recognizable in Figure~\ref{fig:newton}.
+
+Let $B_0, B_+, B_-$ be the respective basins of the roots $r_0, r_+, r_-$, and let $B_{01}$ be the basin of the attractive cycle 0, 1, 0, 1, \dots.
+It may be shown that the Fatou set of $N_\rho$ is $F_\rho = B_{01} \cup B_0 \cup B_{+} \cup B_{-}$, each of these four sets being nonempty open.
+Since $B_{01}$ is nonempty, $N_\rho^{(\bullet)}$ does not converge pointwise; however, its subsequences of even/odd iterates are pointwise convergent on~$B_{01}$ to two distinct deep computations $f_0$ (constant $0$ on~$B_{01}$) and $f_1$ (constant $1$ on~$B_{01}$). \footnote{As remarked above, $\infty$ is a repelling fixed point of $N_\rho$, hence $f_0(\infty) = \infty = f_1(\infty)$.}
+The behavior of iterates $N^{(n)}_\rho$ on the Newton fractal of~$\rho$ (the Julia set of~$\rho$) is chaotic.
+
+\begin{figure}[htbp]
+\centering
+% Row 1: Low iterations
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{newton_div1.png}
+    \caption{$n=1$}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{newton_div2.png}
+    \caption{$n=2$}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{newton_div3.png}
+    \caption{$n=3$}
+\end{subfigure}
+
+\vspace{1em} % Add some vertical space between rows
+
+% Row 2: Large n showcasing the 2-cycle
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{newton_div99.png}
+    \caption{$n=99$ (odd)}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{newton_div100.png}
+    \caption{$n=100$ (even)}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{newton_div101.png}
+    \caption{$n=101$ (odd)}
+\end{subfigure}
+
+\caption{Iterates of the Newton map $N_{\rho}$ of $\rho(z) = z^3-2z+2$.
+Points in the basin of each root $r_0, r_{\pm1}$ (respectively, red, green and blue) converge to the root.
+The basin of attraction of the 2-cycle $\{0,1\}$ is the union of magenta and cyan regions; these two colours alternate like semaphore lights: points~$z$ in the cyan region are those whose subsequence $N_{\rho}^{(2\cdot\bullet)}(z)$ of even Newton iterates (resp., $N_{\rho}^{(2\cdot\bullet+1)}(z)$ of odd iterates) has limit $1$ (resp., limit~$0$).
+For points $z$ in the magenta region, the limits of the even and odd iterate subsequences are exchanged. 
+The boundaries of coloured regions constitute the Newton fractal of~$\rho$.}
+\label{fig:newton}
+\end{figure}
+
+\subsection{Example: Newton's CCS for 3-cyclotomic \texorpdfstring{$\kappa(z) = z^{3}-1$}{kappa(z)=z3-1}}
+
+Consider next the $3$-cyclotomic polynomial ${\kappa}(z) = z^3-1$. 
+The roots of the $3$-cyclotomic polynomial ${\kappa}(z) = z^3-1$ are the cube roots of unity $r_0=1$ and $r_{\pm} = \exp(\pm2\pi i/3)$;
+the Newton map is
+\begin{equation*}
+    N_{\kappa}\colon z\mapsto z-\frac{z^3-1}{3z^2}=\frac{2z^3+1}{3z^2}.
+\end{equation*}
+In Figure~\ref{fig:newton2}(\textsc{C}), one sees a Fatou set consisting of solid-colour (disconnected) open sets, one in each of the colours red (for $r_0=1$), green and blue (for $r_{\pm1}$, respectively), where the sequence of all iterates $z_n \coloneqq N_{\kappa}^{(n)}(z_0)$ starting with a arbitrary initial point $z_0$ converges to the corresponding root.
+(Thus, each solid-colour region is the basin of attraction of the respective root).
+
+\begin{figure}[htbp]
+\centering
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{newton1.png}
+    \caption{After 1 iteration}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{newton3.png}
+    \caption{After 3 iterations}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{newton100.png}
+    \caption{After 100 iterations}
+\end{subfigure}
+
+\caption{Visualization of the Newton iterates of ${\kappa}(z) = z^3 - 1$.}
+\label{fig:newton2}
+\end{figure}
+
+\subsection{Example: Square roots}\label{exa:square-roots-compute}
+When $p\colon \hatC\to\hatC$ has real coefficients, it restricts to a map $\RP^1\to\RP^1$ on the real-projective line $\RP^1 = \mathbb{R}\cup\{\infty\}$.
+In this case, the Newton CSS for $p$ may be regarded as having states space $\RP^1$.
+We shall explain the details in the simplest case of a polynomial $p(x) = x^2-a$ (real $a>0$) to illustrate iterative square-root approximations.
+
+Let $\mathbb{R}\to S^1: x\mapsto (P_1(x),P_2(x))$ be the (inverse) stereographic projection of the real line onto $S^1\subseteq \mathbb{R}^2$, i.e.,
+\begin{align*}
+    P_1(x) &= \frac{2x}{x^2+1}, &
+    P_2(x) &= \frac{x^2-1}{x^2+1},
+\end{align*}
+extended to a projective transformation of the real projective line $\RP^1 = \mathbb{R}\cup\{\infty\}$ by $\infty \mapsto (P_1(\infty), P_2(\infty)) = (0, 1)$;
+this gives a compact CCS $\underline{\mathfrak{L}} = (\RP^1, (P_1, P_2))$.
+As above, consider the quadratic polynomial $p(x)=x^2-a$ for some fixed real number $a>0$.
+The Newton map $N_p$ is
+\begin{equation*}
+    x \mapsto x - \frac{x^2-a}{2x}=
+    \begin{cases}
+        \frac{x^2+a}{2x}, & x\ne0,\infty;\\
+        \infty, & x=0, \infty.
+    \end{cases}
+\end{equation*}
+These Newton steps converge to one of the square roots $\pm\sqrt{a}$ starting from any initial point $x_0\ne0,\infty$.
+More explicitly, the unique deep equilibrium $\mathfrak{f}\colon \RP^1\to\RP^1$ of (the sequence of iterates of) $N_p$ is given by
+\[
+ \mathfrak{f}(x)
+ =
+ \lim_{n\rightarrow\infty}N_p^n(x)
+ =
+ \begin{cases}
+    \sqrt{a}, & x\in(0,\infty);\\
+    -\sqrt{a}, & x\in(\infty,0);\\
+    \infty. & x = 0, \infty.
+ \end{cases}
+ \]
+ Thus, $\mathfrak{f}$ is discontinuous at $x = 0, \infty$.
+
+\subsection{Example: Threshold classifiers on Cantor's set}\label{sec:Cantor-classifiers}
+
+Consider the states space $L = 2^\mathbb{N}$ ($= \{0,1\}^{\mathbb{N}}$) consisting of all bit sequences $x = (x_n)_{n\in \mathbb{N}} \subseteq \{0,1\}$.
+The product space~$2^{\mathbb{N}}$ is compact%
+\footnote{The topology on the space $2 = \{0,1\}$ is discrete.}
+and homeomorphic to the Cantor (ternary) subset of the interval~$[0,1]$.
+Consider the predicate collection $\mathcal{P} = (\bullet_n)_{n\in\mathbb{N}}$ of projections (coordinates)
+\begin{equation*}
+    \bullet_n\colon 2^{\mathbb{N}}\to\{0,1\}: x \mapsto x_n.
+\end{equation*}
+Since $2^{\mathbb{N}} \subseteq \mathbb{R}^{\mathbb{N}}$ ($\cong \mathbb{R}^{\mathcal{P}}$) is closed, the type space of $(2^{\mathbb{N}}, (\bullet_n)_{n\in \mathbb{N}})$ is effectively still~$2^{\mathbb{N}}$.
+The constant $0$ and $1$ elements of $2^\mathbb{N}$ will be denoted $0_{\bullet}$ and $1_{\bullet}$, respectively.
+In this way, we obtain the \emph{Cantor computation states structure (CSS)}
+\begin{equation*}
+    \mathcal{C} = (2^{\mathbb{N}},(\bullet_i)_{i\in \mathbb{N}}).
+\end{equation*}
+
+\subsubsection{The concatenation action of words}\label{sec:concat}
+For fixed $n\in \mathbb{N}$, we call elements of $2^n = \{0,1\}^n$ \emph{finite bit sequences \emph{(or \emph{binary words})} of length~$n$}; the finite set $2^n$ is topologized discretely.
+
+The set of all finite-length words is the disjoint union $2^{<\mathbb{N}}\coloneqq \bigsqcup_{n\in \mathbb{N}}2^n$ (a discrete space); the (unambiguously defined) length~$n$ of any word~$w\in 2^{<\mathbb{N}}$ is denoted~$|w|$.
+For $m\ge n$, we also have natural continuous restriction maps (projections)
+$2^{\mathbb{N}}\rightarrow 2^m\rightarrow 2^n$.
+The restriction of~$x$ — either a sequence or a word of length $m\ge n$— to a length-$n$ word is denoted $x\restriction_n$ (i.e., $\cdot\restriction_n$ projects onto~$2^n$).
+Since the index set $\mathbb{N}$ and the value space~$2 = \{0, 1\}$ are well-ordered, the spaces $2^{\mathbb{N}}$ as well as $2^{<\mathbb{N}}$ and $2^n$ for $n\in \mathbb{N}$ carry a natural lexicographical order henceforth denoted~$\preceq$;
+the order topology coincides with the (product) topology of~$2^{\mathbb{N}}$.
+All restriction maps~$\cdot\restriction_n$ are continuous and order-preserving.
+
+Given lengths $n, m\in \mathbb{N}$, we have a concatenation operation $2^m\times 2^n\to 2^{m+n}: (v,w)\mapsto \arc{vw}$; such concatenations altogether yield a semigroup structure on~$2^{<\mathbb{N}}$ —more precisely, a monoid with the empty word $()\in 2^0$ as identity.
+The more general concatenation operation $2^{<\mathbb{N}}\times 2^{\mathbb{N}}\to 2^{\mathbb{N}}: (w,x)\mapsto \arc{wx}$ is a continuous and order-preserving action of $2^{<\mathbb{N}}$ on~$2^{\mathbb{N}}$;
+we shall call it the \emph{prefixing action}.
+Thus, \emph{prefixing by a given word $w\in 2^{<\mathbb{N}}$} means applying the operation $\arc{w\cdot}: x\mapsto \arc{wx}$.
+In this manner, we obtain the \emph{Cantor prefixes CCS}
+\begin{equation*}
+    \arc{\mathcal{C}} = \langle2^{\mathbb{N}}, (\bullet_i)_{i\in \mathbb{N}}, 2^{<\mathbb{N}}, \arc{\,\cdot\cdot\,}\rangle
+\end{equation*}
+where, by an abuse of nomenclature, the operation $\arc{\,\cdot\cdot\,}$ denotes both the concatenation $(v,w)\mapsto\arc{vw}$ on $2^{<\mathbb{N}}$ and the prefixing $(w,x)\mapsto\arc{wx}$ of~$2^{<\mathbb{N}}$ on~$2^{\mathbb{N}}$.
+
+\subsubsection{Shift action}\label{sec:shifts}
+An altogether different action on $2^{\mathbb{N}}$ is given by shift operations (“Bernoulli shifts”);
+namely, an arbitrary $m\in \mathbb{N}$ acts on $2^{\mathbb{N}}$ by the map
+\begin{equation*}
+    \ola{m} : x = (x_i)_{i\in \mathbb{N}}\mapsto \ola{m}x
+    \coloneq (x_{m+i})_{i\in \mathbb{N}}.
+\end{equation*}
+Here, $\ola{0}\colon 2^{\mathbb{N}}\to2^{\mathbb{N}}$ is the identity $x\mapsto x$, and the equality $(\ola{m+n})x = \ola{m}(\ola{n}x)$ for $m,n\in \mathbb{N}$ holds identically (i.e., the additive semigroup (monoid) $(\mathbb{N},0,+)$ is represented as the semigroup of shifts of~$2^{\mathbb{N}}$).
+Let $\ola{\mathbb{N}} = \{\ola{m}: m\in \mathbb{N}\}$ be the semigroup of all shifts.
+This gives the \emph{Cantor shifts} (or \emph{Cantor-Bernoulli}) CCS
+\begin{equation*}
+    \mathcal{B} = \langle2^{\mathbb{N}}, (\bullet_n)_{n\in \mathbb{N}}, \mathbb{N}, (\ola{n})_{n\in\mathbb{N}}\rangle.
+\end{equation*}
+
+\subsubsection{Finite-precision classifiers and definability}\label{sec:fin-prec-class-defin}
+\begin{notation}
+    When useful, we will regard $0, 1$ as logical constants ($0$ for falsehood, $1$ for truth).
+    In view of such identification, we shall call a $\{0,1\}$-valued function on a set $X$ (resp., in a finite power $X^n$) an \emph{($n$-ary) relation on~$X$}.
+    The propositional connectives of negation~“$\neg$”, disjunction~“$\vee$” and conjunction~“$\wedge$” are realized using (linear lattice) operations on~$\mathbb{R}$; explicitly, as $r\mapsto 1-r$ (negation), binary maximum (max) and binary minimum (min), respectively.
+
+    Let $\Brack{\cdot}$ be Iverson's bracket; \footnote{We choose square brackets \emph{à la} Knuth, but typeset in double-strike “blackboard bold” style to preclude ambiguity.} thus, for any statement $\mathtt{S}$, the value of $\Brack{\mathtt{S}}$ is $1$ if $\mathtt{S}$ is true, $0$ if false.
+\end{notation}
+
+For any fixed word~$w\in2^n$, let ${\preccurlyeq}_nw$ be the relation $\Brack{\cdot\restriction_n \preceq w}: x\mapsto \Brack{x\restriction_n\preceq w}$ on~$2^{\mathbb{N}}$.
+We shall write $x{\preccurlyeq}_nw$ with the meaning of $x\restriction_nw$ or $\Brack{x\restriction_nw}$, depending on context
+(thus, “${\preccurlyeq}_nw$” names a unary relation taking its argument $x$ on the left).
+The subscript $n$ is used only for emphasis and optional, since its value is determined uniquely by the condition $w\in 2^n$.
+Since both $\Brack{\cdot\preceq w}$ and $\cdot\restriction_n$ are continuous, so is ${\preccurlyeq}_nw$, which will be called a \emph{precision-$n$ threshold classifier};
+any such relation ${\preccurlyeq}_nw$ is a \emph{finite-precision threshold classifier}.
+For $n=0$, there is only one “zeroth-precision” classifier ${\preccurlyeq}_0{()}$:
+the identically true relation $\mathbf{1}$ on~$2^{\mathbb{N}}$.
+Although insubstantial for our purposes, the subsequent discussion is simpler if we regard (as we shall) the identically false relation $\mathbf{0}$ as finite-precision threshold classifier, denoted ${\prec}0_{\bullet}$, intuitively, a threshold classifier with negative precision~$n = -1$.
+
+We remark that the statement “$x\preccurlyeq_nw$” has identical semantics to “$x\preceq \arc{w1_{\bullet}}$” (\emph{not} to “$x\preceq \arc{w0_{\bullet}}$”) in the usual ordering semantics of $2^{\mathbb{N}}$ which depend on all entries of~$x$, not just those of $x{\restriction}_n$.
+
+A moment's reflection shows that any finite-precision classifier can be expressed as a Boolean combination \footnote{In other words, finite-precision classifiers are \emph{definable} in the sense of real-valued logic (sans quantifiers) whose connectives are vector-lattice operations (maximum, minimum, and linear combinations), plus logical constants (i.e., real constants) as nullary connectives.} of the first $n$ coordinates $P_i(x)=x_i$ ($i<n$) of its argument~$x\in 2^{\mathbb{N}}$
+(i.e., $x{\preccurlyeq}_nw$ may be obtained from entries $x_i$ of $x\restriction_n$ using the operations of maximum, minimum and negation $\neg: r\mapsto 1-r$ in place of classical Boolean connectives). \footnote{The constant relations $\mathbf{0}$, $\mathbf{1}$ are obtained per the usual convention: the conjunction (resp., disjunction) of an empty set of propositions is $\mathbf{1}$ (resp.,~$\mathbf{0}$).}
+
+\subsubsection{Infinite-precision threshold classifiers}
+\label{sec:infin-prec-class}
+
+\emph{Threshold ultra-classifiers} are relations $2^{\mathbb{N}}\to\{0,1\}$ in the closure of the set of finite-precision classifiers.
+Since each finite-precision classifier is a non-increasing function on~$2^{\mathbb{N}}$, the same holds for any ultra-classifier.
+It is easily shown that such ultra-classifiers have, for some sequence $z\in 2^{\mathbb{N}}$, one of the forms%
+\begin{itemize}
+\item $\Brack{\cdot\preceq z}$, denoted simply “${\preceq}z$”, or
+\item $\Brack{\cdot\prec z}$, denoted “${\prec}z$”.
+\end{itemize}
+
+Any finite-precision classifier is an ultra-classifier.
+Indeed, ${\prec}0_{\bullet}$ is the false relation $\mathbf{0}$ (in agreement with our earlier convention);
+all other finite-precision classifiers are of the form ${\preccurlyeq}_nw$ and hence identical to the ultra-classifier ${\preceq}\arc{w1_{\bullet}}$ as remarked above.
+Since (countably many) sequences of the form $\arc{w1_{\bullet}}$ for words $w\in 2^{<\mathbb{N}}$ are dense in~$2^{\mathbb{N}}$, one sees that ultra-classifiers are \emph{sequential} limits of finite classifiers, hence are Baire-$1$ functions on~$2^{\mathbb{N}}$.
+
+An ultra-classifier not of finite precision is called \emph{of infinite-precision};
+such infinite-precision classifiers are \emph{discontinuous} Baire-1 functions on~$2^{\mathbb{N}}$:
+the sole point of discontinuity of an infinite-precision classifier ${\preccurlyeq}x$ or ${\prec}x$ is~$x$.
+Unlike finite-precision classifiers, those of infinite precision are not definable, i.e., admit no (finite) Boolean expression in the coordinates~$x_i$.
+
+\paragraph{Split Cantor}
+When threshold classifiers are regarded as elements of $\mathrm{B}_1(2^{\mathbb{N}})$, we will denote ${\preceq}x$ by $\bar{x}$, and ${\prec}x$ by~$\hat{x}$.
+Per the preceding discussion, such classifiers constitute a set
+\begin{equation*}
+    \cancel{C} = \widehat{C} \cup \overline{C} \subseteq \mathrm{B}_1(2^{\mathbb{N}})
+\end{equation*}
+consisting of two parts
+\begin{align*}
+    \widehat{C} &= \{\hat{x}: x\in 2^{\mathbb{N}}\},&
+    \overline{C} &= \{\bar{x}: x\in 2^{\mathbb{N}}\}.
+\end{align*}
+In the topology of pointwise convergence, $\cancel{C}$ is homeomorphically identified with the (topologized by the lexicographic order) \footnote{The primary key of a pair $(x,b)\in2^{\mathbb{N}}\times\{0,1\}$ is the sequence~$x\in 2^{\mathbb{N}}$; the secondary key is the bit~$b\in\{0,1\}$. Thus, $\cancel{C}$ is \emph{not} homeomorphic to the product $\{0,1\}\times 2^{\mathbb{N}}$ (i.e., to the “disjoint union” $2^{\mathbb{N}}\sqcup 2^{\mathbb{N}}$ of two open subspaces).}
+\emph{split Cantor space $2^{\mathbb{N}}\times\{0,1\}$} by
+\begin{align*}
+    \widehat{C}\cong 2^{\mathbb{N}}\times\{0\}&: \hat{x}\mapsto (x,0), &
+    \overline{C} \cong 2^{\mathbb{N}}\times\{1\}: \bar{x}\mapsto(x,1).
+\end{align*}
+Each of these two parts is homeomorphic to the Cantor set~$2^{\mathbb{N}}$, but they are \emph{not} open;
+indeed, each is essentially dense:%
+\footnote{The constant relations $\mathbf{0}$, $\mathbf{1}$ are isolated points of~$\cancel{C}$.}
+$\mathrm{Cl}(\widehat{C}) = \cancel{C}\setminus\{\mathbf{1}\}$ and $\mathrm{Cl}(\overline{C}) = \cancel{C}\setminus\{\mathbf{0}\}$.
+
+The upshot is that, starting from a countable set of quite simple finite-precision classifiers (nonincreasing Boolean functions) on Cantor space, ultraclassifiers form a much more complicated split Cantor $\cancel{C}\subseteq \mathrm{B}_1(2^{\mathbb{N}})$.
+
+\subsection{Example: Prefix tests}\label{sec:prefix-test}
+Let $\mathcal{C} = (2^{\mathbb{N}},(\bullet_i)_{i\in \mathbb{N}})$ be the Cantor CSS of Section~§\ref{sec:Cantor-classifiers}.
+For each $w\in 2^{<\mathbb{N}}$, let ${\equiv}_nw$ be the unary $\{0,1\}$-valued relation $\Brack{\,\cdot\,\restriction_n = w}: x\mapsto\Brack{x\restriction_n = w}$ which holds if and only if $w$ is the $n$-prefix of~$x$ (i.e., the initial $n$-word of~$x$);
+any relation ${\equiv}_nw$ will be called an \emph{$n$-prefix test}, or simply a \emph{finite-prefix test}, when $n$ is otherwise unspecified.
+As for finite-precision classifiers in~§\ref{sec:Cantor-classifiers} above, the subscript $n$ in ${\equiv}_nw$ is determined as~$n = |w|$ and thus optional.
+One sees that all finite-prefix tests are continuous maps $2^{\mathbb{N}}\to\{0,1\}$;
+moreover, given~$w$ (of length~$n$), the formula $x\equiv_n\!w$ is explicitly definable as suitable Boolean combination of the entries of $x\restriction_n$.
+The test ${\equiv}w$ will also be denoted $\widetilde{w}$ when thought of as a $\{0,1\}$ valued function on~$2^{\mathbb{N}}$.
+
+\subsubsection{Ultra-prefix tests and equality}\label{sec:ultraprefix-tests}
+\emph{Ultra-prefix tests} are relations $2^{\mathbb{N}}\to\{0,1\}$ that belong to the closure of prefix tests in the topology of pointwise convergence.
+
+\begin{proposition}\label{prop:zero-ultraprefix}
+    The identically false relation $\mathbf{0}$ is an ultra-prefix test.
+\end{proposition}
+\begin{proof}
+    It suffices to show that the sets
+    \begin{align*}
+        W^{\not{\equiv}}_x &\coloneq \{w\in 2^{<\mathbb{N}}: x\not\equiv w\}&
+        (x\in 2^{\mathbb{N}})
+    \end{align*}
+    are a filter sub-base on~$2^{<\mathbb{N}}$, i.e., that for any finite collection $(x_i)_{i<m} \subseteq 2^{\mathbb{N}}$, the corresponding family $(W^{\not{\equiv}}_i)_{i<m} \coloneq (W^{\not{\equiv}}_{x_i})_{i<m}$ has nonempty intersection.%
+    \footnote{From the definition of the sets $W^{\not{\equiv}}_x$, it should be evident that $\mathbf{0}$ is an ultra-prefix if \emph{and only if} they altogether form a filter sub-base.\label{fn:zero-ultraprefix}}
+    Let $k\in \mathbb{N}$ satisfy%
+    \footnote{One may trivially take $k=m$, but the flow of the proof is obscured.} $2^k>m$; thus, at most $m$-many distinct $k$-words $w\in 2^k$ are of the form $w = x_i$ for some $i<m$; some $k$-word $w^{*}\in 2^k$ is not of that form; the intersection $\bigcap_{i<m}W^{\not{\equiv}}_i$ contains~$w^{*}$, hence is nonempty.
+\end{proof}
+
+\begin{proposition}\label{prop:ultra-prefixes}
+    Any ultra-prefix test is either the constant $0_{\bullet}$, a finite-prefix test, or an \emph{equality test}
+    \begin{equation*}
+        \bbar{x}\colon 2^{\mathbb{N}}\to\{0,1\}: y\mapsto \Brack{y = x}
+    \end{equation*}
+    for some fixed $x\in 2^{\mathbb{N}}$.
+    Such equality tests are Baire-$1$ on~$2^{\mathbb{N}}$.
+\end{proposition}
+
+\begin{proof}
+    From the proof of Proposition~\ref{prop:zero-ultraprefix} and the remark in footnote\footref{fn:zero-ultraprefix}, one sees that any non-zero ultra-prefix~$\varphi$ is necessarily an accumulation point of a finite union of sets of the form $\widetilde{W}_x \coloneq \{\widetilde{w}: x\equiv w\in 2^{\mathbb{N}}\}$, and therefore must be an accumulation point of some (single) such set~$\widetilde{W}_{\!x^{*}}$ for some $x^{*}\in 2^{\mathbb{N}}$.
+
+    One readily sees that $\widetilde{W}_{\!x^{*}} = \{\widetilde{w_n}: n\in \mathbb{N}\}$ where $w_n \coloneqq x^{*}\restriction_n$.
+    It remains to show that $\bbar{x^{*}}$ is the sole limit point of $(\widetilde{w_n})_{n\in \mathbb{N}}$, and sequentially so in the pointwise topology.
+    Indeed, for all $y\in 2^{\mathbb{N}}$, we have
+    \begin{equation*}
+        \lim_{n\to\infty}\widetilde{w_n}(y)=\lim_{n\rightarrow\infty}\Brack{y\equiv_nx^{*}\restriction_n}=\Brack{y= x^{*}}=\bbar{x^{*}}(y).\qedhere
+    \end{equation*}
+
+\end{proof}
+
+Unlike finite-prefix tests, equality tests are discontinuous.
+
+\subsubsection{Extended Alexandroff compactification}\label{sec:extended-alexandroff}
+The set $\mathcal{D}_{\mathfrak{c}}\coloneqq\{\bbar{x}: x\in 2^{\mathbb{N}}\} \subseteq \mathrm{B}_1(2^{\mathbb{N}})$ is \emph{discrete} of size~$\mathfrak{c}$ (continuum);
+its Alexandroff (one-point) compactification is $\mathcal{A}\coloneqq \mathcal{D}_{\mathfrak{c}}\cup\{\mathbf{0}\}$.
+Let $\mathcal{A}^{\complement}\coloneqq\{\widetilde{w}: w\in 2^{<\mathbb{N}}\}$.
+The compact space $\mathcal{A}_{\mathrm{E}} = \mathcal{A}\cup \mathcal{A}^{\complement} \subseteq \mathrm{B}_1(2^{\mathbb{N}})$ extends the Alexandroff compactification $\mathcal{A}$ by the countable set~$\mathcal{A}^{\complement}$.
+The point $\mathbf{0}\in \mathcal{A}_{\mathrm{E}}$ is not a $G_\delta$ point, i.e., $\{\mathbf{0}\}$ is not a countable intersection of open sets;
+$\mathbf{0}$ is the only such non-$G_\delta$ point.
+This key topological property implies that the space of ultra-prefix tests is not first-countable
+(in a first-countable Hausdorff space all points are~$G_\delta$). 

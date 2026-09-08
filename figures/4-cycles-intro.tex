@@ -1,0 +1,24 @@
+% figures/4-cycles-intro.tex
+% Shows G and G_sigma side by side, sigma=(2 3), with arrows tracing v_i -> v_{sigma^{-1}(i)}.
+
+\begin{tikzpicture}[scale=1.2]
+    % --- Left graph: G ---
+    \node[vertex, label={[vlabel]above left:$v_1$}] (v1) at (0,1) {};
+    \node[vertex, label={[vlabel]above right:$v_2$}] (v2) at (1,1) {};
+    \node[vertex, label={[vlabel]below left:$v_0$}] (v0) at (0,0) {};
+    \node[vertex, label={[vlabel]below right:$v_3$}] (v3) at (1,0) {};
+    \draw[thick] (v0) -- (v1) -- (v2) -- (v3);
+    \node[vlabel] at (0.5,-0.6) {$G$};
+
+    % --- Right graph: G_sigma (offset 3 units right) ---
+    \node[vertex, label={[vlabel]above left:$v_1$}] (w1) at (3,1) {};
+    \node[vertex, label={[vlabel]above right:$v_2$}] (w2) at (4,1) {};
+    \node[vertex, label={[vlabel]below left:$v_0$}] (w0) at (3,0) {};
+    \node[vertex, label={[vlabel]below right:$v_3$}] (w3) at (4,0) {};
+    \draw[thick] (w0) -- (w1) -- (w3) -- (w2);
+    \node[vlabel] at (3.5,-0.6) {$G_{(2\ 3)}$};
+
+    % --- Arrows tracing the isomorphism varphi_sigma(v_i) = v_{sigma^{-1}(i)}, sigma=(2 3) ---
+    \draw[->, dashed, gray, bend left=20] (v2) to (w3);
+    \draw[->, dashed, gray, bend left=20] (v3) to (w2);
+\end{tikzpicture}

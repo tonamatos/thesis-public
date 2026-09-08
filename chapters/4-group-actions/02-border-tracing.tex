@@ -1,0 +1,282 @@
+% /chapters/4-group-actions/02-border-tracing.tex
+
+\section{Border tracing in oriented adjacency graphs of polygonal tilings}\label{sec:border_tracing}
+
+This section briefly reports a side project, which arose within a specific application of graph theory to the analysis of digital images modelled on polygonal plane tilings, where objects of interest appear as connected sets of tiles.
+Full details of this project, including proofs of all stated results, appear in \cite{WiederholdMatosWiederhold2026}.
+
+\subsection{Introduction}
+
+Traditionally, the support of a two-dimensional digital image is modelled as $\mathbb{Z}^2$, the set of points of the plane with integer coordinates, called grid points or pixels.
+$\mathbb{Z}^2$ can be identified with a set of square tiles of the plane.
+Connectivity in the digital plane $\mathbb{Z}^2$ most commonly relies on the so-called 4-adjacency or 8-adjacency:
+points $p_1=(x_1,y_1), p_2=(x_2,y_2)\in \mathbb{Z}^2$ are called 4-adjacent if $\vert x_1 - x_2\vert + \vert y_1 - y_2\vert =1$, and 8-adjacent if $\max\{ \vert x_1 - x_2\vert , \vert y_1 - y_2\vert \} =1$.
+The set $\mathbb{Z}^2$ forms a graph together with the $k$-adjacency relation, $k\in \{ 4,8\}$.
+The usual concept of $k$-connectivity for a subset $S\subseteq\mathbb{Z}^2$, based on $k$-paths lying in $S$, hence applies \cite{gonzalez2018,klette2004}.
+In a binary digital image, the pixels belonging to an object of interest are identified and labelled, for example, having the value 1, whereas all other pixels are given the value of 0.
+Thus there is a partition of $\mathbb{Z}^2$ into object pixels and so-called background pixels.
+For a $k$-connected object $S\subseteq\mathbb{Z}^2$, an important task in digital image analysis consists in finding some type of border or boundary of $S$, with the purpose of separating it from the background.
+To achieve this, the $k$-adjacency graph is equipped with an additional structure, specifically, a cyclic ordering of the $k$-neighbours of each pixel.
+Then a so-called \emph{border-tracing} algorithm is applied, which finds a closed $k$-path of object pixels that, intuitively, circumscribes the object or some hole in the object.
+Such techniques for square pixels and the 4- or 8-adjacency, are described in textbooks on digital image analysis \cite{gonzalez2018,klette2004}.
+
+A natural generalization replaces square pixels by the tiles of some edge-to-edge polygonal tiling (typically called a \emph{tesselation} or \emph{mosaic} in computational geometry) of the Euclidean plane $\mathbb{R}^2$, for example, a rectangular, triangular or hexagonal tiling.
+This is motivated by theoretical considerations within mathematical disciplines such as digital topology and digital geometry, but also by practical applications.
+Triangular and hexagonal pixels have been used for decades, as alternative to square pixels, for the design of sensors and digitization hardware and in techniques of digital image processing and pattern recognition, computer graphics and data visualization, for example, in thinning of objects and geometric modelling of straight lines and curves.
+All this is reported by numerous references in \cite{WiederholdMatosWiederhold2026}.
+Additionally, the paper \cite{Magillo2025}, published in 2025, summarizes modern tendencies of modelling digital objects within polygonal tesselations and provides outlooks to applications in the future.
+
+In \cite{WiederholdMatosWiederhold2026}, we develop a border-tracing algorithm that works for objects modelled as connected sets of tiles in certain types of polygonal tiling, where connectivity is provided by an adjacency relation, and the adjacency graph is enriched by a so-called orientation.
+Our algorithm adapts and corrects a classical \emph{Border Mesh Determination Algorithm} due to Voss~\cite{voss1993}, which originally was proposed only for planar adjacency graphs\footnote{Planar graphs are graphs that are embeddable in the plane such that graph edges intersect only at nodes.}.
+
+\subsection{Oriented adjacency graphs and border meshes}\label{subsec:oriented-adj}
+
+The notions of adjacency, orientation, and mesh defined below originate with Voss~\cite{voss1993} and are kept here consistent with their standard use throughout the border-tracing literature.
+
+Let $\mathcal{T}$ be an edge-to-edge polygonal tiling of $\mathbb{R}^2$ consisting of convex polygons, where each tile intersects only a finite number of other tiles.
+Then $\mathcal{T}$ is an infinite set and any two distinct intersecting tiles share a common side or point belonging to at least three tiles.
+Any non-empty finite subset $\mathcal{C} \subseteq \mathcal{T}$ is called an \emph{object}.
+
+\begin{definition}[Adjacency; Voss~\cite{voss1993}]\label{def:adjacency}
+    An \emph{adjacency} on $\mathcal{T}$ is an irreflexive, symmetric binary relation $A$ on $\mathcal{T}$ such that: any two $A$-adjacent tiles intersect; the graph $G=(\mathcal{T},A)$ is connected; and every finite subset of $\mathcal{T}$ has exactly one infinite $A$-connected complementary component.
+    $A$-adjacent tiles are also called \emph{$A$-neighbours}, and the number $v(t)$ of $A$-neighbours of a tile $t$ is its \emph{degree}.
+    The graph $G=(\mathcal{T}, A)$ is called an \emph{adjacency graph}.
+\end{definition}
+
+\begin{remark}
+    The third property ensures that an object has only finitely many holes, each of them finite (Section~\ref{subsec:bordertracer}).
+    The two most natural choices of $A$ are \emph{edge-adjacency} (tiles share a whole side) and \emph{vertex-adjacency} (tiles share at least a vertex); since $A$-adjacent tiles always intersect, every adjacency is contained in the vertex-adjacency.
+\end{remark}
+
+\begin{definition}[Orientation; Voss~\cite{voss1993}]\label{def:orientation}
+    An \emph{orientation} of $G$ is a set $Z=\{z(t):t\in\mathcal{T}\}$, where $z(t)=(q_1,\dots,q_{v(t)})$ is a cyclic ordering of the $A$-neighbours of $t$, i.e., $z(t)$ is considered only up to a shifting of the sequence.
+    Then $G=(\mathcal{T}, A, Z)$ is called an \emph{oriented adjacency graph}.
+\end{definition}
+
+\begin{remark}
+    This notion is purely combinatorial: $Z$ need not bear any relation to a planar embedding of $\mathcal{T}$, and in particular need not be counterclockwise or clockwise in any geometric sense.
+    The counterclockwise and clockwise orientations (Definition~\ref{def:cc-orientation} below) are two specific, geometrically motivated choices of $Z$, not the only ones this definition allows.
+\end{remark}
+
+\begin{definition}[Mesh; Voss~\cite{voss1993}]\label{def:mesh}
+    In an oriented adjacency graph $G=(\mathcal{T},A,Z)$, or in a subgraph equipped with the cyclic orders induced by $Z$, define the successor of a directed graph edge $(t_i,t_{i+1})$ by
+    $$
+        \varphi(t_i,t_{i+1}):=(t_{i+1},t_{i+2}),
+    $$
+    where $t_{i+2}$ is the $A$-neighbour of $t_{i+1}$ immediately following $t_i$ in the cyclic order $z(t_{i+1})$.
+    Since each $z(t)$ is a cyclic ordering, $\varphi$ is a bijection on the set of directed graph edges of $G$; in particular, every directed graph edge $e$ has a unique successor $\varphi(e)$ and a unique predecessor $\varphi^{-1}(e)$, and $\varphi(e)\neq e$, since a tile is never its own $A$-neighbour.
+
+    The \emph{mesh} generated by a directed graph edge $e_0$ is obtained by iterating $\varphi$ from $e_0$: setting $e_{i+1}:=\varphi(e_i)$ for $i\geq0$, either $e_r=e_0$ for some smallest $r\geq1$, in which case the mesh is \emph{closed} and equals the finite cyclic sequence $(e_0,\dots,e_{r-1})$ of length $r$; or $e_n\neq e_0$ for every $n\geq1$, in which case the mesh is the infinite sequence $(e_0,e_1,e_2,\dots)$.
+    Cyclic shifts of the sequence of a closed mesh represent the same mesh, and two infinite sequences represent the same mesh if they have a common directed graph edge.
+    In particular, $(e_0,e_1,e_2,\dots)$, $(e_1,e_2,e_3\dots)$, $(e_2,e_3,e_4,\dots)$ and so on, represent the same mesh.
+    Denote the set of meshes of $G$ by $M$, and write the oriented adjacency graph as $G=(\mathcal{T},A,Z,M)$ when this set is included in the notation.
+\end{definition}
+
+\begin{lemma}[No repetition before closure]\label{lemma:mesh-no-premature-repetition}
+    Let $(e_0,e_1,e_2,\dots)$ be the sequence of directed graph edges obtained by iterating the successor bijection $\varphi$ from $e_0$.
+    If $e_i=e_j$ for some $0\leq i<j$, then $e_{j-i}=e_0$.
+    Consequently, no directed graph edge repeats before the sequence first returns to $e_0$: the edges of a closed mesh are distinct up to that return, whereas no edge of an infinite mesh is ever repeated.
+\end{lemma}
+
+\begin{proof}
+    Since $\varphi$ is a bijection, so is $\varphi^i$.
+    The equality $e_i=e_j$ is the equality $\varphi^i(e_0)=\varphi^i(e_{j-i})$, and injectivity of $\varphi^i$ therefore gives $e_0=e_{j-i}$.
+    The two conclusions now follow from the minimality of the return time $r$ in the closed case and the absence of any return to $e_0$ in the infinite case.
+\end{proof}
+
+\begin{remark}
+    By Lemma~\ref{lemma:mesh-no-premature-repetition}, every directed graph edge determines a unique mesh: starting the procedure of iterating $\varphi$ from another directed graph edge of that mesh generates the same mesh.
+    If $e_i=(t_i,t_{i+1})$ for indices modulo $r$, a closed mesh may also be written in the shorthand tile notation $(t_0,\dots,t_{r-1})$, of length $r$ (the tiles need not be distinct, but every mesh contains at least one directed graph edge and therefore at least two distinct tiles).
+\end{remark}
+
+\begin{definition}[Border mesh; Voss~\cite{voss1993}]\label{def:border-mesh}
+    Let $G=(\mathcal{T}, A, Z, M)$ be an oriented adjacency graph.
+    Every object $\mathcal{C}\subseteq\mathcal{T}$ induces an oriented subgraph $G'=(\mathcal{C},A',Z',M')$: its underlying graph is the subgraph of $(\mathcal{T},A)$ induced by $\mathcal{C}$, and $Z'$ arises from $Z$ by restricting each cyclic order $z(t)$, $t\in\mathcal{C}$, to the $A$-neighbours of $t$ that lie in $\mathcal{C}$; the set $M'$ is then determined by Definition~\ref{def:mesh}.
+    A \emph{border mesh} of $\mathcal{C}$ is any mesh $m\in M'\setminus M$, i.e., any mesh of $G'$ that is not a mesh of $G$.
+\end{definition}
+
+\begin{remark}
+    Figure~\ref{fig:border_mesh_example-A} shows examples of border meshes that trace (part of) the boundary of the object within the tiling.
+    Since any object $\mathcal{C}$ is finite, $\mathcal{C}\neq\mathcal{T}$; since $G$ is connected (Definition~\ref{def:adjacency}), $\mathcal{C}$ cannot be closed off from the rest of $\mathcal{T}$, so some tile $t\in\mathcal{C}$ has an $A$-neighbour outside $\mathcal{C}$, hence $z'(t)$ is strictly shorter than $z(t)$; consequently, the successor rule can act differently in $G'$ than in $G$, which allows $M'\setminus M$ to be nonempty.
+\end{remark}
+
+\begin{lemma}\label{lemma:finite-mesh-closed}
+    Let $G=(\mathcal{T},A,Z,M)$ be an oriented adjacency graph on a polygonal tiling $\mathcal{T}$, and let $\mathcal{T}'$ be a finite subset of $\mathcal{T}$.
+    Denote by $G'=(\mathcal{T}',A',Z',M')$ the oriented adjacency subgraph induced by $\mathcal{T}'$, as in Definition~\ref{def:border-mesh}.
+    Then every mesh of $G'$ is closed, and the meshes of $G'$ partition its set of directed graph edges.
+\end{lemma}
+
+\begin{proof}
+    Let $\varphi'$ be the successor bijection of $G'$.
+    Since $\mathcal{T}'$ is finite, $G'$ has finitely many directed graph edges, so $\varphi'$ is a bijection of a finite set and hence decomposes into disjoint finite cycles.
+    Thus iterating $\varphi'$ from any directed graph edge of $G'$ returns to it after finitely many steps, which is exactly the closed case of Definition~\ref{def:mesh}, and the resulting cycles partition the set of directed graph edges.
+\end{proof}
+
+\begin{remark}
+    On the infinite tiling $\mathcal{T}$ itself, some orientations do produce infinite meshes.
+    Nevertheless, by Lemma~\ref{lemma:finite-mesh-closed} (applied with $\mathcal{T}'=\mathcal{C}$), every mesh of $G'$ is closed and $M'$ partitions the directed graph edges of $G'$; in particular, every border mesh, being a mesh of $G'$, is closed.
+    A border mesh may trace the whole of $G'$, i.e., pass through every directed graph edge of $G'$.
+    Border meshes can be determined for arbitrary adjacency $A$, orientation $Z$, and $A$-connected object $\mathcal{C}$ with at least two tiles, by the algorithm described in \cite{WiederholdMatosWiederhold2026}.
+\end{remark}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[height=3.3cm]{Fig_FromPaperFig11.png}
+	\caption{The nodes of the edge-adjacency graph $G$ of a square tiling are drawn as dots, the graph edges as black straight line segments, and the underlying tiling is not shown.
+    The counterclockwise orientation (illustrated in the top left corner with light red arrows) generates meshes, illustrated by green arrows, which circumscribe all graph faces (each mesh has length four, since every face of this square-tiling graph is a $4$-cycle).
+    The nodes drawn as big blue dots form an object $\mathcal{C}$ with two components and a hole, which induces a subgraph and three border meshes of $\mathcal{C}$, depicted by blue, dark red and orange arrows.
+	Reproduced from \cite[Figure~11]{WiederholdMatosWiederhold2026}.}
+	\label{fig:border_mesh_example-A}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[height=3.5cm]{Fig_FromPaperFig13A.png}
+	\hskip0.1cm
+	\includegraphics[height=3.5cm]{Fig_FromPaperFig13B.png}
+	\caption{The nodes of the edge-adjacency graph $G$ of a hexagonal tiling are drawn as dots, the graph edges as brown straight line segments, the underlying tiling is only shown in part.
+    The counterclockwise orientation in (a) generates meshes that circumscribe all graph faces, depicted by green arrows.
+    The clockwise orientation in (b) causes a distinct tracing sense of the meshes.
+    In each graph, the nodes drawn as orange dots form a connected object whose tiles are shaded in, and its border meshes are shown by black and blue arrows.
+	Reproduced from \cite[Figure~13]{WiederholdMatosWiederhold2026}.}
+	\label{fig:border_mesh_example-B}
+\end{figure}
+
+The counterclockwise and clockwise orientations are of special interest for algorithmic aspects of border tracing.
+
+\begin{definition}[Counterclockwise and clockwise orientation]\label{def:cc-orientation}
+    For a given adjacency graph $G=(\mathcal{T},A)$, $Z=\{z(t):t\in\mathcal{T}\}$ is the \emph{counterclockwise orientation} if, for each tile $t\in\mathcal{T}$, $z(t)$ orders the $A$-neighbours of $t$ in counterclockwise sense around $t$.\footnote{Observe that the topological frontier of the convex polygon $t$ is a Jordan curve $\gamma$, which can be traced counterclockwise as a concatenation $(s_1, s_2, \dots , s_m)$ of the sides of $t$. Here \emph{frontier} denotes the usual topological notion (the closure minus the interior of a point set); we reserve \emph{boundary} for the tile-theoretic notion $\mathcal{B}(\mathcal{C})$ introduced later, in the ``Boundary coincidence'' property of Section~\ref{subsec:bordertracer}.}
+    The \emph{clockwise orientation} is defined analogously.
+\end{definition}
+
+\begin{remark}
+    Let $Z$ be the counterclockwise orientation on an adjacency graph $(\mathcal{T},A)$, let $t\in\mathcal{T}$, and list the sides $s_1,s_2,\dots,s_m$ of the polygon $t$ in the order encountered while tracing the Jordan curve $\gamma=\mathrm{fr}(t)$ counterclockwise.
+    If $A$ is the edge-adjacency, $z(t)$ coincides, up to a shifting of the cyclic sequence, with $(p_1,\dots,p_m)$, where each tile $p_i$ shares the side $s_i$ with $t$.
+    If $A$ is the vertex-adjacency, $z(t)$ lists all polygons intersecting $t$ in counterclockwise order around $\gamma$: for each vertex $a$ of $t$, the polygons $h_1,\dots,h_r$ sharing $a$ with $t$ (where $h_1,h_r$ are edge-neighbours of $t$) appear successively in $z(t)$, with consecutive ones sharing a side containing $a$.
+\end{remark}
+
+Figures~\ref{fig:border_mesh_example-A} and \ref{fig:border_mesh_example-B} show examples of border meshes for the edge-adjacency on square and hexagonal tilings.
+
+For applications in digital image modelling and analysis, tilings with certain homogeneity properties are highly relevant, for example, where all tiles are congruent polygons.
+Triangular and hexagonal tilings with this property were considered in detail in \cite{WiederholdMatosWiederhold2026}.
+A particularly simple adjacency would satisfy that each tile $t\in \mathcal{T}$ has the same number $v(t)=k$ of neighbours, which defines a \emph{$k$-adjacency} on $\mathcal{T}$.
+When $A$ is a $k$-adjacency, $A$-neighbours also are called $k$-neighbours, and the concepts of $k$-path, $k$-connected, $k$-component, etc., are employed.
+The commonly used 4- and 8-adjacencies for square tilings in \cite{gonzalez2018,klette2004} are examples of $k$-adjacencies.
+
+\subsection{The algorithm \texttt{BorderTracer}}\label{subsec:bordertracer}
+
+The general border-tracing procedure \cite[Algorithm~1]{WiederholdMatosWiederhold2026} works for any oriented adjacency graph $G = (\mathcal{T},A,Z)$ and any $A$-connected object $\mathcal{C}\subset\mathcal{T}$ that has at least two tiles.
+In particular, the algorithm itself places no restriction on the orientation $Z$ used; the counterclockwise or clockwise orientations become relevant only when relating the resulting border mesh to the geometric boundary of $\mathcal{C}$, as in the properties discussed at the end of this subsection.
+The algorithm determines a border mesh of $\mathcal{C}$.
+It starts with $A$-neighbours $(t_0,q)$ with $t_0\in\mathcal{C}$ and $q\in (\mathcal{T}\setminus\mathcal{C})$; any pair satisfying these conditions may be chosen.
+To find such $t_0,q$, a finite set $\mathcal{N}\subset\mathcal{T}$ surrounding the object $\mathcal{C}\subset\mathcal{N}$ is used, i.e.\ such that all (including non-object) $A$-neighbours of every object tile belong to $\mathcal{N}$.
+
+The algorithm locates $q$ in $z(t_0)$ and analyses, for each one of the tiles subsequent to $q$ in $z(t_0)$, whether it belongs to $\mathcal{C}$.
+If $t_1$ is the first found object tile, the directed graph edge $(t_0, t_1)$ initialises the border mesh.
+At a fixed point of the iteration, if $t_m$ is the last tile found so far, then $t_{m-1}$ is located in $z(t_m)$, so the algorithm examines whether the tiles successive to $t_{m-1}$ in $z(t_m)$ belong to $\mathcal{C}$, the first found object tile gives the next border tile $t_{m+1}$.
+When $t_{m+1}= t_0$, the algorithm stops if also $t_{m+2}= t_1$, otherwise the tracing is continued.
+This is justified because the border mesh can only be closed if the starting directed graph edge $(t_0, t_1)$ is found again.
+Our End Condition Test constitutes a correction over the original method of Voss~\cite{voss1993} as it guarantees a correct performance even in case that a border mesh may pass through the starting tile $t_0$ multiple times before closing.
+
+The algorithm returns an ordered cyclic list $\mathrm{Cont}$ of tiles, which represents the border mesh of $\mathcal{C}$ uniquely determined by the directed graph edge $(t_0,t_1)$.
+
+When $A$ is a $k$-adjacency, the cyclic orderings $z(t)$, $t\in \mathcal{T}$, can be encoded uniformly, which is important since it turns the cyclic order into a simple integer lookup so that the algorithm can efficiently move from one border tile to the next.
+For $k$-adjacent tiles $t$ and $t'$ with $z(t) = (q_1, q_2, \dots, q_k)$ and $t' = q_i$, the \emph{Freeman code} of the ordered pair $(t,t')$ is defined as the integer $f(t,t') = i - 1$.
+Thus $z(t)$ can be represented by the sequence $(0, 1, 2, \dots, k-1)$, then a $k$-path $(t_1, t_2, \dots, t_n)$ can be encoded by the \emph{Freeman chain code} $(f(t_1,t_2), f(t_2,t_3), \dots, f(t_{n-1},t_n))$ (adding $f(t_n,t_1)$ if the path is closed).
+This encoding is the natural extension of the classical Freeman chain code, which has been applied since the beginning of digital image analysis for $4$- and $8$-neighbours on the square grid \cite{gonzalez2018}.
+Figure~\ref{fig:freeman_codes} illustrates Freeman codes for the standard triangular tiling.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[height=2.1cm]{Fig_FromPaperFig12A.png}
+	\hskip0.1cm
+	\includegraphics[height=2.4cm]{Fig_FromPaperFig12B.png}
+	\caption{Freeman codes for the edge- and vertex-neighbours in the standard triangular tiling with the counterclockwise orientation.
+    Reproduced from~\cite[Figure~12]{WiederholdMatosWiederhold2026}.}
+    \label{fig:freeman_codes}
+\end{figure}
+
+For the case of a $k$-adjacency, the border-tracing algorithm simplifies to the version presented below as Algorithm~\ref{alg:border-tracing}, which uses the Freeman code to drive the neighbour search.
+The algorithm has linear time complexity in the length of the output list $\mathrm{Cont}$: at each step, locating the previous tile in the cyclic order and scanning for the next object tile each require at most $k$ comparisons.
+
+\begin{algorithm}[ht]
+    \caption{Border tracing for a $k$-adjacency graph $G = (\mathcal{T}, A, Z, M)$}
+    \label{alg:border-tracing}
+    \DontPrintSemicolon
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \Input{$k$-adjacency graph $G=(\mathcal{T},A,Z,M)$, where $Z$ is represented by the Freeman code sequence $(0,1,\dots,k{-}1)$;\; object $\mathcal{C} \subseteq\mathcal{T}$;\; a finite set $\mathcal{N}$ with $\mathcal{C} \subseteq\mathcal{N} \subseteq\mathcal{T}$ surrounding the object.}
+    \Output{Ordered cyclic list $\mathrm{Cont}$ of tiles representing a border mesh of~$\mathcal{C}$ in~$G$.}
+
+    \textbf{Step 1.}\;
+    Scan $\mathcal{N}$ to find a tile $t = t_0 \in \mathcal{C}$ having an $A$-neighbour $q \in \mathcal{N} \setminus \mathcal{C}$.\;
+    Set $\mathrm{Cont} \leftarrow (t_0)$.\;
+
+    \textbf{Step 2.}\;
+    Set $b \leftarrow f(t, q)$.\;
+    \Repeat{a tile $t' \in \mathcal{C}$ is found \textup{(}at most $k$ iterations\textup{)}}{
+        $b \leftarrow (b+1) \bmod k$\;
+        Let $t'$ be the tile with $f(t, t') = b$\;
+    }
+    \lIf{no object tile was found}{%
+        \Return error: ``$\mathcal{C}$ is an isolated tile''}
+    Append $t'$ to $\mathrm{Cont}$, so $\mathrm{Cont} = (t_0, t_1)$.\;
+
+    \textbf{Step 3.}\;
+    Let $\mathrm{Cont} = (t_0, t_1, \dots, t_n)$.\;
+    Set $b \leftarrow f(t_n, t_{n-1})$.\;
+    \Repeat{a tile $t' \in \mathcal{C}$ is found}{
+        $b \leftarrow (b+1) \bmod k$\;
+        Let $t'$ be the tile with $f(t_n, t') = b$\;
+    }
+
+    \textbf{End Condition Test:}\;
+    \uIf{$t' \neq t_0$}{
+        Append $t'$ to $\mathrm{Cont}$; go to \textbf{Step 3}.\;
+    }
+    \Else{
+        Append $t'$ to $\mathrm{Cont}$.
+        Run \textbf{Step 3} once more to obtain the next tile $t' \in \mathcal{C}$.\;
+        \uIf{$t' = t_1$}{
+        Remove the last element of $\mathrm{Cont}$.\;
+        \Return $\mathrm{Cont}$.\;
+        }
+        \Else{
+        Append $t'$ to $\mathrm{Cont}$; go to \textbf{Step 3}.\;
+        }
+    }
+\end{algorithm}
+
+For example, repeated applications of Algorithm~\ref{alg:border-tracing} to the appropriate $A$-connected components and starting pairs determine the border meshes shown in Figures~\ref{fig:border_mesh_example-A} and \ref{fig:border_mesh_example-B}.
+
+The border-tracing algorithm finds a border mesh of an object $\mathcal{C}$.
+We now record the geometric guarantees proved in \cite{WiederholdMatosWiederhold2026} for the hole-free setting.
+Suppose that $A$ is the edge- or vertex-adjacency, $Z$ is the counterclockwise (respectively, clockwise) orientation, and $\mathcal{C}$ is an $A$-connected object with at least two tiles whose complement $\mathcal{C}^c:=\mathcal{T}\setminus\mathcal{C}$ is edge-connected (and hence has no finite component, or \emph{hole}).
+For every choice of edge-neighbours $t_0$ and $q$ with $t_0\in\mathcal{C}$ and $q\in\mathcal{C}^c$, the algorithm returns a border mesh $\mathrm{Cont}$ uniquely determined by that starting pair.
+Every such output circumscribes $\mathcal{C}$ and is called a \emph{contour} of $\mathcal{C}$.
+Thus the choice of $(t_0,q)$ is arbitrary within the stated conditions: different choices may change the starting point or tile representation, but each resulting contour traces the same geometric frontier in the prescribed direction.
+More precisely, a contour satisfies the following properties:
+\begin{enumerate}
+    \item \textbf{Circumscription} \cite[Theorem~1]{WiederholdMatosWiederhold2026}.
+    Write $\mathrm{Cont}=(t_0,\dots,t_n)$ and let $\gamma:=\mathrm{fr}(|\mathcal{C}|)$, where $|\mathcal{C}|\subseteq\mathbb{R}^2$ is the point-set union of the tiles in $\mathcal{C}$.
+    For each $i\in\{0,\dots,n\}$, the intersection $t_i\cap\gamma$ contains a connected set $F_i$ that is either a vertex of $t_i$ or a union of consecutive sides of $t_i$.
+    The ordered sequence $(F_0,\dots,F_n)$ traces $\gamma=F_0\cup\cdots\cup F_n$ counterclockwise (respectively, clockwise).
+
+    \item \textbf{Separation} \cite[Theorem~2]{WiederholdMatosWiederhold2026} (under edge-adjacency).
+    If $A$ is the edge-adjacency, the graph $(\mathcal{T},A)$ is planar.
+    Then, deleting all graph edges between the contour and the background $\mathcal{C}^c$ disconnects $\mathcal{C}$ from $\mathcal{C}^c$, i.e.\ there is no edge-path in the resulting graph from the object to the background.
+
+    \item \textbf{Boundary coincidence} \cite[Lemma~5]{WiederholdMatosWiederhold2026} (under edge-adjacency).
+    The set of tiles appearing in the contour equals the boundary $\mathcal{B}(\mathcal{C})$, defined as the set of all object tiles that intersect $\mathrm{fr}(|\mathcal{C}|)$.
+\end{enumerate}
+
+\begin{remark}[Objects with holes]
+    A single run of Algorithm~\ref{alg:border-tracing} follows the successor orbit determined by its starting pair and therefore returns one border mesh, or contour.
+    If an object has holes, its frontier may have several components (an outer component and components surrounding the holes) which can correspond to distinct border meshes determined by different starting pairs.
+    Repeated runs can extract these meshes, as in the implementation described below, but a complete geometric characterization of their relation to objects with holes lies beyond the scope of the present algorithmic guarantees and is left for future work.
+\end{remark}
+
+A complete \textbf{implementation} of Algorithm~\ref{alg:border-tracing}, designed, implemented, and documented by the author, is available in a public repository \cite{wiederhold2026border_repo}.
+It supports the edge- and vertex-adjacencies on rectangular, triangular, and hexagonal tilings, and includes routines for generating the Freeman codes, detecting starting pairs~$(t_0, q)$, and extracting all border meshes via repeated application of the algorithm with appropriate marking of already-traced borders.
+
+Future work within this project also aims to implement tools for diverse polygonal tilings and to consider applications of modelling digital objects in such tilings.

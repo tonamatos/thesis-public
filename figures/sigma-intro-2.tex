@@ -1,0 +1,52 @@
+% figures/sigma-intro-2.tex
+
+% --- STEP 0 ---
+\begin{subfigure}[b]{0.21\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=1.2]
+        \node[vertex, label={[vlabel]above right:$v_1$}] (v1) at (1,1) {};
+        \node[vertex, label={[vlabel]below right:$v_2$}] (v2) at (1,0) {};
+        \node[vertex, label={[vlabel]below left:$v_0$}] (v0) at (0,0) {};
+        \node[vertex, label={[vlabel]above left:$v_3$}] (v3) at (0,1) {};
+
+        \draw[thick] (v0) -- (v1) -- (v2) -- (v3);
+    \end{tikzpicture}
+    \caption{Start: $G$.}
+\end{subfigure}
+% --- STEP 1 ---
+\begin{subfigure}[b]{0.21\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=1.2]
+        \node[vertex, label={[vlabel]above right:$v_{1\mapsto2}$}] (v1) at (1,1) {};
+        \node[vertex, label={[vlabel]below right:$v_{2\mapsto0}$}] (v2) at (1,0) {};
+        \node[vertex, label={[vlabel]below left:$v_{0\mapsto3}$}] (v0) at (0,0) {};
+        \node[vertex, label={[vlabel]above left:$v_{3\mapsto1}$}] (v3) at (0,1) {};
+    \end{tikzpicture}
+    \caption{$i\mapsto\sigma(i)$}
+\end{subfigure}
+% --- STEP 2 ---
+\begin{subfigure}[b]{0.21\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=1.2]
+        \node[vertex, label={[vlabel]above right:$v_{1\mapsto2}$}] (v1) at (1,1) {};
+        \node[vertex, label={[vlabel]below right:$v_{2\mapsto0}$}] (v2) at (1,0) {};
+        \node[vertex, label={[vlabel]below left:$v_{0\mapsto3}$}] (v0) at (0,0) {};
+        \node[vertex, label={[vlabel]above left:$v_{3\mapsto1}$}] (v3) at (0,1) {};
+
+        \draw[thick] (v0) -- (v1) -- (v3) -- (v2);
+    \end{tikzpicture}
+    \caption{Redraw edges.}
+\end{subfigure}
+% --- STEP 3 ---
+\begin{subfigure}[b]{0.21\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=1.2]
+        \node[vertex, label={[vlabel]above right:$v_1$}] (v1) at (1,1) {};
+        \node[vertex, label={[vlabel]below right:$v_2$}] (v2) at (1,0) {};
+        \node[vertex, label={[vlabel]below left:$v_0$}] (v0) at (0,0) {};
+        \node[vertex, label={[vlabel]above left:$v_3$}] (v3) at (0,1) {};
+
+        \draw[thick] (v0) -- (v1) -- (v3) -- (v2);
+    \end{tikzpicture}
+    \caption{Result: $G_\sigma$.}
+\end{subfigure}

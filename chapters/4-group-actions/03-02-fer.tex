@@ -1,0 +1,263 @@
+% /chapters/4-group-actions/03-02-fer.tex
+
+\subsection{The group of feasible edge replacements}\label{subsec:fer}
+
+In this subsection, we introduce the group $\Fer(G)$, one of the central objects studied in the rest of the chapter.
+It was first defined in \cite{Caro2020GraphsIU} to study extremal graph properties, including the balancing number, and has since appeared in several works \cite{unavoidable_chromatic, caro2022evolution, Caro_small_balanceable, Eslavaetal2025, gonzalezlaffitte2022amoebas}.
+We work only with finite graphs here and follow the conventions of this literature.
+The definitions are extended to infinite graphs in Section~\ref{sec:infinitary_amoeba_graphs}.
+
+\paragraph{Applying label permutations.}
+
+\begin{definition}\label{def:S_n}
+    Given a set $X$, the collection of all bijections $\sigma\colon X\to X$ forms a group under composition, called the \emph{symmetric group on $X$} and denoted by $S_X$.
+    When $X=\{0,1,\dots,n-1\}$, we write $S_n=S_X$.
+    Products of permutations are evaluated from right to left.
+\end{definition}
+
+For the remainder of this subsection, fix a finite graph $G$ of order $n$ and enumerate its vertices as
+\[
+    V(G)=\{v_0,v_1,\dots,v_{n-1}\}.
+\]
+We call $X:=\{0,1,\dots,n-1\}$ the \emph{label set} of $G$, and refer to $i\in X$ as the \emph{label} of the vertex $v_i$.
+An element $\sigma\in S_n$ is called a \emph{label permutation}.
+The group $\Fer(G)$ will be a subgroup of $S_n$.
+
+\begin{definition}[Applying a label permutation]\label{def:G_sigma}
+    For any graph $H$ on the vertex set $V(G)$ and any $\sigma\in S_n$, define $H_\sigma$ on the same vertex set by
+    \[
+        E(H_\sigma):=\{v_iv_j:v_{\sigma(i)}v_{\sigma(j)}\in E(H)\}.
+    \]
+    We mostly apply this to $H=G$ itself, writing $G_\sigma$, but the operation makes sense for any graph on this vertex set, including graphs obtained from $G$ by feasible edge replacements.
+\end{definition}
+
+A step-by-step example helps visualize the definition.
+Figure~\ref{fig:sigma_intro} starts with a path on four vertices and applies $\sigma=(1\ 3\ 2)$.
+The construction proceeds as follows.
+\begin{itemize}
+    \item[(a)] Draw $G$ with vertices $v_0,v_1,\dots,v_{n-1}$.
+    \item[(b)] Remove its edges and annotate each vertex $v_i$ with $\sigma(i)$, displayed as $v_{i\mapsto\sigma(i)}$.
+    \item[(c)] Join two positions precisely when their displayed labels are adjacent in $G$.
+    \item[(d)] Remove the annotations; the resulting graph is $G_\sigma$ on the original vertex set.
+\end{itemize}
+
+For example, $v_0v_2$ is an edge of $G_{(1\ 3\ 2)}$ because
+$v_{\sigma(0)}v_{\sigma(2)}=v_0v_1\in E(G)$.
+In contrast, $v_0v_1$ is an edge of $G$ but not of $G_{(1\ 3\ 2)}$.
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/sigma-intro.tex}
+    \caption{Applying the label permutation $\sigma=(1\ 3\ 2)$ to the graph $G$.}
+    \label{fig:sigma_intro}
+\end{figure}
+
+\begin{remark}\label{rmk:iso-perm}
+    The map $\varphi_\sigma\colon V(G_\sigma)\to V(G)$ defined by $\varphi_\sigma(v_i)=v_{\sigma(i)}$ is an isomorphism, since
+    \[
+        v_iv_j\in E(G_\sigma)\quad\Longleftrightarrow\quad
+        v_{\sigma(i)}v_{\sigma(j)}\in E(G).
+    \]
+    This convention makes $\sigma$, rather than $\sigma^{-1}$, describe the isomorphism $G_\sigma\to G$ and agrees with the established literature.
+\end{remark}
+
+\begin{definition}[Automorphism label group]\label{def:automorphism-label-group}
+    Define
+    \[
+        A(G):=\{\sigma\in S_n:G_\sigma=G\}.
+    \]
+    The correspondence $\sigma\mapsto\varphi_\sigma$ gives an isomorphism $A(G)\simeq\Aut(G)$.
+\end{definition}
+
+Every isomorphism $\psi\colon H\to G$ from a graph $H$ on the same vertex set uniquely determines the permutation $\sigma$ satisfying $\psi(v_i)=v_{\sigma(i)}$; then $H=G_\sigma$.
+The permutation is unique for the chosen isomorphism, but two fixed isomorphic graphs generally admit several isomorphisms.
+
+\begin{remark}\label{rmk:aut-many-sigmas}
+    If $G$ and $H$ are isomorphic graphs on the same vertex set, then exactly $|\Aut(G)|$ label permutations $\sigma$ satisfy $H=G_\sigma$.
+\end{remark}
+
+Figure~\ref{fig:sigma_intro_2} uses the same graph $G$ in a different drawing and applies the permutation $\sigma=(0\ 3\ 1\ 2)$.
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/sigma-intro-2.tex}
+    \caption{Applying the label permutation $\sigma=(0\ 3\ 1\ 2)$ to the graph $G$.}
+    \label{fig:sigma_intro_2}
+\end{figure}
+
+\paragraph{Feasible edge replacements.}
+
+If $e=\{v_i,v_j\}$ is a pair of vertices and $\sigma\in S_n$, write
+$\sigma(e):=\{v_{\sigma(i)},v_{\sigma(j)}\}$.
+
+\begin{definition}[Feasible edge replacement]\label{def:feasible-fer}
+    Let $e$ and $f$ be $2$-element subsets of $V(G)$.
+    The pair $(e,f)$, denoted by $(e\to f)$, is a \emph{feasible edge replacement of $G$} if
+    \[
+        e\in E(G),\qquad f\notin E(G),\qquad G-e+f\simeq G,
+    \]
+    where $G-e+f$ has edge set $(E(G)\setminus\{e\})\cup\{f\}$.
+\end{definition}
+
+\begin{definition}[Witness permutations]\label{def:fer-witness-set}
+    If $(e\to f)$ is a feasible edge replacement for $G$, define
+    \[
+        \Fer_G(e\to f):=\{\sigma\in S_n:G_\sigma=G-e+f\}.
+    \]
+    Its elements are the label permutations that witness the feasibility of $(e\to f)$.
+\end{definition}
+
+The literature uses the notation $\Fer_G(\emptyset\to\emptyset):=A(G)$ for the permutations induced by automorphisms.
+They move no edge, but they are retained because $\Fer(G)$ records label permutations rather than merely the graphs they produce: two permutations producing the same graph differ by an element of $A(G)$.
+Their inclusion also retains the label symmetries of graphs with no nontrivial feasible edge replacements, such as complete graphs.
+This group structure is exactly what Subsection~\ref{subsec:balancing_Tk} relies on to compute the balancing number of $G$, for instance by establishing $\Fer(G)=S_X$ through a comparison of group orders.
+
+Figure~\ref{fig:4_cycles_intro} illustrates a feasible edge replacement.
+Both $\sigma=(2\ 3)$ and $\sigma=(0\ 3\ 1\ 2)$ witness it, since
+\[
+    G_{(2\ 3)}=G_{(0\ 3\ 1\ 2)}=G-v_1v_2+v_1v_3.
+\]
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/4-cycles-intro.tex}
+    \caption{A feasible edge replacement with more than one witness permutation.}
+    \label{fig:4_cycles_intro}
+\end{figure}
+
+Figure~\ref{fig:sigma_intro} gives a two-step example.
+Starting from $G$, the sequence of feasible edge replacements
+\[
+    (v_1v_2\to v_1v_3),\qquad (v_0v_1\to v_0v_2)
+\]
+produces $G_\alpha$, where $\alpha=(1\ 3\ 2)$.
+
+To make use of the group structure, it is important to understand how feasible edge replacements are applied sequentially.
+The following puzzle makes the issue visible.
+Figure~\ref{fig:4_paths} shows $G$ and $G_{(0\ 3)}$.
+Informally, applying the transposition $(0\ 3)$ to $G$ twists the two bottom endpoints of the path.
+Can one pass from $G$ to $G_{(0\ 3)}$ by a sequence of feasible edge replacements, keeping every intermediate graph isomorphic to $G$?
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/4-paths.tex}
+    \caption{Two paths on the same vertex set.}
+    \label{fig:4_paths}
+\end{figure}
+
+The first two feasible edge replacements already produce the two diagonal edges required in the final graph.
+Now let $\beta=(0\ 3\ 1\ 2)$, which also witnesses the feasible edge replacement $(v_1v_2\to v_1v_3)$ for the original graph $G$.
+Since $\beta\circ\alpha=(0\ 3)$, it is tempting to write the sequence
+\[
+    (v_1v_2\to v_1v_3),\qquad
+    (v_0v_1\to v_0v_2),\qquad
+    (v_1v_2\to v_1v_3).
+\]
+This sequence cannot be executed as written: the last instruction tries to remove the edge $v_1v_2$, but that edge was removed by the first feasible edge replacement and was never added back.
+The final instruction must therefore be translated into the current labelling.
+
+\begin{proposition}[Relabelling feasible edge replacements]\label{prop:concatenation-fer}
+    Let $\sigma\in S_n$ and let $e,f$ be $2$-element subsets of $V(G)$.
+    Then $(e\to f)$ is a feasible edge replacement for $G_\sigma$ if and only if $(\sigma(e)\to\sigma(f))$ is a feasible edge replacement for $G$.
+    When these conditions hold,
+    \[
+        \Fer_{G_\sigma}(e\to f)
+        =\sigma^{-1}\circ\Fer_G(\sigma(e)\to\sigma(f))\circ\sigma.
+    \]
+\end{proposition}
+
+\begin{proof}
+    The isomorphism $\varphi_\sigma\colon G_\sigma\to G$ sends $e$ to $\sigma(e)$ and $f$ to $\sigma(f)$.
+    It therefore sends $G_\sigma-e+f$ to $G-\sigma(e)+\sigma(f)$, proving the equivalence.
+
+    Directly from Definition~\ref{def:G_sigma},
+    \[
+        (G_\sigma)_\rho=G_{\sigma\circ\rho}
+        \quad\text{and}\quad
+        (G-\sigma(e)+\sigma(f))_\sigma=G_\sigma-e+f.
+    \]
+    Hence $\rho$ witnesses $(e\to f)$ for $G_\sigma$ exactly when
+    $\sigma\circ\rho\circ\sigma^{-1}$ witnesses $(\sigma(e)\to\sigma(f))$ for $G$.
+\end{proof}
+
+Apply the proposition with $\sigma=\alpha$.
+The instruction associated with $\beta$ becomes
+\[
+    \alpha^{-1}(v_1v_2)\to\alpha^{-1}(v_1v_3),
+    \qquad\text{that is,}\qquad
+    v_2v_3\to v_1v_2.
+\]
+Thus the puzzle has the executable solution
+\[
+    (v_1v_2\to v_1v_3),\quad
+    (v_0v_1\to v_0v_2),\quad
+    (v_2v_3\to v_1v_2),
+\]
+whose total label permutation is $\beta\circ\alpha=(0\ 3)$.
+
+\begin{definition}[The group of feasible edge replacements]\label{def:fer-group}
+    Define the set of \emph{canonical generators}
+    \[
+        \mathcal E_G
+        :=A(G)\cup
+        \bigcup\{\Fer_G(e\to f):(e\to f)\text{ is a feasible edge replacement for }G\}.
+    \]
+    The \emph{group of feasible edge replacements} of $G$ is
+    \[
+        \Fer(G):=\langle\mathcal E_G\rangle\leq S_n.
+    \]
+\end{definition}
+
+Proposition~\ref{prop:concatenation-fer} explains how a product of canonical generators is executed as a sequence of feasible edge replacements: after each step, the next instruction is translated into the current labelling.
+In particular,
+\[
+    1\leq A(G)\leq\Fer(G)\leq S_n.
+\]
+
+\paragraph{Amoebas.}
+
+\begin{definition}[Local amoeba]\label{def:local_amoeba}
+    A finite graph $G$ on the label set $X$ is a \emph{local amoeba} if
+    \[
+        \Fer(G)=S_X.
+    \]
+\end{definition}
+
+Thus every label permutation, and hence every isomorphic copy of a local amoeba on the same vertex set, can be realized by a finite product of canonical generators.
+This notion first appeared in \cite{unavoidable_chromatic} and has strong balanceability properties.%
+\footnote{The word \emph{balanceable} is defined in Subsection~\ref{subsec:amoebas_bal}.}
+
+If $C_4$ and $P_4$ denote the $4$-cycle and the path on four vertices, respectively, then
+$\Fer(C_4)=A(C_4)\simeq D_4$, whereas $\Fer(P_4)=S_4$.
+Therefore, $C_4$ is not a local amoeba, while $P_4$ is.
+Every finite complete graph $K_n$ is a local amoeba because $A(K_n)=S_n$.
+
+\begin{definition}[Rigid graph]\label{def:rigid-asymmetric}
+    A finite graph $G$ is \emph{rigid} if it has no nontrivial feasible edge replacement, equivalently, if
+    \[
+        \Fer(G)=A(G).
+    \]
+\end{definition}
+
+Constructing local amoeba trees with arbitrarily large maximum degree was the main precursor to \cite{Eslavaetal2025}; the construction is presented in Subsection~\ref{subsec:new_recursive}.
+
+The groups $\Fer(G)$ range over all finite groups, as the following proposition shows.
+
+\begin{proposition}\label{prop:fer-is-any-group}
+    For every finite group $\Gamma$, there is a finite graph $G$ such that $\Fer(G)\simeq\Gamma$.
+\end{proposition}
+
+The main ingredient is Frucht's theorem.
+
+\begin{lemma}[Frucht's theorem \cite{Frucht1949}]
+    For every finite group $\Gamma$, there exists a finite cubic graph $G$ such that $\Aut(G)\simeq\Gamma$.
+\end{lemma}
+
+\begin{proof}[Proof of Proposition~\ref{prop:fer-is-any-group}]
+    Let $G$ be a cubic graph given by Frucht's theorem.
+    If $e\in E(G)$ and $f\notin E(G)$, then $G-e+f$ is not cubic and hence is not isomorphic to $G$.
+    Thus $G$ is rigid, and
+    \[
+        \Fer(G)=A(G)\simeq\Aut(G)\simeq\Gamma.
+    \]
+\end{proof}

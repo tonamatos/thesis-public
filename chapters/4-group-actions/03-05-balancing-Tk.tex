@@ -1,0 +1,321 @@
+% /chapters/4-group-actions/03-05-balancing-Tk.tex
+
+\subsection{Balancing numbers of Fibonacci-type trees}\label{subsec:balancing_Tk}
+
+By Theorem~\ref{thm:fibonacci_is_local} together with Corollary~\ref{cor:local_trees_are_global}, every Fibonacci-type tree $T_k$ is a global amoeba and is, in particular, balanceable in the sense of Definition~\ref{def:balancing_num}, as is any global amoeba (see the proof of Theorem~\ref{thm:bal_eq_ex} below).
+The aim of this subsection is to give bounds, often sharp, on $\bal(n,T_k)$ as a function of $n$ and $k$.
+The treatment follows \cite[Section~4]{Eslavaetal2025}; the proofs of the results concerning $T_k$ are reproduced below, and the reader is referred to that work for the parallel arguments concerning the amoeba families $\mathcal A$ and $\mathcal B$ studied there.
+
+The principal result of the subsection is the following.
+
+\begin{theorem}[{\cite[Theorem~15, partial]{Eslavaetal2025}}]\label{thm:bal_Tk_summary}
+    For $n$ sufficiently large,
+    $$
+        n-1 \;\leq\; \bal(n,T_6) \;\leq\; 2n-2,
+    $$
+    and for $k\geq 7$,
+    $$
+        F_{k-4}(n-F_{k-4})\;\leq\;\bal(n,T_k)\;\leq\;(F_{k-2}-2)n-\binom{F_{k-2}-1}{2}+\delta_{k=7},
+    $$
+    where $\delta_{k=7}=1$ if $k=7$ and is zero otherwise.
+\end{theorem}
+
+For $1\leq k\leq 5$, where the balancing number is constant in $n$, the values are recorded in Table~\ref{tbl:small_bal_Tk}; the case $T_3\simeq P_4$ was already handled in Example~\ref{ex:balancing_numbers}(1), and the cases $T_4$ and $T_5$ are addressed in Lemma~\ref{lemma:bal_Tk_small}.
+
+\begin{remark}\label{rem:T3_paper_typo}
+    The proof of \cite[Lemma~24]{Eslavaetal2025} handles the cases $T_1,T_2,T_3$ with the remark that ``\emph{the first few elements of $\mathcal T,\mathcal A,\mathcal B$ are paths and their balancing numbers are straightforward to obtain},'' and reports $\bal(n,T_3)=1$, for sufficiently large $n$, in the corresponding table.
+    Since $T_3\simeq P_4$, by Example~\ref{ex:balancing_numbers}(1) we have $\bal(n,T_3)=0$, for sufficiently large $n$, not $1$.
+    Indeed, applying Theorem~\ref{thm:bal_eq_ex} gives $\bal(n,T_3)=\ex(n,\mathcal H_{T_3})=\ex(n,K_2)=0$, since $T_3$ has $3$ edges and so $\mathcal H_{T_3}=\{K_2\}$.
+    The values reported in Table~\ref{tbl:small_bal_Tk} and the corresponding entries of Lemma~\ref{lemma:bal_Tk_small} reflect this correction.
+\end{remark}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{c|c|c}
+        $G$ & $e(G)$ & $\bal(n,G)$ \\\hline
+        $T_1\simeq T_2\simeq K_2$ & $1$ & $0$ \\
+        $T_3\simeq P_4$ & $3$ & $0$ \\
+        $T_4$ & $5$ & $1$ \\
+        $T_5$ & $9$ & $6$
+    \end{tabular}
+    \caption{Balancing numbers of the smallest Fibonacci-type trees.}
+    \label{tbl:small_bal_Tk}
+\end{table}
+
+The proof of Theorem~\ref{thm:bal_Tk_summary} occupies the remainder of the subsection.
+The strategy combines three ingredients:
+\begin{enumerate}
+    \item an exact identity expressing the balancing number of any global amoeba as a Tur\'an-type extremal number for an associated class of subgraphs (Theorem~\ref{thm:bal_eq_ex});
+    \item a lower bound on this extremal number coming from the degree sequence of $G$ (Theorem~\ref{thm:bal_general_lower}); and
+    \item an explicit family of star forests embedded in $T_k$ on half its edges, together with the Tur\'an number of star forests due to Lidick\'y, Liu, and Palmer (Proposition~\ref{prop:bal_Tk_upper}).
+\end{enumerate}
+
+The next three paragraphs implement these three ingredients in order.
+
+\paragraph{The balancing number as a Tur\'an-type extremal number.}
+
+For a graph $G$ with $m=e(G)$ edges, define
+\begin{equation}\label{eq:H_G_def}
+    \mathcal H_G \;:=\; \bigl\{H\subseteq G \;:\; e(H)=\lfloor m/2\rfloor \text{ and } H\text{ has no isolated vertices}\bigr\}.
+\end{equation}
+For a class $\mathcal F$ of graphs, recall that $\ex(n,\mathcal F)$ denotes the maximum number of edges in an $n$-vertex graph that contains no member of $\mathcal F$ as a subgraph.
+Since containing a given subgraph is a property invariant under isomorphism, $\ex(n,\mathcal F)$ depends only on the isomorphism types occurring in $\mathcal F$.
+Accordingly, we read \eqref{eq:H_G_def} up to isomorphism: isomorphic subgraphs of $G$ determine the same member of $\mathcal H_G$.
+For instance, $\mathcal H_{P_4}=\{K_2\}$, even though the three distinct edges of $P_4$ give three distinct one-edge subgraphs.
+
+\begin{theorem}[{\cite[Theorem~11]{Eslavaetal2025}}]\label{thm:bal_eq_ex}
+    Let $G$ be a global amoeba.
+    Then for $n$ sufficiently large, $\bal(n,G)=\ex(n,\mathcal H_G)$.
+\end{theorem}
+
+\begin{proof}
+    Let $m=e(G)$.
+    By a classical averaging argument of Erd\H{o}s, every graph contains a bipartite subgraph with at least half of its edges.
+    Retaining exactly $\lfloor m/2\rfloor$ of these edges and deleting isolated vertices gives a bipartite member of $\mathcal H_G$; consequently, $\ex(n,\mathcal H_G)=o(n^2)$ by standard bounds on Tur\'an numbers of bipartite graphs (cf.\ \cite[Section~4]{Eslavaetal2025}).
+
+    \emph{Lower bound on $\bal(n,G)$.}
+    Pick a $2$-edge-colouring $E(K_n)=R\sqcup B$ with $|B|=\ex(n,\mathcal H_G)$ chosen so that the graph induced by $B$ contains no member of $\mathcal H_G$.
+    For $n$ large, $|R|=\binom{n}{2}-|B|\geq |B|$, so this colouring has at least $|B|$ edges of each colour.
+    No balanced copy of $G$ exists, since any balanced copy of $G$ would contribute exactly $\lfloor m/2\rfloor$ blue edges that, after deleting isolated vertices from the subgraph formed by those edges, would give a member of $\mathcal H_G$ inside $B$.
+    Hence $\bal(n,G)\geq\ex(n,\mathcal H_G)$.
+
+    \emph{Upper bound on $\bal(n,G)$.}
+    Let $E(K_n)=R\sqcup B$ be a $2$-edge-colouring with $\min\{|R|,|B|\}>\ex(n,\mathcal H_G)$.
+    Both colour classes contain a member of $\mathcal H_G$; extending each to a copy of $G$ in $K_n$ yields copies $G_R$ and $G_B$ with at least $\lfloor m/2\rfloor$ red edges and at least $\lfloor m/2\rfloor$ blue edges, respectively.
+    If either $G_R$ or $G_B$ is itself balanced we are done; otherwise the number of red edges $\ell_R$ in $G_R$ satisfies $\ell_R>\lceil m/2\rceil$, while the number of red edges in $G_B$ is strictly less than $\lfloor m/2\rfloor$.
+
+    Since $G$ is a global amoeba, there is a chain $G_R=G_0,G_1,\dots,G_t=G_B$ of copies of $G$ in $K_n$ in which each $G_i$ is obtained from $G_{i-1}$ by a feasible edge replacement.
+    Let $\ell_{R,i}$ denote the number of red edges in $G_i$.
+    Each replacement changes $\ell_{R,i}$ by at most one, so $|\ell_{R,i}-\ell_{R,i-1}|\leq 1$.
+    Since $\ell_{R,0}>\lceil m/2\rceil$ and $\ell_{R,t}<\lfloor m/2\rfloor$, the discrete intermediate value theorem produces some $G_i$ with $\ell_{R,i}\in\{\lfloor m/2\rfloor,\lceil m/2\rceil\}$, which is therefore a balanced copy of $G$ in the given colouring.
+    Hence $\bal(n,G)\leq\ex(n,\mathcal H_G)$.
+\end{proof}
+
+\paragraph{A general lower bound from the degree sequence.}
+
+The lower bound $\bal(n,G)\geq\ex(n,\mathcal H_G)$ from Theorem~\ref{thm:bal_eq_ex} can be exploited to extract a quantitative lower bound on $\bal(n,G)$ directly from the degree sequence of $G$.
+For a graph $G=(V,E)$ and a subset $S\subseteq V$, denote by $e_G(S,V\setminus S)$ the number of edges of $G$ with one endpoint in $S$ and the other in $V\setminus S$.
+For $1\leq\ell\leq|V|$, set
+\begin{align}
+    \mathrm{MaxCut}(G,\ell) &\;:=\; \max\bigl\{e_G(S,V\setminus S):S\subseteq V,\,|S|\leq\ell\bigr\}, \label{eq:maxcut_def}\\
+    \ell_G &\;:=\; \max\bigl\{\ell\geq0 : \mathrm{MaxCut}(G,\ell)<\lfloor e(G)/2\rfloor\bigr\}. \label{eq:ellG_def}
+\end{align}
+The quantity $\ell_G$ is well-defined: $\mathrm{MaxCut}(G,\ell)$ is non-decreasing in $\ell$, and the same averaging argument of Erd\H{o}s used in the proof of Theorem~\ref{thm:bal_eq_ex} gives $\mathrm{MaxCut}(G,\lfloor|V|/2\rfloor)\geq\lfloor e(G)/2\rfloor$, so $\ell_G<|V|/2$.
+
+\begin{lemma}[{\cite[Lemma~13]{Eslavaetal2025}}]\label{lemma:ex_HG_bipartite}
+    For any graph $G$ and any $\ell\leq\ell_G$,
+    $$
+        \ex(n,\mathcal H_G)\;\geq\;\ell_G(n-\ell_G)\;\geq\;\ell(n-\ell).
+    $$
+\end{lemma}
+
+\begin{proof}
+    The function $\ell\mapsto\ell(n-\ell)$ is non-decreasing on $[0,n/2]$, and $\ell_G<|V|/2\leq n/2$, which gives the second inequality.
+    For the first, we claim that the complete bipartite graph $K_{\ell_G,n-\ell_G}$ contains no member of $\mathcal H_G$ as a subgraph; granting this, $\ex(n,\mathcal H_G)\geq e(K_{\ell_G,n-\ell_G})=\ell_G(n-\ell_G)$.
+
+    Suppose, for contradiction, that some member of $\mathcal H_G$ embeds into $K_{\ell_G,n-\ell_G}$.
+    Choose a representative $H\subseteq G$ of this isomorphism type and transfer to it the bipartition induced by the embedding.
+    Write its parts as $S\sqcup R$, choosing their order so that $|S|\leq\ell_G$.
+    Denoting $m=e(G)$,
+    $$
+        e_G(S,V\setminus S)\;\geq\;e_H(S,R)\;=\;\lfloor m/2\rfloor,
+    $$
+    while by the definition of $\ell_G$,
+    $$
+        e_G(S,V\setminus S)\;\leq\;\mathrm{MaxCut}(G,\ell_G)\;<\;\lfloor m/2\rfloor,
+    $$
+    a contradiction.
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem~12]{Eslavaetal2025}}]\label{thm:bal_general_lower}
+    Let $G$ be a global amoeba on $k$ vertices and $m$ edges, with degree sequence $d_1\geq d_2\geq\cdots\geq d_k$.
+    For any integer $\ell\geq 1$ satisfying $\sum_{i=1}^\ell d_i<\lfloor m/2\rfloor$, $\bal(n,G)\geq\ell(n-\ell)$ for $n$ sufficiently large.
+\end{theorem}
+
+\begin{proof}
+    For any $S\subseteq V(G)$,
+    $$
+        e_G(S,V\setminus S)\;\leq\;\sum_{v\in S}\deg_G(v)\;\leq\;\sum_{i=1}^{|S|}d_i,
+    $$
+    where the second inequality uses that $d_1,\dots,d_k$ is in non-increasing order.
+    Hence, if $\sum_{i=1}^\ell d_i<\lfloor m/2\rfloor$, then $\mathrm{MaxCut}(G,\ell)<\lfloor m/2\rfloor$, so $\ell\leq\ell_G$.
+    Combining Theorem~\ref{thm:bal_eq_ex} and Lemma~\ref{lemma:ex_HG_bipartite},
+    $$
+        \bal(n,G)\;=\;\ex(n,\mathcal H_G)\;\geq\;\ell(n-\ell).
+    $$
+\end{proof}
+
+\paragraph{Profile of $T_k$ and the lower bound.}
+
+For a graph $G$ and $i\geq 0$, let $V_i(G)$ denote the set of vertices of $G$ of degree $i$, and call the sequence $(|V_i(G)|)_{i\geq 0}$ the \emph{degree profile} of $G$.
+By induction on the recursive construction of $T_k$ one obtains an explicit description of its degree profile in terms of Fibonacci numbers.
+
+\begin{lemma}[{\cite[Lemma~17]{Eslavaetal2025}}]\label{lemma:profile_Tk}
+    The number of vertices of $T_k$ is $2F_k$.
+    For $k\geq 4$,
+    $$
+        |V_i(T_k)|=
+        \begin{cases}
+            F_{k+1-i} & 1\leq i\leq 2,\\
+            F_{k-1-i} & 3\leq i\leq k-2,\\
+            1 & i=k-1,\\
+            0 & i\geq k.
+        \end{cases}
+    $$
+\end{lemma}
+
+\begin{proposition}[{\cite[Proposition~19]{Eslavaetal2025}}]\label{prop:bal_Tk_lower}
+    For every $k\geq 6$ and $n$ sufficiently large, $\bal(n,T_k)\geq F_{k-4}(n-F_{k-4})$.
+\end{proposition}
+
+\begin{proof}
+    The tree $T_k$ has $m=2F_k-1$ edges, hence $\lfloor m/2\rfloor=F_k-1$.
+    Letting $d_1\geq d_2\geq\cdots\geq d_{2F_k}$ be its degree sequence, by Theorem~\ref{thm:bal_general_lower} it suffices to show that
+    \begin{equation}\label{eq:Tk_lower_partialsum}
+        \sum_{i=1}^{F_{k-4}}d_i\;\leq\;F_k-2\;<\;\lfloor m/2\rfloor.
+    \end{equation}
+
+    The case $k=6$ is immediate: $F_{k-4}=F_2=1$, so the partial sum is equal to $d_1=\Delta(T_6)=k-1=5$, while $F_6-2=6$.
+
+    For $k\geq 7$, denote by $V_{>4}(T_k)$ the set of vertices of $T_k$ of degree exceeding $4$.
+    By Lemma~\ref{lemma:profile_Tk},
+    $$
+        |V_{>4}(T_k)|\;=\;\sum_{i=5}^{k-1}|V_i(T_k)|\;=\;1+\sum_{i=5}^{k-2}F_{k-i-1}\;=\;1+\sum_{j=1}^{k-6}F_j.
+    $$
+    The well-known identity $\sum_{j=1}^{r}F_j=F_{r+2}-1$ gives $|V_{>4}(T_k)|=F_{k-4}$.
+    Hence the $F_{k-4}$ largest entries in the degree sequence are exactly the degrees of vertices of degree at least $5$, and so
+    $$
+        \sum_{i=1}^{F_{k-4}}d_i\;=\;\sum_{v\in V_{>4}(T_k)}\deg_{T_k}(v)\;=\;\sum_{i=5}^{k-1}i\,|V_i(T_k)|.
+    $$
+    Since $T_k$ is a tree on $2F_k$ vertices, it has $2F_k-1$ edges.
+    The handshake lemma therefore gives $\sum_{i=1}^{k-1}i\,|V_i(T_k)|=2(2F_k-1)=4F_k-2$, so
+    \begin{equation}\label{eq:Tk_lower_partialsum2}
+        \sum_{i=1}^{F_{k-4}}d_i\;=\;4F_k-2-\sum_{i=1}^{4}i\,|V_i(T_k)|.
+    \end{equation}
+    Lemma~\ref{lemma:profile_Tk} and the Fibonacci recursion give
+    $$
+        \sum_{i=1}^4 i\,|V_i(T_k)|\;=\;F_k+2F_{k-1}+3F_{k-4}+4F_{k-5}.
+    $$
+    The Fibonacci recursion together with $F_{k-4}\leq 2F_{k-5}$ (valid for $k\geq 7$, since $F_{k-4}=F_{k-5}+F_{k-6}\leq 2F_{k-5}$) implies
+    $$
+        2F_{k-2}\;=\;4F_{k-4}+2F_{k-5}\;\leq\;3F_{k-4}+4F_{k-5},
+    $$
+    and therefore
+    $$
+        \sum_{i=1}^4 i\,|V_i(T_k)|\;\geq\;F_k+2F_{k-1}+2F_{k-2}\;=\;F_k+2(F_{k-1}+F_{k-2})\;=\;3F_k.
+    $$
+    Substituting back into \eqref{eq:Tk_lower_partialsum2} yields $\sum_{i=1}^{F_{k-4}}d_i\leq 4F_k-2-3F_k=F_k-2$, establishing \eqref{eq:Tk_lower_partialsum}.
+\end{proof}
+
+\paragraph{The upper bound via star forests.}
+
+To produce upper bounds on $\bal(n,T_k)=\ex(n,\mathcal H_{T_k})$, it suffices, by definition of $\mathcal H_{T_k}$, to exhibit a single member $H\in\mathcal H_{T_k}$ with a tractable Tur\'an number, since then $\ex(n,\mathcal H_{T_k})\leq\ex(n,H)$.
+Such a member is provided by the following recursive star forest construction, which mirrors the recursion of the trees $T_k$ themselves.
+
+For $k\geq 5$, define recursively two star forests $S_k\subseteq S_k^+\subseteq T_k$:
+\begin{itemize}
+    \item $S_5$ is a single star of degree $4$, and $S_5^+$ is obtained from $S_5$ by adding an independent edge;
+    \item $S_6$ is the disjoint union of one star of degree $4$ and one star of degree $3$, and $S_6^+$ is obtained from $S_6$ by adding an independent edge;
+    \item for $k\geq 7$, the natural decomposition of $T_k$ into a copy of $T_{k-1}$ and a copy of $T_{k-2}$ allows us to define, on the $T_{k-1}$ summand, a copy of $S_{k-1}$ for $S_k$ (and a copy of $S_{k-1}^+$ for $S_k^+$); on the $T_{k-2}$ summand, a copy of $S_{k-2}^+$ in both cases.
+    That is,
+    $$
+        S_k\;:=\;S_{k-1}\sqcup S_{k-2}^+\quad\text{and}\quad S_k^+\;:=\;S_{k-1}^+\sqcup S_{k-2}^+.
+    $$
+\end{itemize}
+A direct induction on $k\geq 5$ establishes the following properties:
+\begin{enumerate}
+    \item $S_k\subseteq S_k^+\subseteq T_k$;
+    \item $e(S_k^+)=e(S_k)+1=F_k$;
+    \item $S_k$ has $F_{k-2}-1$ connected components, of which $F_{k-4}$ are stars of (maximum) degree $4$, $F_{k-5}$ are stars of degree $3$, and $F_{k-4}-1$ are independent edges (i.e., stars of degree $1$).
+\end{enumerate}
+In particular, $e(S_k)=F_k-1=\lfloor(2F_k-1)/2\rfloor=\lfloor e(T_k)/2\rfloor$, so $S_k\in\mathcal H_{T_k}$ for every $k\geq 5$.
+
+The Tur\'an number of any star forest is given by the following theorem of Lidick\'y, Liu, and Palmer.
+
+\begin{theorem}[Lidick\'y, Liu, Palmer \cite{LidickyLiuPalmer2013}; cf.\ {\cite[Theorem~21]{Eslavaetal2025}}]\label{thm:LLP_star_forest}
+    Let $H=\bigsqcup_{j=1}^p S^j$ be a star forest, where $S^j$ has maximum degree $d_j$, and $d_1\geq d_2\geq\cdots\geq d_p$.
+    For $n$ sufficiently large,
+    $$
+        \ex(n,H)\;=\;\max_{1\leq j\leq p}\left\{(j-1)(n-j+1)+\binom{j-1}{2}+\left\lfloor\tfrac{d_j-1}{2}\right\rfloor(n-j+1)\right\}.
+    $$
+\end{theorem}
+
+\begin{proposition}[{\cite[Proposition~22]{Eslavaetal2025}}]\label{prop:bal_Tk_upper}
+    For $n$ sufficiently large, $\bal(n,T_6)\leq 2n-2$, and for every $k\geq 7$,
+    $$
+        \bal(n,T_k)\;\leq\;(F_{k-2}-2)n-\binom{F_{k-2}-1}{2}+\delta_{k=7}.
+    $$
+\end{proposition}
+
+\begin{proof}
+    Since $S_k\in\mathcal H_{T_k}$ and $T_k$ is a global amoeba, by Theorem~\ref{thm:bal_eq_ex},
+    $$
+        \bal(n,T_k)\;=\;\ex(n,\mathcal H_{T_k})\;\leq\;\ex(n,S_k).
+    $$
+    Order the connected components of $S_k$ in non-increasing order of maximum degree, and let $s_{k,j}$ denote the maximum degree of the $j$-th component.
+    The component count from item (3) of the construction above gives
+    $$
+        s_{k,j}\;=\;\begin{cases}
+            4 & 1\leq j\leq F_{k-4},\\
+            3 & F_{k-4}<j\leq F_{k-3},\\
+            1 & F_{k-3}<j\leq F_{k-2}-1,
+        \end{cases}
+    $$
+    using the identity $F_{k-4}+F_{k-5}=F_{k-3}$ and the total component count $F_{k-3}+(F_{k-4}-1)=F_{k-2}-1$.
+
+    For $1\leq j\leq F_{k-2}-1$, set
+    $$
+        h_k(j,n) \;:=\; (j-1)(n-j+1)+\binom{j-1}{2}+\left\lfloor\tfrac{s_{k,j}-1}{2}\right\rfloor(n-j+1).
+    $$
+    By Theorem~\ref{thm:LLP_star_forest}, $\ex(n,S_k)=\max_{j} h_k(j,n)$ for $n$ sufficiently large.
+    Within each of the three intervals on which $s_{k,j}$ is constant, $h_k(\cdot,n)$ is non-decreasing for $n\geq 2(F_{k-2}-1)$ (recall that we assume that $n$ is sufficiently large), so the maximum is attained at one of the right endpoints.
+    Substituting $\lfloor(4-1)/2\rfloor=1$, $\lfloor(3-1)/2\rfloor=1$, and $\lfloor(1-1)/2\rfloor=0$, and simplifying, one obtains
+    \begin{align}
+        h_k(F_{k-4},n) &\;=\; F_{k-4}(n-F_{k-4}+1)+\binom{F_{k-4}-1}{2}, \label{eq:hkFm4}\\
+        h_k(F_{k-3},n) &\;=\; F_{k-3}(n-F_{k-3}+1)+\binom{F_{k-3}-1}{2}, \label{eq:hkFm3}\\
+        h_k(F_{k-2}-1,n) &\;=\; (F_{k-2}-2)(n-F_{k-2}+2)+\binom{F_{k-2}-2}{2}. \label{eq:hkFm2}
+    \end{align}
+    A short calculation rearranges \eqref{eq:hkFm2} as
+    \begin{equation}\label{eq:hkFm2_rearranged}
+        h_k(F_{k-2}-1,n)\;=\;(F_{k-2}-2)n-\binom{F_{k-2}-1}{2}.
+    \end{equation}
+
+    For $k\geq 8$, the leading-in-$n$ coefficients in \eqref{eq:hkFm4}, \eqref{eq:hkFm3}, and \eqref{eq:hkFm2_rearranged} are $F_{k-4}$, $F_{k-3}$, and $F_{k-2}-2$, respectively, and one has $F_{k-4}<F_{k-3}<F_{k-2}-2$.
+    Hence, for $n$ sufficiently large, $\ex(n,S_k)=h_k(F_{k-2}-1,n)=(F_{k-2}-2)n-\binom{F_{k-2}-1}{2}$.
+
+    The cases $k\in\{6,7\}$ are computed directly:
+    \begin{itemize}
+        \item For $k=6$, $S_6$ has $F_4-1=2$ components, and $h_6(1,n)=n$, $h_6(2,n)=2(n-1)=2n-2$, so $\ex(n,S_6)=2n-2$.
+        \item For $k=7$, $F_3=2$, $F_4=3$, and $F_5-1=4$, giving $h_7(2,n)=2n-2$, $h_7(3,n)=3n-5$, and $h_7(4,n)=3n-6$.
+        The maximum is $h_7(F_{k-3},n)=3n-5=h_7(F_{k-2}-1,n)+1$, which accounts for the correction $\delta_{k=7}=1$.
+    \end{itemize}
+    Combining all cases, for $n$ sufficiently large,
+    $$
+        \bal(n,T_k)\;\leq\;\ex(n,S_k)\;=\;(F_{k-2}-2)n-\binom{F_{k-2}-1}{2}+\delta_{k=7}\quad\text{for }k\geq 7,
+    $$
+    and $\bal(n,T_6)\leq 2n-2$.
+\end{proof}
+
+\paragraph{Constant cases: $T_3,\ T_4,\ T_5$.}
+
+\begin{lemma}[cf.\ {\cite[Lemma~24]{Eslavaetal2025}}]\label{lemma:bal_Tk_small}
+    For $n$ sufficiently large, $\bal(n,T_4)=1$ and $\bal(n,T_5)=6$.
+\end{lemma}
+
+\begin{proof}
+    By Theorem~\ref{thm:bal_eq_ex}, it suffices to compute $\ex(n,\mathcal H_{T_4})$ and $\ex(n,\mathcal H_{T_5})$.
+
+    \emph{Case $T_4$.}
+    Since $T_4$ has $5$ edges, $\mathcal H_{T_4}$ consists of the $2$-edge subgraphs of $T_4$ with no isolated vertices.
+    Both the matching $2K_2$ and the path $P_3$ embed into $T_4$, and these are the only two isomorphism types available, so $\mathcal H_{T_4}=\{2K_2,P_3\}$.
+    A graph that contains neither $P_3$ nor $2K_2$ as a subgraph must be a matching of size at most $1$, hence has at most one edge, so $\ex(n,\mathcal H_{T_4})=1$.
+
+    \emph{Case $T_5$.}
+    Since $T_5$ has $9$ edges, $\mathcal H_{T_5}$ is the family of $4$-edge subgraphs of $T_5$ with no isolated vertices.
+    The lower bound $\ex(n,\mathcal H_{T_5})\geq 6$ is witnessed by $K_4$, which has $6$ edges and contains no forest on $4$ edges as a subgraph (since $K_4$ has only $4$ vertices, every subgraph of $K_4$ on $4$ edges contains a cycle).
+    For the matching upper bound, a case analysis on the components of an arbitrary graph with $7$ edges shows that it must contain a member of $\mathcal H_{T_5}$; the details are routine and given in \cite[Lemma~24]{Eslavaetal2025}.
+    Hence $\ex(n,\mathcal H_{T_5})=6$.
+\end{proof}
+
+The proof of Theorem~\ref{thm:bal_Tk_summary} is now complete: the lower bound is Proposition~\ref{prop:bal_Tk_lower}, the upper bound is Proposition~\ref{prop:bal_Tk_upper}, and the constant cases recorded in Table~\ref{tbl:small_bal_Tk} are addressed in Example~\ref{ex:balancing_numbers}(1) and Lemma~\ref{lemma:bal_Tk_small}.
+Analogous bounds for the recursive amoeba families $\mathcal A=\{A_k\}$ and $\mathcal B=\{B_k\}$ studied in \cite{Eslavaetal2025} can be obtained by the same methods, exhibiting suitable star forests adapted to the recursions of $A_k$ and $B_k$; the details, together with the corresponding analogues of Theorem~\ref{thm:bal_Tk_summary}, are given in \cite[Theorem~15 and Propositions~20--22]{Eslavaetal2025}.
