@@ -26,11 +26,9 @@ document class ([source](https://github.com/jessexknight/ut-thesis)) together wi
 style files, included as a submodule.
 
 `ut-thesis-local.cls` is vendored at the repository root rather than taken from the local TeX
-installation. Versions of the class differ in whether they define theorem environments,
-which collides with the declarations in `common/tonas-thesis.sty`; pinning the class here
-keeps local and CI builds identical. It is renamed rather than shipped as
-`ut-thesis.cls` so that no installed copy can shadow it, as the LPPL requires for
-modified works.
+installation, so local and CI builds use the same class version. It is renamed rather than
+shipped as `ut-thesis.cls` so that no installed copy can shadow it, as the LPPL also
+requires for modified works.
 
 ```
 git clone --recurse-submodules https://github.com/tonamatos/thesis-public.git
