@@ -23,17 +23,12 @@ jobs:
         with:
           root_file: thesis.tex
 
-      # The defence slides are not rebuilt here: slides.tex embeds pages from an
-      # external PDF that is not part of this repository, so the committed
-      # presentation/slides.pdf is published as-is.
-
       - name: Prepare deployment folder
         run: |
           mkdir public
           cp index.html public/
           cp favicon.ico public/
           mv thesis.pdf public/
-          cp presentation/slides.pdf public/
           touch public/.nojekyll  # Prevents Jekyll processing on GitHub Pages
 
       - name: Deploy to gh-pages branch

@@ -25,7 +25,6 @@
 *.pdf
 ## Except images
 !images/*.pdf
-!presentation/slides.pdf
 
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl

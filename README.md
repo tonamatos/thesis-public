@@ -3,7 +3,7 @@
 LaTeX sources for my PhD thesis, submitted to the Graduate Department of Mathematics,
 University of Toronto, 2026.
 
-**[thesis.wiederhold.dev](https://thesis.wiederhold.dev)** — compiled thesis and defence slides.
+**[thesis.wiederhold.dev](https://thesis.wiederhold.dev)** — compiled thesis.
 
 ## Abstract
 
@@ -41,17 +41,12 @@ pdflatex thesis.tex && bibtex thesis && pdflatex thesis.tex && pdflatex thesis.t
 | `images/` | Raster and vector figures |
 | `bibliography/` | BibTeX database |
 | `common/` | Style files ([tonas-latex](https://github.com/tonamatos/tonas-latex), submodule) |
-| `presentation/` | Defence slides |
 | `tools/` | Figure-generation scripts |
-
-Note that `presentation/slides.tex` includes several pages from an external PDF that is not
-distributed here, so it will not compile as-is; the compiled `presentation/slides.pdf` is
-committed instead.
 
 ## Automation
 
 GitHub Actions compiles `thesis.tex` on every push to `main` and deploys the result,
-together with the slides and landing page, to the `gh-pages` branch.
+together with the landing page, to the `gh-pages` branch.
 
 ## Licence
 
