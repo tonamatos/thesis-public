@@ -25,10 +25,12 @@ The thesis uses the [`ut-thesis`](https://ctan.org/tex-archive/macros/latex/cont
 document class ([source](https://github.com/jessexknight/ut-thesis)) together with my own
 style files, included as a submodule.
 
-`ut-thesis.cls` is vendored at the repository root rather than taken from the local TeX
+`ut-thesis-local.cls` is vendored at the repository root rather than taken from the local TeX
 installation. Versions of the class differ in whether they define theorem environments,
 which collides with the declarations in `common/tonas-thesis.sty`; pinning the class here
-keeps local and CI builds identical. It is redistributed under the LPPL 1.3c.
+keeps local and CI builds identical. It is renamed rather than shipped as
+`ut-thesis.cls` so that no installed copy can shadow it, as the LPPL requires for
+modified works.
 
 ```
 git clone --recurse-submodules https://github.com/tonamatos/thesis-public.git
@@ -41,7 +43,7 @@ pdflatex thesis.tex && bibtex thesis && pdflatex thesis.tex && pdflatex thesis.t
 | Path | Contents |
 | --- | --- |
 | `thesis.tex` | Root document |
-| `ut-thesis.cls` | Vendored document class (LPPL 1.3c) |
+| `ut-thesis-local.cls` | Vendored document class, renamed copy of ut-thesis v3.1.8 (LPPL 1.3c) |
 | `chapters/` | Chapter sources |
 | `figures/` | TikZ figures |
 | `images/` | Raster and vector figures |

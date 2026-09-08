@@ -1,3 +1,12 @@
+%% ------------------------------------------------------------------
+%% MODIFIED COPY. This is ut-thesis v3.1.8 (2024/07/26), renamed from
+%% ut-thesis.cls to ut-thesis-local.cls and vendored with this thesis.
+%% The only change is the class name, so that this pinned copy is used
+%% instead of whatever version the local or CI TeX distribution ships;
+%% older releases of ut-thesis predefine theorem environments, which
+%% collide with common/tonas-thesis.sty.
+%% Renamed as required by the LPPL for modified works.
+%% ------------------------------------------------------------------
 %%
 %% This is file `ut-thesis.cls',
 %% generated with the docstrip utility.
@@ -51,7 +60,7 @@
 %% [https://github.com/jessexknight/ut-thesis]
 %% 
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
-\ProvidesClass{ut-thesis}
+\ProvidesClass{ut-thesis-local}
 [2024/07/26 v3.1.8 University of Toronto thesis class]
 \newif\ifmargins@equal
 \newlength{\margin@base}
