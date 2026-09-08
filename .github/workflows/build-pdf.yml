@@ -24,11 +24,17 @@ jobs:
       # the theorem counter, and something in that distribution defines it a
       # second time. Pinning reproduces the environment the thesis was written
       # and checked against, alongside the vendored ut-thesis-local.cls.
+      #
+      # Note: 2024 is the newest value that actually pins. In this action,
+      # "2025" (and "latest", and the empty value) all resolve to the rolling
+      # texlive-full:latest image, which is now TeX Live 2026 -- so asking for
+      # 2025 silently gives you the very version that fails. 2024 maps to the
+      # frozen tag texlive-full:20250301.
       - name: Compile thesis
         uses: xu-cheng/latex-action@v3
         with:
           root_file: thesis.tex
-          texlive_version: 2025
+          texlive_version: 2024
 
       - name: Prepare deployment folder
         run: |
