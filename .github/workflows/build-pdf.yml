@@ -18,10 +18,17 @@ jobs:
           submodules: recursive  # To include style files
           fetch-depth: 0
 
+      # TeX Live is pinned rather than tracking latest. On TeX Live 2026,
+      # loading common/tonas-thesis.sty aborts with "Command \c@lemma already
+      # defined": thmtools aliases a counter for each \newtheorem that shares
+      # the theorem counter, and something in that distribution defines it a
+      # second time. Pinning reproduces the environment the thesis was written
+      # and checked against, alongside the vendored ut-thesis-local.cls.
       - name: Compile thesis
         uses: xu-cheng/latex-action@v3
         with:
           root_file: thesis.tex
+          texlive_version: 2025
 
       - name: Prepare deployment folder
         run: |
